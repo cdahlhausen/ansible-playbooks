@@ -1,0 +1,13 @@
+---
+  - hosts: webservers
+    sudo: yes
+    vars:
+      playbook_name: https_servers
+      ssl_cert: ~/.ansible/external/files/ssl/__aptrust_org_cert.cer
+      ssl_key: ~/.ansible/external/files/ssl/__aptrust_org.key
+      ssl_cert_path: /etc/ssl/certs/aptrust_org.pem
+      ssl_key_path: /etc/ssl/private/aptrust_org.key
+    roles:
+      - common
+      - apache2
+      - ssl

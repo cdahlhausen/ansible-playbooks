@@ -1,0 +1,25 @@
+# build products...
+*.py[co]
+build
+
+# Emacs backup files...
+*~
+.\#*
+
+# RPM stuff...
+MANIFEST
+dist
+rpm-build
+
+# PyCharm
+.idea
+
+# Mac OS X stuff...
+.DS_Store
+
+# SublimeText
+*.sublime-project
+*.sublime-workspace
+
+# Any distribution builds use this directory
+dist/

@@ -1,0 +1,15 @@
+WSGIDaemonProcess dpnode python-path={{ proj_path }}:{{ env_lib }}/site-packages
+WSGIProcessGroup {{ wsgi_group }}
+WSGIScriptAlias /{{ web_root }} {{ wsgi_dir }}
+
+<Directory {{ settings_dir }}>
+<Files wsgi.py>
+Require all granted
+</Files>
+</Directory>
+
+Alias {{ web_static }} {{ static_dir }}
+<Directory {{ static_dir }}>
+Order allow,deny
+Allow from all
+</Directory>

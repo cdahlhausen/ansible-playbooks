@@ -1,0 +1,22 @@
+# Setup SSL files
+- name: OpenSSL Installed
+  apt: pkg=openssl state=present
+  tags: ssl
+
+- name: Copy over ssl certs
+  copy:
+    src={{ ssl_cert }}
+    dest={{ ssl_cert_path }}
+    owner=root
+    group=root
+    mode=0755
+  tags: ssl
+
+- name: Copy over ssl keys
+  copy:
+    src={{ ssl_key }}
+    dest={{ ssl_key_path }}
+    owner=root
+    group=root
+    mode=0600
+  tags: ssl

@@ -1,0 +1,23 @@
+---
+- name: Apache2 | copy default-ssl template
+  template:
+    src=siteconfig-ssl.j2
+    dest=/etc/apache2/sites-available/{{ server_name }}-ssl.conf
+    owner=root
+    group=root
+    mode=0644
+    backup=yes
+  tags: https
+
+- name:  Apache2 | enable mod_ssl
+  apache2_module: name=ssl state=present
+  tags: https
+
+- name: Apache2 | disable default site
+  command: a2dissite 000-default
+  tags: https
+
+- name: Apache2 | enable https site
+  command: a2ensite {{ server_name }}-ssl
+  notify:
+    - restart apache

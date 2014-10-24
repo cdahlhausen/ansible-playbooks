@@ -1,0 +1,27 @@
+---
+# wget us used to pull the version of apache we want.
+  - name: WGET | Ensure Wget
+    apt: pkg=wget state=present
+
+# The following are so make can run properly
+  - name: Build Requirements | Build Essentials
+    apt: pkg=build-essential state=present update_cache=yes
+
+  - name: Build Requirements | python3 dev
+    apt: pkg=python3-dev state=present
+
+  - name: Build Requirements | apache2 dev
+    apt: pkg=apache2-dev state=present
+
+# Install for python 2 first puts the wsgi.loads and
+# wsgi.conf files on the server properly.
+  - name: Apache 2 | Install wsgi 2
+    apt: pkg=libapache2-mod-wsgi state=present
+
+# Bash based build script.  Update script for new
+# versions.
+  - name: WSGI | build for python3
+    script: build_wsgi.sh
+
+  - name: Apache2 | enable mod_wsgi
+    apache2_module: name=wsgi state=present

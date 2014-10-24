@@ -1,0 +1,32 @@
+---
+##
+# Message of the day explaining server is under control of Ansible.
+#
+- name: MOTD
+  template: src=motd.j2 dest=/etc/motd owner=root mode=0644
+  tags: common
+
+##
+# Adding common users to the system.
+#
+- name: add common users
+  user: name="{{ item }}" state=present groups=admin, shell='/bin/bash'
+  tags: common
+  with_items:
+    - scott.turnbull
+    - andrew.diamond
+
+- name: add common user public keys
+  authorized_key: user={{ item.name }} key="{{ lookup('file', item.keyfile) }}" state=present
+  tags: common
+  with_items:
+    - { name: 'scott.turnbull', keyfile: '~/.ansible/external/files/public_keys/turnbull_pub' }
+    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
+
+- name: Modifiy admins so they need no sudo password
+  tags: common
+  lineinfile: dest=/etc/sudoers state=present regexp='^%admin ALL\=' line='%admin ALL=(ALL) NOPASSWD:ALL' validate='visudo -cf %s'
+
+- name: Add emacs for everyone.
+  tags: common
+  apt: pkg='emacs23-nox' state=present

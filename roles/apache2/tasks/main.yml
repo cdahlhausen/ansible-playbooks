@@ -1,0 +1,11 @@
+---
+- name: Apache | Install package
+  apt: pkg=apache2 state=installed
+  tags: apache2
+
+- name: Apache | Enable some common modules
+  apache2_module: name=rewrite state=present
+  apache2_module: name=vhost_alias state=present
+  tags: apache2
+  notify:
+    - restart apache

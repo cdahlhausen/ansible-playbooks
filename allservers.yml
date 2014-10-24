@@ -1,0 +1,8 @@
+---
+  - hosts: all
+    user: ubuntu
+    sudo: yes
+    vars:
+      playbook_name: allservers
+    roles:
+      - common

@@ -1,0 +1,8 @@
+---
+  - name: Python3 | Installed
+    apt: pkg=python3 state=present
+    tags: python3
+
+# Fix for ensurepip problem in Trusty
+  - name: Python3 | ensurepip fix
+    script: python3_venvfix.sh

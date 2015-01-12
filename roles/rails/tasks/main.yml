@@ -62,12 +62,15 @@
       line='eval "$(rbenv init -)"'
 
 
-# Install ruby build, even if it's already there, so we can
-# build the latest Ruby
+# Install ruby build
+  - stat: path=~/.rbenv/plugins/ruby-build/bin/ruby-build
+    register: ruby_build
+
   - name: install ruby-build
     git:
       repo=https://github.com/sstephenson/ruby-build.git
       dest=~/.rbenv/plugins/ruby-build
+    when: not ruby_build.stat.exists
     environment:
       PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
     tags: rbenv
@@ -83,7 +86,57 @@
       PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
 
 
-  # - command: . ~/bash_profile
+# Checkout Fluctus
+  - stat: path=~/aptrust/fluctus/app/models/
+    register: fluctus
+
+  - name: checkout fluctus repo
+    git:
+      repo=git@github.com:APTrust/fluctus.git
+      dest=~/aptrust/fluctus
+    when: not fluctus.stat.exists
+    environment:
+      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+    tags: fluctus
+
+# Set the right ruby interpreter
+  - name: set ruby interpreter to {{ ruby_version }}
+    command: chdir=~/aptrust/fluctus rbenv local {{ ruby_version }}
+    environment:
+      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+    tags: rbenv
+
+# Install bundler
+  - name: install bundler
+    command: chdir=~/aptrust/fluctus gem install bundler
+    environment:
+      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+    tags: rails
+
+# Load gems into the local rbenv
+  - name: install items in fluctus gemfile
+    command: chdir=~/aptrust/fluctus bundle install
+    environment:
+      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+    tags: rails
+
+# Generate Rails keys
+  - name: bundle exec rake secret
+    shell: chdir=~/aptrust/fluctus bundle exec rake secret
+    register: rails_key
+    environment:
+      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+    tags: rails
+
+  - debug: var=rails_key
+
+# Set up Jetty/Solr
+  # - stat: path=~/aptrust/fluctus/jetty/lib
+  #   register: jetty
+
+  # - name: set up jetty/solr
+  #   command: chdir=~/aptrust/fluctus rails g hydra:jetty
+  #   when: not jetty.stat.exists
   #   environment:
-  #     RBENV_PATH: "$HOME/.rbenv/bin"
-  #     PATH: "$RBENV_PATH:$PATH"
+  #     PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+  #   tags: rails

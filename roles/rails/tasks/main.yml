@@ -3,6 +3,7 @@
 # Rails setup.
 #
 
+
 # Install libraries required for building various gems
 # that our Rails app uses.
   - name: install required packages
@@ -36,3 +37,53 @@
     script: install_oracle_jvm.sh
     sudo: yes
     when: not good_java.stdout_lines[0] == 'Yes'
+    tags: packages
+
+# rbenv and ruby-build
+  - stat: path=~/.rbenv
+    register: rbenv
+
+  - name: install rbenv if not already present
+    when: not rbenv.stat.exists
+    git:
+      repo=https://github.com/sstephenson/rbenv.git
+      dest=~/.rbenv
+    tags: rbenv
+
+  - lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line='export PATH="$HOME/.rbenv/bin:$PATH"'
+    tags: rbenv
+
+  - lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line='eval "$(rbenv init -)"'
+
+
+# Install ruby build, even if it's already there, so we can
+# build the latest Ruby
+  - name: install ruby-build
+    git:
+      repo=https://github.com/sstephenson/ruby-build.git
+      dest=~/.rbenv/plugins/ruby-build
+    environment:
+      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+    tags: rbenv
+
+# Install Ruby 2.1.5, if it's not already there.
+# ruby_version is defined in roles/rails/vars/main.yml
+  - stat: path=~/.rbenv/versions/{{ ruby_version }}
+    register: ruby
+
+  - command: rbenv install {{ ruby_version }}
+    when: not ruby.stat.exists
+    environment:
+      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+
+
+  # - command: . ~/bash_profile
+  #   environment:
+  #     RBENV_PATH: "$HOME/.rbenv/bin"
+  #     PATH: "$RBENV_PATH:$PATH"

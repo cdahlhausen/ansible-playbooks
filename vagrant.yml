@@ -7,7 +7,8 @@
 
 - hosts: vagrant
   vars:
-    system_default_user:   vagrant
+    system_default_user: vagrant
+    ruby_version: 2.1.5
   roles:
     - go
     - rails

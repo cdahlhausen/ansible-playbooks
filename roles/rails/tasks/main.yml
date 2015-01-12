@@ -1,0 +1,38 @@
+---
+#
+# Rails setup.
+#
+
+# Install libraries required for building various gems
+# that our Rails app uses.
+  - name: install required packages
+    sudo: yes
+    apt: pkg={{item}} state=present
+    with_items:
+        - sqlite3
+        - libssl-dev
+        - bundler
+        - postgresql-client
+        - libpq5
+        - libpqxx-dev
+        - libsqlite3-dev
+        - nodejs
+        - zip
+        - mailutils
+    environment:
+        DEBIAN_FRONTEND: noninteractive
+    tags:
+        - packages
+        - rails dependencies
+
+
+# Check to see if the Oracle JVM version 7 is already installed.
+# Install it if it's not already there.
+  - name: check java version
+    script: has_oracle_1.7.sh
+    register: good_java
+
+  - name: install oracle jvm
+    script: install_oracle_jvm.sh
+    sudo: yes
+    when: not good_java.stdout_lines[0] == 'Yes'

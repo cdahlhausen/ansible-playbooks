@@ -4,12 +4,13 @@
 #
 
 
-
 # Install libraries required for building various gems
-# that our Rails app uses.
+# that our Rails app uses. Be sure to update cache first,
+# since the typical Vagrant Ubuntu VM ships with an out-
+# of-date apt cache.
   - name: install required packages
     sudo: yes
-    apt: pkg={{item}} state=present
+    apt: pkg={{item}} state=present update_cache=yes
     with_items:
         - sqlite3
         - libssl-dev
@@ -107,14 +108,9 @@
       PATH: "{{ path }}"
     tags: rbenv
 
-# Install bundler
-  - name: check for bundler
-    command: "gem list bundler | grep bundler"
-    register: bundler_installed
-
+# Install bundler in local rbenv
   - name: install bundler
     command: chdir=~/aptrust/fluctus gem install bundler
-    when: bundler_installed.stdout == ""
     environment:
       PATH: "{{ path }}"
     tags: rails

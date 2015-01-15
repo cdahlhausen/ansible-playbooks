@@ -4,6 +4,7 @@
 #
 
 
+
 # Install libraries required for building various gems
 # that our Rails app uses.
   - name: install required packages
@@ -36,7 +37,7 @@
   - name: install oracle jvm
     script: install_oracle_jvm.sh
     sudo: yes
-    when: not good_java.stdout_lines[0] == 'Yes'
+    when: not good_java.stdout == 'Yes'
     tags: packages
 
 # rbenv and ruby-build
@@ -72,7 +73,7 @@
       dest=~/.rbenv/plugins/ruby-build
     when: not ruby_build.stat.exists
     environment:
-      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+      PATH: "{{ path }}"
     tags: rbenv
 
 # Install Ruby 2.1.5, if it's not already there.
@@ -83,7 +84,7 @@
   - command: rbenv install {{ ruby_version }}
     when: not ruby.stat.exists
     environment:
-      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+      PATH: "{{ path }}"
 
 
 # Checkout Fluctus
@@ -96,47 +97,100 @@
       dest=~/aptrust/fluctus
     when: not fluctus.stat.exists
     environment:
-      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+      PATH: "{{ path }}"
     tags: fluctus
 
 # Set the right ruby interpreter
   - name: set ruby interpreter to {{ ruby_version }}
     command: chdir=~/aptrust/fluctus rbenv local {{ ruby_version }}
     environment:
-      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+      PATH: "{{ path }}"
     tags: rbenv
 
 # Install bundler
+  - name: check for bundler
+    command: "gem list bundler | grep bundler"
+    register: bundler_installed
+
   - name: install bundler
     command: chdir=~/aptrust/fluctus gem install bundler
+    when: bundler_installed.stdout == ""
     environment:
-      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+      PATH: "{{ path }}"
     tags: rails
 
 # Load gems into the local rbenv
   - name: install items in fluctus gemfile
     command: chdir=~/aptrust/fluctus bundle install
     environment:
-      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+      PATH: "{{ path }}"
     tags: rails
 
-# Generate Rails keys
-  - name: bundle exec rake secret
+# Generate Rails keys if they don't already exist
+# We don't do the usual lineinfile because we don't
+# want to keep overwriting the keys.
+  - name: check for rails secret key
+    command: grep RAILS_SECRET_KEY /home/{{ system_default_user }}/.bash_profile
+    register: rails_key_present
+    ignore_errors: yes
+
+  - name: check for devise secret key
+    command: grep DEVISE_SECRET_KEY ~/.bash_profile
+    register: devise_key_present
+    ignore_errors: yes
+
+  - name: generate rails secret key
     shell: chdir=~/aptrust/fluctus bundle exec rake secret
     register: rails_key
+    when: rails_key_present|failed
     environment:
-      PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
+      PATH: "{{ path }}"
     tags: rails
 
-  - debug: var=rails_key
+  - name: add rails key to bash_profile if necessary
+    when: rails_key_present|failed
+    lineinfile:
+      dest=/home/{{ system_default_user }}/.bash_profile
+      state=present
+      line="export RAILS_SECRET_KEY='{{ rails_key.stdout }}'"
+
+  - name: generate devise secret key
+    shell: chdir=~/aptrust/fluctus bundle exec rake secret
+    when: devise_key_present|failed
+    register: devise_key
+    environment:
+      PATH: "{{ path }}"
+    tags: rails
+
+  - name: add devise key to bash_profile if necessary
+    when: devise_key_present|failed
+    lineinfile:
+      dest=/home/{{ system_default_user }}/.bash_profile
+      state=present
+      line="export DEVISE_SECRET_KEY='{{ devise_key.stdout }}'"
 
 # Set up Jetty/Solr
-  # - stat: path=~/aptrust/fluctus/jetty/lib
-  #   register: jetty
+  - stat: path=~/aptrust/fluctus/jetty/lib
+    register: jetty
 
-  # - name: set up jetty/solr
-  #   command: chdir=~/aptrust/fluctus rails g hydra:jetty
-  #   when: not jetty.stat.exists
-  #   environment:
-  #     PATH: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
-  #   tags: rails
+  - name: set up jetty/solr
+    script: setup_jetty.sh
+    when: not jetty.stat.exists
+    environment:
+      PATH: "{{ path }}"
+    tags: rails
+
+# Bring the dev and test databases up to date.
+# If the the test db is not up to date, you can't run spec tests.
+  - name: migrate dev database
+    script: rails_migrate_db.sh
+    environment:
+      PATH: "{{ path }}"
+    tags: rails
+
+  - name: migrate test database
+    script: rails_migrate_db.sh
+    environment:
+      PATH: "{{ path }}"
+      RAILS_ENV: "test"
+    tags: rails

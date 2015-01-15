@@ -84,11 +84,51 @@
     script: install_go_1.4.sh
     tags: go-binaries
 
-# Install .bash_profile settings for default system user
-  - template:
-      src: bash_profile.j2
-      dest: ~/.bash_profile
-      mode: 0644
+# Set env var in .bash_profile
+  - name: set editor in .bash_profile
+    lineinfile:
+      dest=~/.bash_profile
+      create=yes
+      mode=0644
+      state=present
+      line="export EDITOR=emacs"
+
+  - name: set aws access key in .bash_profile
+    lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line="export AWS_ACCESS_KEY_ID=\"{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}\""
+
+  - name: set aws secret key in .bash_profile
+    lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line="export AWS_SECRET_ACCESS_KEY=\"{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}\""
+
+  - name: set go path in .bash_profile
+    lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line="export GOPATH=$HOME/go"
+
+  - name: set path in .bash_profile
+    lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line="export PATH=\"$GOPATH/bin:$PATH:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin\""
+
+  - name: set fluctus API user in .bash_profile
+    lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line="export FLUCTUS_API_USER='system@aptrust.org'"
+
+  - name: set fluctus API key in .bash_profile
+    lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line="export FLUCTUS_API_KEY='GENERATE API KEY THROUGH WEB UI AND SET IN ~/.bash_profile'"
+
 
 # Add /usr/local/go/bin to system-wide path var
   - name: add {{item}} to path

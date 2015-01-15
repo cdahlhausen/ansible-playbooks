@@ -8,7 +8,9 @@
 - hosts: vagrant
   vars:
     system_default_user: vagrant
+    home: /home/{{ system_default_user }}
     ruby_version: 2.1.5
+    path: /home/{{ system_default_user }}/.rbenv/shims:/home/{{ system_default_user }}/.rbenv/bin:/home/{{ system_default_user }}/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/go/bin:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin
   roles:
     - go
     - rails

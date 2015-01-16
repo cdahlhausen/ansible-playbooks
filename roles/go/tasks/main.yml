@@ -28,12 +28,13 @@
     register: mimelibs
   - stat: path=~/go/src/github.com/APTrust/bagins
     register: baginslibs
+  - stat: path=~/go/bin/nsqd
+    register: nsqd_binaries
+
 
 # The bagman source code directory
   - stat: path=~/go/src/github.com/APTrust/bagman
     register: bagman
-
-
 
 # Emacs with golang-mode for editing
   - name: emacs
@@ -117,6 +118,9 @@
       state=present
       line="export PATH=\"$GOPATH/bin:$PATH:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin\""
 
+# Following are two settings that allow the Go services to
+# connect to Fluctus. You will have to set the API key manually
+# after the system is running.
   - name: set fluctus API user in .bash_profile
     lineinfile:
       dest=~/.bash_profile
@@ -141,6 +145,17 @@
       line="PATH=\1\2:{{item}}\3"
     with_items:
       - /usr/local/go/bin
+
+# Install NSQD binaries. These are currently going into a path
+# under home/vagrant. Should they go into /usr/local/bin?
+  - name: install nsqd binaries
+    script: install_nsq.sh
+    when: not nsqd_binaries.stat.exists
+    tags: go-libs
+    environment:
+      GOPATH: /home/{{ system_default_user }}/go
+      PATH:   /bin:/usr/bin:/usr/local/go/bin
+
 
 # Load env vars. We need PATH, GOPATH, GOROOT. Note that source does not work.
 # See http://stackoverflow.com/questions/22256884/not-possible-to-source-bashrc-with-ansible

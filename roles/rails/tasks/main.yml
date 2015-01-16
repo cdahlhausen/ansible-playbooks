@@ -176,6 +176,25 @@
       PATH: "{{ path }}"
     tags: rails
 
+  - lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line='export FEDORA_USER=fedoraAdmin'
+    tags: rails
+
+  - lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line='export FEDORA_PASS=fedoraAdmin'
+    tags: rails
+
+  - lineinfile:
+      dest=~/.bash_profile
+      state=present
+      line="export FEDORA_URL='http://127.0.0.1:8983/fedora'"
+    tags: rails
+
+
 # Bring the dev and test databases up to date.
 # If the the test db is not up to date, you can't run spec tests.
   - name: migrate dev database

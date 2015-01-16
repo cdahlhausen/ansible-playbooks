@@ -1,0 +1,18 @@
+---
+
+# Add user accounts and set up a MySQL database on the
+# DPN MySQL server.
+
+- hosts: dpndb
+  user: ubuntu
+  sudo: yes
+  vars:
+    playbook_name: dpndb
+  roles:
+    - common
+  tasks:
+    - name: install mysql
+      apt: pkg={{ item }} state=present update_cache=yes
+      with_items:
+        - mysql-server
+        - mysql-client

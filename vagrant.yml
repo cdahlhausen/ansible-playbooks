@@ -1,10 +1,5 @@
 ---
 
-# Note: See the jinja templates under roles/go/templates.
-# Those copy some environment variables from the Ansible
-# host into the .bash_profile of the system_default_user
-# on the target machine.
-
 - hosts: vagrant
   vars:
     system_default_user: vagrant

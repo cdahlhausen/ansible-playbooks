@@ -1,0 +1,6 @@
+---
+  - hosts: vagrant
+    vars:
+      playbook_name: monitoring
+    roles:
+      - psdash

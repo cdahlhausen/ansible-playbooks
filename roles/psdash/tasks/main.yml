@@ -1,0 +1,38 @@
+---
+#
+# Common setup for psdash agents and server.
+#
+
+# psdash needs pip and the python dev headers
+  - name: install required packages
+    sudo: yes
+    apt: pkg={{item}} state=present update_cache=yes
+    with_items:
+        - python-dev
+        - python-pip
+    environment:
+        DEBIAN_FRONTEND: noninteractive
+    tags:
+        - packages
+
+# We'll run psdash under a virtual env, so we don't
+# pollute the system with its libraries. Make sure
+# we have virtualenv first
+  - name: install virtualenv if necessary
+    pip: name=virtualenv state=present
+    sudo: yes
+
+# If the virtualenv has not been created, make it.
+  - stat: path=~/psdash
+    register: psdash_venv
+
+  - name: create psdash virtualenv if necessary
+    when: not psdash_venv.stat.exists
+    command: virtualenv psdash
+    tags: virtualenv
+
+# Now install psdash into the virtual env
+# This takes a while because it has to compile
+# some native extensions.
+  - name: install psdash if necessary
+    pip: name=psdash state=present virtualenv=/home/{{ system_default_user }}/psdash

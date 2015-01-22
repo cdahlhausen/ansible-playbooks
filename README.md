@@ -56,7 +56,7 @@ You can connect to the Vagrant via SSH with this command:
 
 You'll be logged in as user vagrant. Now do this:
 
-> cd ~/cd go/src/github.com/APTrust/bagman/bagman/
+> cd ~/go/src/github.com/APTrust/bagman/bagman/
 > go test
 
 You should see output like this:
@@ -70,6 +70,7 @@ Now finish setting up Fluctus. You should not have to run migrations
 the first time, since the Ansible setup did that for you.
 
 > cd ~/aptrust/fluctus
+
 > bundle exec rake jetty:start
 
 Jetty will take a while to start. Once it's running, run setup to
@@ -114,6 +115,7 @@ With the Rails server still running, open another ssh connection using
 vagrant ssh, and do this:
 
 > cd ~/go/src/github.com/APTrust/bagman/
+
 > ./scripts/process_items.sh
 
 The process_items script ingests a number of bags from our AWS test

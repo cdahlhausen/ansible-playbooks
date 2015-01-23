@@ -42,11 +42,11 @@
     when: psdash_role == 'agent'
     template:
       src=agent_config.j2
-      dest=~/.psdash_config.py
+      dest=/home/{{ system_default_user }}/.psdash_config.py
 
 # Copy the psdash config file for the server
   - name: copy psdash agent config
     when: psdash_role == 'server'
     template:
       src=agent_config.j2
-      dest=~/.psdash_config.py
+      dest=/home/{{ system_default_user }}/.psdash_config.py

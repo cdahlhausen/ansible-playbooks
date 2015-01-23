@@ -6,6 +6,9 @@
 # psdash will send all env vars, and some of those
 # contain info we don't want to share.
 
-PSDASH_REGISTER_TO = 172.31.32.170
-PSDASH_REGISTER_AS = {{ inventory_hostname }}
+PSDASH_REGISTER_TO = "http://172.31.32.170:5000"
+PSDASH_REGISTER_AS = "{{ inventory_hostname }}"
 PSDASH_ENVIRON_WHITELIST = ['GOPATH', 'RAILS_ENV', 'SOLR_URL', 'FEDORA_URL', 'FEDORA_NAMESPACE']
+PSDASH_LOGS = ['/var/log/*.log', '/mnt/apt/logs/*.log', '/mnt/apt/logs/*.json',
+               '/mnt/apt/logs/ingest_failures/*', '/var/www/test.aptrust.org/fluctus/log/*',
+               '/var/www/repository.aptrust.org/fluctus/log/*', '/var/log/tomcat7/*.log']

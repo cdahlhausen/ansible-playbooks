@@ -4,5 +4,6 @@
 # psdash will send all env vars, and some of those
 # contain info we don't want to share.
 
-PSDASH_REGISTER_AS = {{ inventory_hostname }}
+PSDASH_REGISTER_AS = "{{ inventory_hostname }}"
 PSDASH_ENVIRON_WHITELIST = ['GOPATH', 'RAILS_ENV', 'SOLR_URL', 'FEDORA_URL', 'FEDORA_NAMESPACE']
+PSDASH_LOGS = ['/var/log/boot.log', '/var/log/cloud-init.log', '/var/log/dmesg']

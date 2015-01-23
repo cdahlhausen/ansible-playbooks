@@ -2,6 +2,11 @@
 #
 # Common setup for psdash agents and server.
 #
+# For monitoring to work, every member of the monitoring
+# group has to open port 5000 to every other member of the
+# monitoring group. The AWS security group PSDash has these
+# rules already set up.
+#
 
 # psdash needs pip and the python dev headers
   - name: install required packages

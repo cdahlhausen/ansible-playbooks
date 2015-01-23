@@ -36,3 +36,17 @@
 # some native extensions.
   - name: install psdash if necessary
     pip: name=psdash state=present virtualenv=/home/{{ system_default_user }}/psdash
+
+# Copy the psdash config file for agents
+  - name: copy psdash agent config
+    when: psdash_role == 'agent'
+    template:
+      src=agent_config.j2
+      dest=~/.psdash_config.py
+
+# Copy the psdash config file for the server
+  - name: copy psdash agent config
+    when: psdash_role == 'server'
+    template:
+      src=agent_config.j2
+      dest=~/.psdash_config.py

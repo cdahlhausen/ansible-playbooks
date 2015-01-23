@@ -1,0 +1,8 @@
+# Configuration for psdash server (web ui)
+#
+# Be sure to whitelist environment vars, otherwise,
+# psdash will send all env vars, and some of those
+# contain info we don't want to share.
+
+PSDASH_REGISTER_AS = {{ inventory_hostname }}
+PSDASH_ENVIRON_WHITELIST = ['GOPATH', 'RAILS_ENV', 'SOLR_URL', 'FEDORA_URL', 'FEDORA_NAMESPACE']

@@ -1,0 +1,11 @@
+# Configuration for psdash client/agent
+# This tells our agent what server to report to,
+# and sets the host name it will report as.
+#
+# Be sure to whitelist environment vars, otherwise,
+# psdash will send all env vars, and some of those
+# contain info we don't want to share.
+
+PSDASH_REGISTER_TO = 172.31.32.170
+PSDASH_REGISTER_AS = {{ inventory_hostname }}
+PSDASH_ENVIRON_WHITELIST = ['GOPATH', 'RAILS_ENV', 'SOLR_URL', 'FEDORA_URL', 'FEDORA_NAMESPACE']

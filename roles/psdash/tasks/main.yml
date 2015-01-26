@@ -55,3 +55,24 @@
     template:
       src=server_config.j2
       dest=/home/{{ system_default_user }}/.psdash_config.py
+
+# Create an ssl cert on the server, if it does not already have one.
+# This is a self-signed certificate, so you'll get a warning in your
+# browser.
+  - stat: path=/home/{{ system_default_user }}/psdash/certs
+    register: certdir
+
+  - name: make cert directory if necessary
+    command: mkdir /home/{{ system_default_user }}/psdash/certs
+    when: psdash_role == 'server' and not certdir.stat.exists
+
+  - stat: path=/home/{{ system_default_user }}/psdash/certs/cert.pem
+    register: cert
+
+  - name: create self-signed ssl cert if necessary
+    command: openssl req -x509 -newkey rsa:2048 -sha256 -nodes -keyout key.pem -out cert.pem -days 1500 -subj '/CN=psdash.aptrust.org'
+    when: psdash_role == 'server' and not cert.stat.exists
+    args:
+      chdir: /home/{{ system_default_user }}/psdash/certs/
+    environment:
+      PATH: "/usr/bin"

@@ -1,0 +1,14 @@
+;; This config file should *NOT* go on the go ingest/restore
+;; servers, since those have to run a number of go services.
+;; This should go on the live and test Rails servers and on
+;; the rsync server.
+
+;; psdash monitoring listens on port 5000
+[program:psdash]
+{% if psdash_role == 'agent' %}
+command=/home/ubuntu/psdash/bin/psdash --agent
+{% else %}
+command=/home/ubuntu/psdash/bin/psdash
+{% endif %}
+environment=PATH="/home/ubuntu/psdash/bin/:$PATH",PSDASH_CONFIG="/home/ubuntu/.psdash_config.py"
+priority=100

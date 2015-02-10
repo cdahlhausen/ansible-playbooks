@@ -15,6 +15,7 @@
     with_items:
         - python-dev
         - python-pip
+        - supervisor
     environment:
         DEBIAN_FRONTEND: noninteractive
     tags:
@@ -76,3 +77,18 @@
       chdir: /home/{{ system_default_user }}/psdash/certs/
     environment:
       PATH: "/usr/bin"
+
+# Make sure supervisor config is set to run psdash.
+# This should only be set on the non-Go servers.
+# The Go servers that run ingest and restore have
+# their own supervisor config files.
+  - name: copy supervisor config
+    when: psdash_supervisor_config == 'yes'
+    sudo: yes
+    template:
+      src=supervisord.j2
+      dest=/etc/supervisor/conf.d/supervisord.conf
+
+
+# Make sure psdash is running
+  - supervisorctl: name=psdash state=restarted config=/etc/supervisor/conf.d/supervisord.conf

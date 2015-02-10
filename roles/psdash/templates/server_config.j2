@@ -13,8 +13,10 @@ PSDASH_AUTH_PASSWORD = "{{ lookup('env','PSDASH_PWD') }}"
 
 PSDASH_HTTPS_KEYFILE = "/home/{{ system_default_user }}/psdash/certs/key.pem"
 PSDASH_HTTPS_CERTFILE = "/home/{{ system_default_user }}/psdash/certs/cert.pem"
-PSDASH_NODES = ['54.173.231.69:5000',
-                '54.172.115.2:5000',
-                '52.0.57.87:5000',
-                '54.175.97.3:5000',
-                '54.175.41.111:5000']
+
+PSDASH_NODES = [
+    {'name': 'test.aptrust.org', 'host': '54.84.48.153', 'port': 5000},
+    {'name': 'repository.aptrust.org', 'host': '54.172.115.2', 'port': 5000},
+    {'name': 'Test Ingest/Restore', 'host': '52.0.57.87', 'port': 5000},
+    {'name': 'Live Ingest', 'host': '54.175.97.3', 'port': 5000},
+    {'name': 'Live Restore', 'host': '54.175.41.111', 'port': 5000}]

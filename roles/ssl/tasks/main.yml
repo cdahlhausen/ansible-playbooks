@@ -20,3 +20,12 @@
     group=root
     mode=0600
   tags: ssl
+
+- name: Copy ssl intermediate cert chain
+  copy:
+    src={{ ssl_chain }}
+    dest={{ ssl_chain_path }}
+    owner=root
+    group=root
+    mode=0755
+  tags: ssl

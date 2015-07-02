@@ -1,0 +1,13 @@
+#
+# Make sure rsync and rssh are installed.
+#
+
+# Install rsync
+  - name: rsync
+    sudo: yes
+    apt: pkg=rsync state=present
+
+# Install rssh shell to limit what rsync users can do
+  - name: rssh
+    sudo: yes
+    apt: pkg=rssh state=present

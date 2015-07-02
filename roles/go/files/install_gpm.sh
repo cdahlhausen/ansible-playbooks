@@ -10,6 +10,6 @@
 
 # gpm is required to find and load nsq dependencies
 go get github.com/pote/gpm
-cd ~/go/src/github.com/pote/gpm
+cd $GOPATH/src/github.com/pote/gpm
 ./configure
 sudo make install

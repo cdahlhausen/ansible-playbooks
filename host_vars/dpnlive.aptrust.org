@@ -1,0 +1,4 @@
+---
+# host_vars/dpnlive.aptrust.org
+
+hostname: dpnlive.aptrust.org

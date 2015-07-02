@@ -1,8 +1,8 @@
 <IfModule mod_ssl.c>
 	<VirtualHost _default_:443>
 		ServerAdmin {{ server_admin }}
-{% if server_name %}
-		ServerName {{ server_name }}
+{% if hostname %}
+		ServerName {{ hostname }}
 {% endif %}
 
 		DocumentRoot {{ document_root }}

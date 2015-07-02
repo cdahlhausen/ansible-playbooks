@@ -1,0 +1,21 @@
+##
+# Add DPN users to the system.
+# Run the rsync playbook before this, so that rssh is installed.
+#
+- name: add common users
+  user: name="{{ item }}" state=present shell='/usr/bin/rssh'
+  tags: common
+  with_items:
+    - dpn.hathi
+    - dpn.chron
+    - dpn.sdr
+    - dpn.tdr
+
+- name: add common user public keys
+  authorized_key: user={{ item.name }} key="{{ lookup('file', item.keyfile) }}" state=present
+  tags: common
+  with_items:
+    - { name: 'dpn.hathi', keyfile: 'dpn/dpn_hathi.pub' }
+    - { name: 'dpn.chron', keyfile: 'dpn/dpn_chron.pub' }
+    - { name: 'dpn.sdr', keyfile: 'dpn/dpn_sdr.pub' }
+    - { name: 'dpn.tdr', keyfile: 'dpn/dpn_tdr.pub' }

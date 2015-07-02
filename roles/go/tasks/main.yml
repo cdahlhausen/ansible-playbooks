@@ -234,7 +234,8 @@
   - name: Checkout bagman repo
     when: not bagman.stat.exists
     git:
-      repo=ssh://git@github.com/APTrust/bagman.git
+      #repo=ssh://git@github.com/APTrust/bagman.git
+      repo=https://github.com/APTrust/bagman.git
       dest=~/go/src/github.com/APTrust/bagman
       accept_hostkey=yes
     tags:

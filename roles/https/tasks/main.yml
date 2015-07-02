@@ -2,7 +2,7 @@
 - name: Apache2 | copy default-ssl template
   template:
     src=siteconfig-ssl.j2
-    dest=/etc/apache2/sites-available/{{ server_name }}-ssl.conf
+    dest=/etc/apache2/sites-available/{{ hostname }}-ssl.conf
     owner=root
     group=root
     mode=0644
@@ -18,6 +18,6 @@
   tags: https
 
 - name: Apache2 | enable https site
-  command: a2ensite {{ server_name }}-ssl
+  command: a2ensite {{ hostname }}-ssl
   notify:
     - restart apache

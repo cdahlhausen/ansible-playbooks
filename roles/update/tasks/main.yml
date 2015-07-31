@@ -1,0 +1,4 @@
+---
+- name: Update all packages and security patches
+  tags: common
+  apt: upgrade=safe

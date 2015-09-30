@@ -22,7 +22,7 @@
     register: s3libs
   - stat: path=~/go/src/github.com/op/go-logging
     register: logginglibs
-  - stat: path=~/go/src/github.com/nu7hatch/gouuid
+  - stat: path=~/go/src/github.com/satori/go.uuid
     register: uuidlibs
   - stat: path=~/go/src/github.com/rakyll/magicmime
     register: mimelibs
@@ -60,11 +60,20 @@
         - source control
 
 # Requirements for C extension https://github.com/rakyll/magicmime
+# Problem here. We need to build against an older commit.
+#
+# cd ~/go/src/github.com
+# mkdir rakyll
+# cd rakyll
+# git clone https://github.com/rakyll/magicmime.git
+# cd magicmime
+# git reset --hard 672bd9146d1802abfd8a851fb428e6070d524e3d
   - name: magicmime
     sudo: yes
     apt: pkg={{item}} state=present
     with_items:
         - gcc
+        - make
         - libmagic-dev
     tags:
         - packages
@@ -208,7 +217,7 @@
       PATH:   /bin:/usr/bin:/usr/local/go/bin
 
   - name: Install Go UUID libs
-    shell: go get github.com/nu7hatch/gouuid
+    shell: go get github.com/satori/go.uuid
     when: not uuidlibs.stat.exists
     environment:
       GOPATH: /home/{{ system_default_user }}/go

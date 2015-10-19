@@ -39,7 +39,7 @@
 # Install base packages
 #
 - name: install base packages
-  tags: common
+  tags: packages
   apt: pkg={{ item }} state=latest update_cache=true
   with_items:
     - sudo
@@ -54,3 +54,32 @@
     - vim-tiny
     - emacs23-nox
 
+##
+# Sendmail aliases workaround
+# This makes sure that root and ubuntu user emails
+# are being sent to ops@aptrust.org
+#
+- name: Aliasing email addresses
+  tags: configuration
+  copy: src='aliases' dest=/etc/aliases owner=root group=root mode=0644 backup=yes
+  register: result
+
+- name: Activate email aliases
+  tags: configuration
+  shell: newaliases
+  when: result|changed
+
+##
+# Add monitoring script for disk space usage.
+# Workaround in lieu of monitoring application.
+#
+
+- name: Add diskcheck.py
+  tags: configuration
+  git: repo=https://github.com/cdahlhausen/ops_scripts.git
+       dest=/srv/ops_scripts
+       accept_hostkey=yes
+
+- name: Add diskcheck cron job
+  tags: common
+  cron: name="Check disk space" minute="10" hour="*" job="/srv/ops_scripts/diskcheck.py"

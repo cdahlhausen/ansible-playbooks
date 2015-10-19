@@ -10,21 +10,50 @@
 # Adding common users to the system.
 #
 - name: add common users
-  user: name="{{ item }}" state=present groups=admin, shell='/bin/bash'
+  user: name="{{ item.name }}"
+        password='{{ item.passwd }}'
+        state=present
+        groups=adm
+        shell='/bin/bash'
   tags: common
   with_items:
-    - andrew.diamond
+#    PW hash file needs to be added. mkpasswd -m
+#    - { name: 'andrew.diamond', passwd: "{{ lookup('file', 'creds/andrew.diamond') }}" }
+    - { name: 'cd3ef', passwd: "{{ lookup('file', 'creds/cd3ef') }}" }
 
 - name: add common user public keys
   authorized_key: user={{ item.name }} key="{{ lookup('file', item.keyfile) }}" state=present
   tags: common
   with_items:
-    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
+#    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
+    - { name: 'cd3ef', keyfile: '~/.ansible/external/files/cdahlhausen/cdahlhausen.pub' }
 
+# We might want to tighten this. Sudo pwd is helpful and more secure. 
+# If ops/stage user ubuntu: could have restrictive settings.
 - name: Modifiy admins so they need no sudo password
   tags: common
   lineinfile: dest=/etc/sudoers state=present regexp='^%admin ALL\=' line='%admin ALL=(ALL) NOPASSWD:ALL' validate='visudo -cf %s'
 
-- name: Add emacs for everyone.
+
+##
+# Install base packages
+#
+- name: install base packages
   tags: common
-  apt: pkg='emacs23-nox' state=present
+  apt: pkg={{ item }} state=latest update_cache=true
+  with_items:
+    - sudo
+    - curl
+    - wget
+    - git-core
+    - tig
+    - tmux
+    - htop
+    - iotop
+    - bmon
+    - vim-tiny
+    - emacs23-nox
+
+#- name: Add emacs for everyone.
+#  tags: common
+#  apt: pkg='emacs23-nox' state=present

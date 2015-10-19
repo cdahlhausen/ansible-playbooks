@@ -54,6 +54,3 @@
     - vim-tiny
     - emacs23-nox
 
-#- name: Add emacs for everyone.
-#  tags: common
-#  apt: pkg='emacs23-nox' state=present

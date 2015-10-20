@@ -82,4 +82,4 @@
 
 - name: Add diskcheck cron job
   tags: common
-  cron: name="Check disk space" minute="10" hour="*" job="/srv/ops_scripts/diskcheck.py"
+  cron: name="Check disk space" minute="*/10" hour="*" job="/srv/ops_scripts/diskcheck.py"

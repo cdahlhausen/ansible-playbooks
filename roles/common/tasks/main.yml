@@ -59,15 +59,21 @@
 # This makes sure that root and ubuntu user emails
 # are being sent to ops@aptrust.org
 #
+- name: Check if postfix is installed
+  shell: dpkg-query -W 'postfix'
+  ignore_errors: True
+  register: is_postfix
+
 - name: Aliasing email addresses
   tags: configuration
   copy: src='aliases' dest=/etc/aliases owner=root group=root mode=0644 backup=yes
-  register: result
+  register: result_aliasing
+  when: is_postfix|failed 
 
 - name: Activate email aliases
   tags: configuration
   shell: newaliases
-  when: result|changed
+  when: result_aliasing|changed
 
 ##
 # Add monitoring script for disk space usage.

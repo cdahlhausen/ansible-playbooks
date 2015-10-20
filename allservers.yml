@@ -1,8 +1,14 @@
 ---
   - hosts: all
-    user: ubuntu
+    user: "{{ system_default_user }}"
     sudo: yes
     vars:
       playbook_name: allservers
+      postfix_aliases:
+        - { user: root, alias: ops@aptrust.org }
+        - { user: ubuntu, alias: ops@aptrust.org }
     roles:
       - common
+      - postfix
+
+

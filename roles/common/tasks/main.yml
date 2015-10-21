@@ -13,7 +13,7 @@
   user: name="{{ item.name }}"
         password='{{ item.passwd }}'
         state=present
-        groups=adm
+        groups='admin'
         shell='/bin/bash'
   tags: common
   with_items:

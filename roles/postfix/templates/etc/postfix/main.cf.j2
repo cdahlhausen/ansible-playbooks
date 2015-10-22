@@ -38,6 +38,9 @@ recipient_delimiter = +
 inet_interfaces = {{ postfix_inet_interfaces }}
 inet_protocols = ipv4
 
+smtp_generic_maps = hash:/etc/postfix/generic
+canonical_maps = hash:/etc/postfix/generic
+
 {% if postfix_relayhost %}
 relayhost = [{{ postfix_relayhost }}]:{{ postfix_relayhost_port }}
 smtp_sasl_auth_enable = yes

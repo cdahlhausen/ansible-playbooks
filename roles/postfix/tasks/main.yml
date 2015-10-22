@@ -102,6 +102,9 @@
     name: postfix
     state: started
     enabled: true
-  notify: send test email
+  notify: test_email
   tags: [configuration, postfix, postfix-start-enable-service]
 
+- name: send test email
+  tags: test_email
+  shell: echo "This is a test message. Ignore me."| mail -s "System {{ ansible_hostname     }} has been successfully provisioned with email." ops@aptrust.org

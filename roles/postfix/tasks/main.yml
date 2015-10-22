@@ -1,5 +1,21 @@
 # tasks file for postfix
 ---
+- name: Checking if sendmail is installed.
+  shell: dpkg-query -W 'sendmail*'
+  ignore_errors: True
+  tags: sendmail
+  register: sendmail_installed
+
+- name: Removing sendmail packages
+  apt: name={{ item }}  state=absent
+  with_items:
+    - sendmail-base
+    - sendmail-bin
+    - sendmail-cf
+    - sendmail-doc
+  tags: sendmail
+  when: sendmail_installed.rc == '0'
+
 - name: configure debconf
   debconf:
     name: "{{ item.name }}"
@@ -51,6 +67,21 @@
     - restart postfix
   tags: [configuration, postfix, postfix-sasl-passwd]
 
+- name: configure AWS SES rewrites
+  lineinfile:
+    dest: /etc/postfix/generic
+    create: yes
+    regexp: '^{{ item.user }}\s+{{ item.alias }}'
+    line: '{{ item.user }} {{ item.alias }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items: postfix_AWS_aliases
+  notify:
+    - postmap generic
+    - restart postfix
+  tags: [configuration, postfix, postfix-aliases]
+
 - name: configure aliases
   lineinfile:
     dest: /etc/aliases
@@ -63,11 +94,14 @@
   notify:
     - new aliases
     - restart postfix
-  tags: [configuration, postfix, postfix-aliases]
+    - send test email
+  tags: [configuration, postfix, postfix-alipostfix/generic ]
 
 - name: start and enable service
   service:
     name: postfix
     state: started
     enabled: true
+  notify: send test email
   tags: [configuration, postfix, postfix-start-enable-service]
+

@@ -1,6 +1,5 @@
-#vagrant ansible_host=10.0.2.15 
 [local-vagrant]
-vagrant ansible_port=222 ansible_user=vagrant user=vagrant
+vagrant ansible_port=2222 ansible_user=vagrant
 
 [local-vagrant:vars]
 system_default_user=vagrant
@@ -8,18 +7,19 @@ system_default_user=vagrant
 [test-servers:vars]
 system_default_user=ubuntu
 
+[production-servers:vars]
+system_default_user=ubuntu
 
 [test-servers]
-#test.aptrust.org
-apt-util
+test.aptrust.org hostname_name=test hostname_fqdn=test.aptrust.org
+apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org
 dpn-test
 
 [production-servers]
-#repository.aptrust.org
-#apt-live-ingest
-#apt-live-restore
-#dpn-test
-#apt-oregon
+repository.aptrust.org
+apt-live-ingest
+apt-live-restore
+apt-oregon
 #
 
 [us-west-servers]

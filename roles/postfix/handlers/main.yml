@@ -14,6 +14,6 @@
 - name: postmap generic
   command: postmap /etc/postfix/generic
 
-- name: send test email
+- name: test_email
   tags: test_email
   command: echo "This is a test message. Ignore me."| mail -s "System {{ ansible_hostname }} has been successfully provisioned with email." ops@aptrust.org

@@ -94,7 +94,7 @@
   notify:
     - new aliases
     - restart postfix
-    - send test email
+    - test_email
   tags: [configuration, postfix, postfix-alipostfix/generic ]
 
 - name: start and enable service
@@ -104,7 +104,3 @@
     enabled: true
   notify: test_email
   tags: [configuration, postfix, postfix-start-enable-service]
-
-- name: send test email
-  tags: test_email
-  shell: echo "This is a test message. Ignore me."| mail -s "System {{ ansible_hostname     }} has been successfully provisioned with email." ops@aptrust.org

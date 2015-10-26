@@ -8,8 +8,14 @@
         - { user: root, alias: ops@aptrust.org }
         - { user: ubuntu, alias: ops@aptrust.org }
         - { user: postmaster, alias: ops@aptrust.org }
+      postfix_AWS_aliases:
+        - { user: "@{{ ansible_fqdn}}", alias: ops@aptrust.org }
+
+      postfix_relayhost: email-smtp.us-east-1.amazonaws.com
+      postfix_relayhost_port: 25
+      postfix_relaytls: true
     roles:
+      - hostname
       - common
       - postfix
-
 

@@ -9,7 +9,7 @@
 ##
 # Adding common users to the system.
 #
-- name: add common users
+- name: Add common users
   user: name="{{ item.name }}"
         password='{{ item.passwd }}'
         state=present
@@ -21,12 +21,33 @@
 #    - { name: 'andrew.diamond', passwd: "{{ lookup('file', 'creds/andrew.diamond') }}" }
     - { name: 'cd3ef', passwd: "{{ lookup('file', 'creds/cd3ef') }}" }
 
-- name: add common user public keys
+- name: Add common user public keys
   authorized_key: user={{ item.name }} key="{{ lookup('file', item.keyfile) }}" state=present
   tags: common
   with_items:
 #    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
     - { name: 'cd3ef', keyfile: '~/.ansible/external/files/cdahlhausen/cdahlhausen.pub' }
+
+#
+# Removing old user accounts
+#
+
+- name: Remove old user accounts
+  user: name="{{ item }}" state=absent remove=yes
+  with_items:
+    - scott.turnbull
+  tags: remove_user
+#
+# Install Security updates periodically
+#- name: Install unattended-upgrades
+#   action: apt pkg=unattended-upgrades state=present
+
+#  - name: Adjust APT update intervals
+#    action: copy src=config/apt_periodic dest=/etc/apt/apt.conf.d/10periodic
+
+#  - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
+#    action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="$ubuntu_release-updates" state=absent
+
 
 # We might want to tighten this. Sudo pwd is helpful and more secure. 
 # If ops/stage user ubuntu: could have restrictive settings.

@@ -2,6 +2,9 @@
   - hosts: all
     user: "{{ system_default_user }}"
     sudo: yes
+    vars_files:
+      - "group_vars/all.yml"
+      - "group_vars/vault.yml"
     vars:
       playbook_name: allservers
       postfix_aliases:
@@ -14,6 +17,9 @@
       postfix_relayhost: email-smtp.us-east-1.amazonaws.com
       postfix_relayhost_port: 25
       postfix_relaytls: true
+      # AWS IAM SES credentials (not access key):
+      postfix_sasl_user: "{{ var_postfix_sasl_user }}"
+      postfix_sasl_password: "{{ var_postfix_sasl_password }}"
     roles:
       - hostname
       - common

@@ -1,0 +1,13 @@
+# http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults
+# This file includes all needed group_vars,# The sensitive variables are copied to the vault file in this directory,
+# which stores sensitive information encrypted.
+#
+---
+include_vars:
+    - "group_vars/vault.yml"
+
+
+var_postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
+var_postfix_sasl_password: "{{ vault_postfix_sasl_password }}"
+
+var_cd3ef_password: "{{ vault_cd3ef_password }}"

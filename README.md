@@ -175,3 +175,39 @@ fingerprint of the new VM will not match the fingerprint of the old
 VM. Ansible will fail to connect but will not give a meaningful
 error. Open ~/.ssh/known_hosts and delete the entry for host
 192.168.33.10, then try again.
+
+
+## Ansible Vault
+In order to store sensitive information securely we use Ansible Vault. This feature of Ansible encrypts any file with AES-256bit encryption. This allows for storing encrypted files in a public repo (GitHub). 
+
+A best practice with Ansible Vault is to keep all variables in a single file (vault.yml) and reference them using an unencrypted file (vars.yml) in order to be able to grep for variables without decrypting the vault every time. Having a single vault file might prove impractical in the future, so we might revisit this later.
+
+The process involves three basic commands:
+
+### Encrypt a vault file (only done initially).
+> ansible-vault create group_vars/vault.yml
+
+### Edit encrypted variables
+> ansible-vault edit group_vars/vault.yml
+
+### Encrypting Unencrypted Files
+> ansible-vault encrypt group_vars/otherfile.yml
+
+### Re-key encrypted file (reset the password used to encrypt file)
+> ansible-vault rekey group_vars/vault.yml
+
+In order to run an Ansible playbook and decrypt the vault at runtime make sure to use the flag --ask-vault-pass
+ansible-playbook site.yml --ask-vault-pass
+
+## .ansible.cfg
+It is advisable to keep an Ansible config file in your home directory to make use of Ansible simpler. A config file could look like this:
+
+[defaults]
+inventory = ~/aptrust/ansible-playbooks/hosts
+
+# Prompts for vault password with every run of a playbook
+ask_vault_pass = True
+
+# The vault password can be stored in a flat-file to avoid the password prompt
+# Be aware that it is not advisable to keep passwords in text files in clear #text.
+vault_password_file=~/.ansible/vault_pass

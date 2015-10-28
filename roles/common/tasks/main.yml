@@ -1,5 +1,3 @@
----
-##
 # Message of the day explaining server is under control of Ansible.
 #
 - name: MOTD
@@ -9,13 +7,14 @@
 ##
 # Adding common users to the system.
 #
-- name: Add common users
+- name: add common users
   user: name="{{ item.name }}"
         password='{{ item.passwd }}'
         state=present
-        groups='admin,adm'
+        groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm' }}{% else %}{{'adm' }}{% endif %}
         shell='/bin/bash'
   tags: common
+  no_log: True
   with_items:
 #    PW hash file needs to be added. mkpasswd -m
 #    - { name: 'andrew.diamond', passwd: "{{ lookup('file', 'creds/andrew.diamond') }}" }

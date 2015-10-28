@@ -202,12 +202,12 @@ ansible-playbook site.yml --ask-vault-pass
 ## .ansible.cfg
 It is advisable to keep an Ansible config file in your home directory to make use of Ansible simpler. A config file could look like this:
 
-[defaults]
-inventory = ~/aptrust/ansible-playbooks/hosts
-
-# Prompts for vault password with every run of a playbook
-ask_vault_pass = True
-
-# The vault password can be stored in a flat-file to avoid the password prompt
-# Be aware that it is not advisable to keep passwords in text files in clear #text.
-vault_password_file=~/.ansible/vault_pass
+> [defaults]
+> inventory = ~/aptrust/ansible-playbooks/hosts
+> 
+> # Prompts for vault password with every run of a playbook
+> ask_vault_pass = True
+> 
+> # The vault password can be stored in a flat-file to avoid the password prompt
+> # Be aware that it is not advisable to keep passwords in text files in clear #text.
+> vault_password_file=~/.ansible/vault_pass

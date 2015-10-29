@@ -3,11 +3,26 @@
 # which stores sensitive information encrypted.
 #
 ---
-include_vars:
-    - "group_vars/vault.yml"
+# This does not work for some reason. Investigate.
+#include_vars:
+#    - "group_vars/vault.yml"
 
+# Postfix variables
+postfix_aliases:
+    - { user: root, alias: ops@aptrust.org }
+    - { user: ubuntu, alias: ops@aptrust.org }
+    - { user: postmaster, alias: ops@aptrust.org }
+postfix_AWS_aliases:
+    - { user: "@{{ ansible_fqdn}}", alias: ops@aptrust.org }
 
-var_postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
-var_postfix_sasl_password: "{{ vault_postfix_sasl_password }}"
+postfix_relayhost: email-smtp.us-east-1.amazonaws.com
+postfix_relayhost_port: 25
+postfix_relaytls: true
+# AWS IAM SES credentials (not access key):
 
+postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
+postfix_sasl_password: "{{ vault_postfix_sasl_password }}"
+
+# User variables
 var_cd3ef_password: "{{ vault_cd3ef_password }}"
+var_cd3ef_sshkey: "{{ vault_cd3ef_sshkey }}"

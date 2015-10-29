@@ -1,20 +1,25 @@
 # tasks file for postfix
 ---
 - name: Checking if sendmail is installed.
-  shell: dpkg-query -W 'sendmail*'
+  shell: dpkg-query -l 'sendmail*'
   ignore_errors: True
   tags: sendmail
   register: sendmail_installed
 
+- name: Stopping sendmail service
+  service: name=sendmail state=stopped
+  tags: sendmail
+  when: sendmail_installed.rc == 0
+
 - name: Removing sendmail packages
-  apt: name={{ item }}  state=absent
+  apt: name={{ item }}  state=absent force=yes
   with_items:
     - sendmail-base
     - sendmail-bin
     - sendmail-cf
     - sendmail-doc
   tags: sendmail
-  when: sendmail_installed.rc == '0'
+  when: sendmail_installed.rc == 0
 
 - name: configure debconf
   debconf:

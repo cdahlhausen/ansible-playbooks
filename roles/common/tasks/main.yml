@@ -18,42 +18,33 @@
   with_items:
 #    PW hash file needs to be added. mkpasswd -m
 #    - { name: 'andrew.diamond', passwd: "{{ lookup('file', 'creds/andrew.diamond') }}" }
-    - { name: 'cd3ef', passwd: "{{ lookup('file', 'creds/cd3ef') }}" }
+    - { name: 'cd3ef', passwd: "{{ var_cd3ef_password }}" }
 
-- name: Add common user public keys
-  authorized_key: user={{ item.name }} key="{{ lookup('file', item.keyfile) }}" state=present
+- name: add common user public keys
+  authorized_key: user={{ item.name }} key="{{ item.pubkeyfile }}" state=present
   tags: common
   with_items:
+## Keys can be stored encrypted as a variable in group_vars/vault.yml or directly imported from GitHub
 #    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
-    - { name: 'cd3ef', keyfile: '~/.ansible/external/files/cdahlhausen/cdahlhausen.pub' }
-
+#    - { name: 'cd3ef', pubkeyfile: "{{ inventory_dir }}/group_vars/vault/users/cd3ef/cd3ef2.pub" }
+#    - { name: 'cd3ef', pubkeyfile: "{{ var_cd3ef_sshkey }}" }
+#    - { name: 'andrew.diamond', pubkeyfile: "http://github.com/diamondap.keys" }
+    - { name: 'cd3ef', pubkeyfile: "http://github.com/cdahlhausen.keys" }
 #
 # Removing old user accounts
 #
-
 - name: Remove old user accounts
   user: name="{{ item }}" state=absent remove=yes
   with_items:
     - scott.turnbull
   tags: remove_user
-#
-# Install Security updates periodically
-#- name: Install unattended-upgrades
-#   action: apt pkg=unattended-upgrades state=present
-
-#  - name: Adjust APT update intervals
-#    action: copy src=config/apt_periodic dest=/etc/apt/apt.conf.d/10periodic
-
-#  - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
-#    action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="$ubuntu_release-updates" state=absent
 
 
-# We might want to tighten this. Sudo pwd is helpful and more secure. 
+# We might want to tighten this. Sudo pwd is helpful and more secure.
 # If ops/stage user ubuntu: could have restrictive settings.
 - name: Modifiy admins so they need no sudo password
   tags: common
   lineinfile: dest=/etc/sudoers state=present regexp='^%admin ALL\=' line='%admin ALL=(ALL) NOPASSWD:ALL' validate='visudo -cf %s'
-
 
 ##
 # Install base packages
@@ -99,7 +90,6 @@
 # Add monitoring script for disk space usage.
 # Workaround in lieu of monitoring application.
 #
-
 - name: Add diskcheck.py
   tags: configuration
   git: repo=https://github.com/cdahlhausen/ops_scripts.git
@@ -110,3 +100,15 @@
 - name: Add diskcheck cron job
   tags: common
   cron: name="Check disk space" minute="*/10" hour="*" job="/srv/ops_scripts/diskcheck.py"
+
+# Install Security updates periodically
+#- name: Install unattended-upgrades
+#   action: apt pkg=unattended-upgrades state=present
+
+#  - name: Adjust APT update intervals
+#NEED to ADJUST
+#    action: copy src=config/apt_periodic dest=/etc/apt/apt.conf.d/10periodic
+
+#  - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
+#    action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="$ubuntu_release-updates" state=absent
+

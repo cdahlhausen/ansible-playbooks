@@ -3,10 +3,10 @@
   apt: pkg=openssl state=present
   tags: ssl
 
-- name: Copy over ssl certs
+- name: Copy ssl certs
   copy:
-    src={{ ssl_cert }}
-    dest={{ ssl_cert_path }}
+    content="{{ ssl_cert }}"
+    dest="{{ ssl_cert_path }}"
     owner=root
     group=root
     mode=0755
@@ -14,8 +14,8 @@
 
 - name: Copy over ssl keys
   copy:
-    src={{ ssl_key }}
-    dest={{ ssl_key_path }}
+    content="{{ ssl_key }}"
+    dest="{{ ssl_key_path }}"
     owner=root
     group=root
     mode=0600
@@ -23,8 +23,8 @@
 
 - name: Copy ssl intermediate cert chain
   copy:
-    src={{ ssl_chain }}
-    dest={{ ssl_chain_path }}
+    content="{{ ssl_chain }}"
+    dest="{{ ssl_chain_path }}"
     owner=root
     group=root
     mode=0755

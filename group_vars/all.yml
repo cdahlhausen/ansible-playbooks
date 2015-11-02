@@ -7,7 +7,9 @@
 #include_vars:
 #    - "group_vars/vault.yml"
 
-# Postfix variables
+
+## Postfix variables
+#
 postfix_aliases:
     - { user: root, alias: ops@aptrust.org }
     - { user: ubuntu, alias: ops@aptrust.org }
@@ -19,10 +21,27 @@ postfix_relayhost: email-smtp.us-east-1.amazonaws.com
 postfix_relayhost_port: 25
 postfix_relaytls: true
 # AWS IAM SES credentials (not access key):
-
 postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
 postfix_sasl_password: "{{ vault_postfix_sasl_password }}"
 
+##
 # User variables
+##
 var_cd3ef_password: "{{ vault_cd3ef_password }}"
 var_cd3ef_sshkey: "{{ vault_cd3ef_sshkey }}"
+
+#var_andrewdiamond_password: "{{ vault_andrewdiamond_password }}"
+#var_andrewdiamond_sshkey: "{{ vault_andrewdiamond_sshkey }}"
+
+###
+# SSL Certificates
+##
+var_ssl_cert: "{{ vault_ssl_cert }}"
+var_ssl_key: "{{ vault_ssl_key }}"
+var_ssl_chain: "{{ vault_ssl_chain }}"
+var_ssl_cert_path: "{{ vault_ssl_cert_path }}"
+var_ssl_key_path: "{{ vault_ssl_key_path }}"
+var_ssl_chain_path: "{{ vault_ssl_chain_path }}"
+
+
+

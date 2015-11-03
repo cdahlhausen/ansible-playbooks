@@ -1,45 +1,96 @@
 ---
-  - hosts: vagrant
-#    Might not be needed if using ansible-playbooks -b
-#    sudo: yes
-   vars_files:
-      - "group_vars/all.yml"
-      - "group_vars/vault.yml"
-   vars:
-      playbook_name: fluctus
+-   hosts: local-vagrant
+    vars_files:
+        - "group_vars/all.yml"
+        - "group_vars/vault.yml"
+    vars:
+        playbook_name: fluctus
 
-      ## SSL
-      ssl_cert: {{ var_ssl_cert }}
-      ssl_key: {{ var_ssl_key }}
-      ssl_chain: {{ var_ssl_chain }}
-      ssl_cert_path: {{ var_ssl_cert_path }}
-      ssl_key_path: {{ var_ssl_key_path }}
-      ssl_chain_path: {{ var_ssl_chain_path }}
+    # SSL
+        ssl_cert: "{{ var_ssl_cert }}"
+        ssl_key: "{{ var_ssl_key }}"
+        ssl_chain: "{{ var_ssl_chain }}"
+        ssl_cert_path: "{{ var_ssl_cert_path }}"
+        ssl_key_path: "{{ var_ssl_key_path }}"
+        ssl_chain_path: "{{ var_ssl_chain_path }}"
 
-      ## Apache
-      apache_vhosts:
-        - servername: "{{ ansible_fqdn }}"
-          documentroot: "/var/www/{{ playbook_name }}"
-          serveradmin: "ops@aptrust.org"
-          extra_parameters: |
+    # Apache
+        apache_vhosts:
+          - servername: "{{ ansible_fqdn }}"
+            documentroot: "/var/www/{{ ansible_fqdn }}/{{ playbook_name }}"
+            serveradmin: "ops@aptrust.org"
+            extra_parameters: |
                 # Redirect all http to https per default
                 RewriteEngine On
                 RewriteCond %{HTTPS} !=on
                 RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
-      apache_vhosts_ssl:
-        - {
-            servername: "{{ ansible_fqdn }}"
-            documentroot: "/var/www/{{ playbook_name }}"
+        apache_vhosts_ssl:
+          - servername: "{{ ansible_fqdn }}"
+            documentroot: "/var/www/{{ ansible_fqdn }}/{{ playbook_name }}"
             serveradmin: "ops@aptrust.org"
-            certificate_file: "{{ var_ssl_cert }}",
-            certificate_key_file: "{{ var_ssl_key }}",
-            certificate_chain_file: "{{ var_ssl_chain }}"
-        }
-         apache_mods_enabled:
-           - rewrite.load
-           - ssl.load
+            certificate_file: "{{ var_ssl_cert_path }}"
+            certificate_key_file: "{{ var_ssl_key_path }}"
+            certificate_chain_file: "{{ var_ssl_chain_path }}"
+
+        apache_mods_enabled:
+            - rewrite.load
+            - ssl.load
         apache_mods_disabled: []
+
+
+    # Postgresql
+        # Basic settings
+        postgresql_version: 9.3
+        postgresql_encoding: 'UTF-8'
+        postgresql_locale: 'en_US.UTF-8'
+
+        postgresql_admin_user: "postgres"
+        postgresql_default_auth_method: "trust"
+
+        #postgresql_cluster_name: "main"
+        #postgresql_cluster_reset: false
+
+        # List of databases to be created (optional)
+        #postgresql_databases:
+        #  - name: foobar
+             # flag to install the hstore extension on this database (yes/no)
+        #    hstore: yes
+             # flag to install the uuid-ossp extension on this database (yes/no)
+        #    uuid_ossp: yes
+             # flag to install the citext extension on this database (yes/no)
+        #    citext: yes
+        # List of users to be created (optional)
+        #postgresql_users:
+        #  - name: baz
+        #    pass: pass
+        #    encrypted: no       # denotes if the password is already encrypted.
+
+        # List of user privileges to be applied (optional)
+        #postgresql_user_privileges:
+        #  - name: baz                   # user name
+        #    db: foobar                  # database
+        #    priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+        #    role_attr_flags: "CREATEDB" # role attribute flagsv
+
     roles:
       - common
+      - hostname
       - apache
       - ssl
+      - postgresql
+
+    tasks:
+    - name: Install required packages
+      apt: name="{{ item }}" state=present
+      with_items:
+        - postgresql-client
+        - libpq-dev
+        - nodejs
+        - sqlite3
+        - libsqlite3-dev
+
+    - name: Checkout Fluctus repository
+      git:
+        repo=git://github.com/APTrust/fluctus
+        dest="/var/www/{{ ansible_fqdn }}/{{ playbook_name }}"
+        accept_hostkey=True

@@ -1,15 +1,13 @@
+# all.yml
+# This file includes all needed group_vars and maps them to their vault vars.
+# The vault vars are encrypted using ansible-vault.
+#
+# Source:
 # http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults
-# This file includes all needed group_vars,# The sensitive variables are copied to the vault file in this directory,
-# which stores sensitive information encrypted.
-#
 ---
-# This does not work for some reason. Investigate.
-#include_vars:
-#    - "group_vars/vault.yml"
-
-
-## Postfix variables
-#
+##
+# Postfix variables
+##
 postfix_aliases:
     - { user: root, alias: ops@aptrust.org }
     - { user: ubuntu, alias: ops@aptrust.org }
@@ -20,6 +18,7 @@ postfix_AWS_aliases:
 postfix_relayhost: email-smtp.us-east-1.amazonaws.com
 postfix_relayhost_port: 25
 postfix_relaytls: true
+
 # AWS IAM SES credentials (not access key):
 postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
 postfix_sasl_password: "{{ vault_postfix_sasl_password }}"
@@ -43,5 +42,9 @@ var_ssl_cert_path: "{{ vault_ssl_cert_path }}"
 var_ssl_key_path: "{{ vault_ssl_key_path }}"
 var_ssl_chain_path: "{{ vault_ssl_chain_path }}"
 
-
+##
+# AWS Credentials
+##
+var_aws_access_key_id: {% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_access_prod_vkey_id }}{% else %}{{ vault_aws_access_dev_key_id }} {% endif %}
+var_aws_secret_access_key: {% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_secret_access_prod_key}}{% else %}{{ vault_aws_secret_access_dev_key }}{{% endif %}}
 

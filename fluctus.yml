@@ -14,7 +14,7 @@
         ssl_key_path: "{{ var_ssl_key_path }}"
         ssl_chain_path: "{{ var_ssl_chain_path }}"
 
-    # Apache
+    # APACHE
         apache_vhosts:
           - servername: "{{ ansible_fqdn }}"
             documentroot: "/var/www/{{ ansible_fqdn }}/{{ playbook_name }}"
@@ -37,8 +37,7 @@
             - ssl.load
         apache_mods_disabled: []
 
-
-    # Postgresql
+    # POSTGRESQL
         # Basic settings
         postgresql_version: 9.3
         postgresql_encoding: 'UTF-8'

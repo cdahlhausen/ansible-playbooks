@@ -14,26 +14,26 @@
 # Bagman deps.
   - stat: path=/usr/local/bin/gpm
     register: gpm
-  - stat: path=~/go/src/github.com/bitly/nsq/
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/bitly/nsq/
     register: nsqlibs
-  - stat: path=~/go/src/github.com/crowdmob/goamz/aws
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/crowdmob/goamz/aws
     register: awslibs
-  - stat: path=~/go/src/github.com/crowdmob/goamz/s3
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/crowdmob/goamz/s3
     register: s3libs
-  - stat: path=~/go/src/github.com/op/go-logging
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/op/go-logging
     register: logginglibs
-  - stat: path=~/go/src/github.com/satori/go.uuid
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/satori/go.uuid
     register: uuidlibs
-  - stat: path=~/go/src/github.com/rakyll/magicmime
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/rakyll/magicmime
     register: mimelibs
-  - stat: path=~/go/src/github.com/APTrust/bagins
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/APTrust/bagins
     register: baginslibs
-  - stat: path=~/go/bin/nsqd
+  - stat: path=/home/{{system_default_user}}/go/bin/nsqd
     register: nsqd_binaries
 
 
 # The bagman source code directory
-  - stat: path=~/go/src/github.com/APTrust/bagman
+  - stat: path=/home/{{system_default_user}}/go/src/github.com/APTrust/bagman
     register: bagman
 
 # Emacs with golang-mode for editing
@@ -92,10 +92,10 @@
     script: install_go_1.4.sh
     tags: go-binaries
 
-# Set env var in .bash_profile
+#CD3EF: This is discriminating vim users :) If we use our own users to login, we can use `sudo -E` to preserve our env.
   - name: set editor in .bash_profile
     lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       create=yes
       mode=0644
       state=present
@@ -103,25 +103,25 @@
 
   - name: set aws access key in .bash_profile
     lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
-      line="export AWS_ACCESS_KEY_ID=\"{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}\""
+      line="export AWS_ACCESS_KEY_ID="{{ var_aws_access_key_id }}
 
   - name: set aws secret key in .bash_profile
     lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
-      line="export AWS_SECRET_ACCESS_KEY=\"{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}\""
+      line="export AWS_SECRET_ACCESS_KEY="{{ var_aws_secret_access_key }}
 
   - name: set go path in .bash_profile
     lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export GOPATH=$HOME/go"
 
-  - name: set path in .bash_profile
+  - name: set path in .bash_profile or .profile
     lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export PATH=\"$GOPATH/bin:$PATH:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin\""
 
@@ -130,15 +130,15 @@
 # after the system is running.
   - name: set fluctus API user in .bash_profile
     lineinfile:
-      dest=~/.bash_profile
+      dest=/home/{{system_default_user}}/.bash_profile
       state=present
       line="export FLUCTUS_API_USER='system@aptrust.org'"
 
   - name: set fluctus API key in .bash_profile
     lineinfile:
-      dest=~/.bash_profile
+      dest=/home/{{system_default_user}}/.bash_profile
       state=present
-      line="export FLUCTUS_API_KEY='GENERATE API KEY THROUGH WEB UI AND SET IN ~/.bash_profile'"
+      line="export FLUCTUS_API_KEY='GENERATE API KEY THROUGH WEB UI AND SET IN /home/{{system_default_user}}/.bash_profile'"
 
 
 # Add /usr/local/go/bin to system-wide path var
@@ -243,7 +243,7 @@
     git:
       #repo=ssh://git@github.com/APTrust/bagman.git
       repo=https://github.com/APTrust/bagman.git
-      dest=~/go/src/github.com/APTrust/bagman
+      dest=/home/{{system_default_user}}/go/src/github.com/APTrust/bagman
       accept_hostkey=yes
     tags:
         - go-libs
@@ -254,5 +254,5 @@
     when: not bagman.stat.exists
     script: build_bagman.sh
     environment:
-      GOPATH: ~/go
+      GOPATH: /home/{{system_default_user}}/go
       PATH:   /bin:/usr/bin:/usr/local/go/bin

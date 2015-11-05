@@ -5,6 +5,12 @@
 # Source:
 # http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults
 ---
+
+##
+# System Default User
+##
+system_default_user: "{% if ansible_bios_version != 'VirtualBox' %}ubuntu{% else %}vagrant{% endif %}"
+
 ##
 # Postfix variables
 ##
@@ -45,6 +51,6 @@ var_ssl_chain_path: "{{ vault_ssl_chain_path }}"
 ##
 # AWS Credentials
 ##
-var_aws_access_key_id: {% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_access_prod_vkey_id }}{% else %}{{ vault_aws_access_dev_key_id }} {% endif %}
-var_aws_secret_access_key: {% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_secret_access_prod_key}}{% else %}{{ vault_aws_secret_access_dev_key }}{{% endif %}}
+var_aws_access_key_id: "{% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_access_prod_key_id }}{% else %}{{ vault_aws_access_dev_key_id }}{% endif %}"
+var_aws_secret_access_key: "{% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_secret_access_prod_key}}{% else %}{{ vault_aws_secret_access_dev_key }}{% endif %}"
 

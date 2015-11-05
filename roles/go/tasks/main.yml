@@ -130,13 +130,13 @@
 # after the system is running.
   - name: set fluctus API user in .bash_profile
     lineinfile:
-      dest=/home/{{system_default_user}}/.bash_profile
+      dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export FLUCTUS_API_USER='system@aptrust.org'"
 
   - name: set fluctus API key in .bash_profile
     lineinfile:
-      dest=/home/{{system_default_user}}/.bash_profile
+      dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export FLUCTUS_API_KEY='GENERATE API KEY THROUGH WEB UI AND SET IN /home/{{system_default_user}}/.bash_profile'"
 

@@ -71,12 +71,17 @@
         #    priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
         #    role_attr_flags: "CREATEDB" # role attribute flagsv
 
+    # AWS CREDENTIALS
+    #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"
+    #AWS_SECRET_ACCESS_KEY: "{{ var_aws_secret_access_key }}"
+
     roles:
-      - common
-      - hostname
-      - apache
-      - ssl
-      - postgresql
+    #      - common
+    #  - hostname
+    #  - apache
+    #  - ssl
+    #  - postgresql
+      - go
 
     tasks:
     - name: Install required packages
@@ -93,3 +98,5 @@
         repo=git://github.com/APTrust/fluctus
         dest="/var/www/{{ ansible_fqdn }}/{{ playbook_name }}"
         accept_hostkey=True
+
+

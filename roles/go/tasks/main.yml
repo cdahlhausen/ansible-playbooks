@@ -86,10 +86,10 @@
 
 
 # Install the Go 1.4 binaries
-  - name: Install Go 1.4 if necessary
+  - name: Install Go 1.4
     when: not godir.stat.exists
     sudo: yes
-    script: install_go_1.4.sh
+    shell: "curl https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz | sudo tar xz -C /usr/local | rm"
     tags: go-binaries
 
 #CD3EF: This is discriminating vim users :) If we use our own users to login, we can use `sudo -E` to preserve our env.
@@ -160,6 +160,7 @@
     when: not nsqd_binaries.stat.exists
     tags: go-libs
     environment:
+      HOME: /home/{{ system_default_user }}
       GOPATH: /home/{{ system_default_user }}/go
       PATH:   /bin:/usr/bin:/usr/local/go/bin
 
@@ -250,7 +251,7 @@
     when: not bagman.stat.exists
     git:
       #repo=ssh://git@github.com/APTrust/bagman.git
-      repo=https://github.com/APTrust/bagman.git
+      repo=git://github.com/APTrust/bagman.git
       dest=/home/{{system_default_user}}/go/src/github.com/APTrust/bagman
       accept_hostkey=yes
     tags:
@@ -260,7 +261,8 @@
 # Build bagman binaries
   - name: Build bagman binaries
     when: not bagman.stat.exists
-    script: build_bagman.sh
+    shell: $BAGMAN_HOME/scripts/build.sh
     environment:
+      BAGMAN_HOME: /home/{{system_default_user}}/go/src/github.com/APTrust/bagman
       GOPATH: /home/{{system_default_user}}/go
       PATH:   /bin:/usr/bin:/usr/local/go/bin

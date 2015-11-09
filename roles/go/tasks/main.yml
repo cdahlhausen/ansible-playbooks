@@ -68,7 +68,7 @@
 # git clone https://github.com/rakyll/magicmime.git
 # cd magicmime
 # git reset --hard 672bd9146d1802abfd8a851fb428e6070d524e3d
-  - name: magicmime
+  - name: magicmime dependency
     sudo: yes
     apt: pkg={{item}} state=present
     with_items:
@@ -94,7 +94,7 @@
 
 #CD3EF: This is discriminating vim users :) If we use our own users to login, we can use `sudo -E` to preserve our env.
   - name: set editor in .bash_profile
-    lineinfile:
+    lineinfile: >
       dest={% if ansible_distribution == "MacOSX"%}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       create=yes
       mode=0644
@@ -102,7 +102,7 @@
       line="export EDITOR=emacs"
 
   - name: set aws access key in .bash_profile
-    lineinfile:
+    lineinfile: >
       dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export AWS_ACCESS_KEY_ID="{{ var_aws_access_key_id }}
@@ -173,10 +173,13 @@
 # work with. E.g. new source libraries with breaking changes.
 
 
-# This task should be run as ubuntu or vagrant user,
-# and assumes that user has passwordless sudo privileges.
-  - name: build Go Package Manager
-    script: install_gpm.sh
+# Installing gpm as recommended in its repository.
+  - name: Install Go Package Manager
+    sudo: yes
+    get_url:
+      url="https://raw.githubusercontent.com/pote/gpm/v1.3.2/bin/gpm"
+      dest="/usr/local/bin"
+      mode="0755"
     when: not gpm.stat.exists
     tags: go-libs
     environment:
@@ -221,8 +224,13 @@
       GOPATH: /home/{{ system_default_user }}/go
       PATH:   /bin:/usr/bin:/usr/local/go/bin
 
+# Using git to get specific version. Package does not have other
+# dependencies that we would miss using git rather than go get
   - name: Install Go MagicMime lib
-    shell: go get github.com/rakyll/magicmime
+    git:
+      repo=https://github.com/rakyll/magicmime.git 
+      dest=/home/{{ system_default_user }}/go/src/github.com/rakyll/magicmime
+      version=672bd9146d1802abfd8a851fb428e6070d524e3
     when: not mimelibs.stat.exists
     environment:
       GOPATH: /home/{{ system_default_user }}/go

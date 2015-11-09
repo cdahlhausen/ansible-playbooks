@@ -66,6 +66,7 @@
     - vim-tiny
     - emacs23-nox
     - unzip
+    - tar
 
 ##
 # Sendmail aliases workaround

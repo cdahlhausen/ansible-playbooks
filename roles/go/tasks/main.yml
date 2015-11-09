@@ -36,17 +36,6 @@
   - stat: path=/home/{{system_default_user}}/go/src/github.com/APTrust/bagman
     register: bagman
 
-# Emacs with golang-mode for editing
-  - name: emacs
-    sudo: yes
-    apt: pkg={{item}} state=present
-    with_items:
-        - emacs23-nox
-        - golang-mode
-    tags:
-        - packages
-        - editors
-
 # Source control tools. Required for go get
   - name: source control clients
     sudo: yes
@@ -86,10 +75,11 @@
 
 
 # Install the Go 1.4 binaries
+# Using curl instead of get_url module to use streaming the file into tar to avoid # rm the downloaded file afterwards.
   - name: Install Go 1.4
     when: not godir.stat.exists
     sudo: yes
-    shell: "curl https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz | sudo tar xz -C /usr/local | rm"
+    shell: curl https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz | sudo tar xz -C /usr/local
     tags: go-binaries
 
 #CD3EF: This is discriminating vim users :) If we use our own users to login, we can use `sudo -E` to preserve our env.

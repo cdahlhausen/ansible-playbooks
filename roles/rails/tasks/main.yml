@@ -3,7 +3,6 @@
 # Rails setup.
 #
 
-
 # Install libraries required for building various gems
 # that our Rails app uses. Be sure to update cache first,
 # since the typical Vagrant Ubuntu VM ships with an out-
@@ -31,6 +30,9 @@
 
 # Check to see if the Oracle JVM version 7 is already installed.
 # Install it if it's not already there.
+
+# TODO: Get rid of scripts and put logic in here.
+
   - name: check java version
     script: has_oracle_1.7.sh
     register: good_java
@@ -53,13 +55,14 @@
     tags: rbenv
 
   - lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line='export PATH="$HOME/.rbenv/bin:$PATH"'
     tags: rbenv
 
   - lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
+      #dest=~/.bash_profile
       state=present
       line='eval "$(rbenv init -)"'
 
@@ -146,7 +149,7 @@
   - name: add rails key to bash_profile if necessary
     when: rails_key_present|failed
     lineinfile:
-      dest=/home/{{ system_default_user }}/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export RAILS_SECRET_KEY='{{ rails_key.stdout }}'"
 
@@ -161,7 +164,7 @@
   - name: add devise key to bash_profile if necessary
     when: devise_key_present|failed
     lineinfile:
-      dest=/home/{{ system_default_user }}/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export DEVISE_SECRET_KEY='{{ devise_key.stdout }}'"
 
@@ -177,19 +180,19 @@
     tags: rails
 
   - lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line='export FEDORA_USER=fedoraAdmin'
     tags: rails
 
   - lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line='export FEDORA_PASS=fedoraAdmin'
     tags: rails
 
   - lineinfile:
-      dest=~/.bash_profile
+      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
       line="export FEDORA_URL='http://127.0.0.1:8983/fedora'"
     tags: rails

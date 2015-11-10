@@ -1,5 +1,8 @@
+[localhost]
+localhost ansible_connection=local
+
 [local-vagrant]
-vagrant ansible_port=2222 ansible_user=vagrant
+vagrant ansible_port=2222 ansible_user=vagrant hostname_name=vagrant hostname_fqdn=vagrant.local.dev
 
 [local-vagrant:vars]
 system_default_user=vagrant
@@ -11,15 +14,15 @@ system_default_user=ubuntu
 system_default_user=ubuntu
 
 [test-servers]
-test.aptrust.org hostname_name=test hostname_fqdn=test.aptrust.org  # Fluctus Server
+apt-test hostname_name=test hostname_fqdn=test.aptrust.org  # Fluctus Server
 apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  # Test Ingest+Restore+Utility
-dpn-test
+#dpn-test
 
 [production-servers]
-repository.aptrust.org hostname_name=repository hostname_fqdn=repository.aptrust.org
+apt-live hostname_name=repository hostname_fqdn=repository.aptrust.org
 apt-live-ingest  hostname_name=apt-live-ingest hostname_fqdn=apt-live-ingest.aptrust.org
 apt-live-restore hostname_name=apt-live-restore hostname_fqdn=apt-live-restore.aptrust.org
-apt-oregon hostname_name=apt-oregon hostname_f:qqdn=apt-oregon.aptrust.org
+apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org
 #
 
 [us-west-servers]

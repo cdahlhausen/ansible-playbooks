@@ -4,6 +4,14 @@
   template: src=motd.j2 dest=/etc/motd owner=root mode=0644
   tags: common
 
+## Making sure github.com is a known_host
+- name: Ensure github.com is a known host
+  lineinfile:
+    dest: /home/{{ system_default_user }}/.ssh/known_hosts
+    create: yes
+    state: present
+    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    regexp: "^github\\.com"
 ##
 # Adding common users to the system.
 #
@@ -14,6 +22,7 @@
         groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm' }}{% else %}{{'adm' }}{% endif %}
         shell='/bin/bash'
   tags: common
+  # Don't show and log the password hash to everybody.
   no_log: True
   with_items:
 #    PW hash file needs to be added. mkpasswd -m
@@ -77,6 +86,7 @@
   shell: dpkg-query -W 'postfix'
   ignore_errors: True
   register: is_postfix
+  changed_when: "is_postfix.rc != 0"
 
 - name: Aliasing email addresses
   tags: configuration
@@ -101,8 +111,9 @@
        force=yes
 
 - name: Add diskcheck cron job
-  tags: common
+  tags: common, cron
   cron: name="Check disk space" minute="*/10" hour="*" job="/srv/ops_scripts/diskcheck.py"
+
 
 # Install Security updates periodically
 #- name: Install unattended-upgrades

@@ -62,7 +62,6 @@
 
   - lineinfile:
       dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
-      #dest=~/.bash_profile
       state=present
       line='eval "$(rbenv init -)"'
 
@@ -99,6 +98,7 @@
     git:
       repo=git@github.com:APTrust/fluctus.git
       dest=~/aptrust/fluctus
+      version=release-0.31
     when: not fluctus.stat.exists
     environment:
       PATH: "{{ path }}"

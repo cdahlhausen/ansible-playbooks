@@ -1,5 +1,8 @@
 ---
 - hosts: vagrant
+  vars_files:
+    - "group_vars/all.yml"
+    - "group_vars/vault.yml"
   vars:
     system_default_user: vagrant
     home: /home/{{ system_default_user }}

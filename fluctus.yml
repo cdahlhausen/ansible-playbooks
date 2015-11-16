@@ -56,6 +56,14 @@
       - go
 
     tasks:
+    - name: Create fluctus directory
+      file: >
+        state=directory
+        path=/var/www/{{ ansible_fqdn }}/{{ playbook_name }}
+        owner="{{system_default_user}}"
+        mode=755
+      become: yes
+
     - name: Install required packages
       apt: name="{{ item }}" state=present
       with_items:

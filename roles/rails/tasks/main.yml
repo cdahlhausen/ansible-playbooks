@@ -56,8 +56,6 @@
       dest=~/aptrust/fluctus
       version=release-0.31
     when: not fluctus.stat.exists
-    environment:
-      PATH: "{{ path }}"
     tags: fluctus
 
 # Set the right ruby interpreter
@@ -85,12 +83,12 @@
 # We don't do the usual lineinfile because we don't
 # want to keep overwriting the keys.
   - name: check for rails secret key
-    command: grep RAILS_SECRET_KEY /home/{{ system_default_user }}/.bash_profile
+    command: grep RAILS_SECRET_KEY /home/{{ system_default_user }}/.profile
     register: rails_key_present
     ignore_errors: yes
 
   - name: check for devise secret key
-    command: grep DEVISE_SECRET_KEY ~/.bash_profile
+    command: grep DEVISE_SECRET_KEY ~/.profile
     register: devise_key_present
     ignore_errors: yes
 

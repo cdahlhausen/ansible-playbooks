@@ -32,62 +32,18 @@
 # Install it if it's not already there.
 
 # TODO: Get rid of scripts and put logic in here.
-
   - name: check java version
     script: has_oracle_1.7.sh
+    no_log: true
     register: good_java
 
+# TODO: Get rid of scripts and put logic in here.
   - name: install oracle jvm
     script: install_oracle_jvm.sh
     sudo: yes
+    no_log: true
     when: not good_java.stdout == 'Yes'
     tags: packages
-
-# rbenv and ruby-build
-  - stat: path=~/.rbenv
-    register: rbenv
-
-  - name: install rbenv if not already present
-    when: not rbenv.stat.exists
-    git:
-      repo=https://github.com/sstephenson/rbenv.git
-      dest=~/.rbenv
-    tags: rbenv
-
-  - lineinfile:
-      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
-      state=present
-      line='export PATH="$HOME/.rbenv/bin:$PATH"'
-    tags: rbenv
-
-  - lineinfile:
-      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
-      state=present
-      line='eval "$(rbenv init -)"'
-
-
-# Install ruby build
-  - stat: path=~/.rbenv/plugins/ruby-build/bin/ruby-build
-    register: ruby_build
-
-  - name: install ruby-build
-    git:
-      repo=https://github.com/sstephenson/ruby-build.git
-      dest=~/.rbenv/plugins/ruby-build
-    when: not ruby_build.stat.exists
-    environment:
-      PATH: "{{ path }}"
-    tags: rbenv
-
-# Install Ruby 2.1.5, if it's not already there.
-# ruby_version is defined in roles/rails/vars/main.yml
-  - stat: path=~/.rbenv/versions/{{ ruby_version }}
-    register: ruby
-
-  - command: rbenv install {{ ruby_version }}
-    when: not ruby.stat.exists
-    environment:
-      PATH: "{{ path }}"
 
 
 # Checkout Fluctus

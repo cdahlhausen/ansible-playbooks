@@ -11,6 +11,11 @@
 ##
 system_default_user: "{% if ansible_bios_version != 'VirtualBox' %}ubuntu{% else %}vagrant{% endif %}"
 
+## 
+# Ruby Variables
+## 
+ruby_version: 2.1.5
+
 ##
 # Postfix variables
 ##

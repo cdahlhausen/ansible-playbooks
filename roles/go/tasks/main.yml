@@ -147,6 +147,8 @@
 # under home/vagrant. Should they go into /usr/local/bin?
   - name: install nsqd binaries
     script: install_nsq.sh
+    become: yes
+    become_user: "{{ system_default_user }}"
     when: not nsqd_binaries.stat.exists
     tags: go-libs
     environment:

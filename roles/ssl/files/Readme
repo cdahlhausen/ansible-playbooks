@@ -1,0 +1,16 @@
+the ca itself:
+————–
+CA_NAME=rootCA-FooBar
+openssl genrsa -aes256 -out $CA_NAME.key 4096
+openssl req -x509 -sha512 -new -nodes -key $CA_NAME.key -days 65000 -out $CA_NAME.pem
+a site certificate:
+————————–
+FQDN=foobar.dyndns.org
+openssl genrsa -out $FQDN.key 2048
+openssl req -sha512 -new -key $FQDN.key -out $FQDN.csr
+openssl x509 -sha512 -req -in $FQDN.csr -CA $CA_NAME.pem -CAkey $CA_NAME.key -CAcreateserial -out $FQDN.crt -days 65000
+
+install the root ca into a linux:
+—————————–
+cp rootCA.pem /usr/local/share/ca-certificates/rootCA.crt # with .crt extension!!!
+update-ca-certificates

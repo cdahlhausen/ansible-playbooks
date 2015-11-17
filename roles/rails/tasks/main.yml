@@ -47,14 +47,16 @@
 
 
 # Checkout Fluctus
+# MOVED TO fluctus global play
   - stat: path=~/aptrust/fluctus/app/models/
     register: fluctus
 
   - name: checkout fluctus repo
+    become: yes
     git:
       repo=git@github.com:APTrust/fluctus.git
       dest=~/aptrust/fluctus
-      version=release-0.31
+      version=0.3.1
     when: not fluctus.stat.exists
     tags: fluctus
 

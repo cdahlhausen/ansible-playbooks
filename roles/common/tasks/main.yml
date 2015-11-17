@@ -2,6 +2,7 @@
 #
 - name: MOTD
   template: src=motd.j2 dest=/etc/motd owner=root mode=0644
+  become: yes
   tags: common
 
 ## Making sure github.com is a known_host
@@ -12,10 +13,13 @@
     state: present
     line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
     regexp: "^github\\.com"
+  become: yes
+  become_user: "{{ system_default_user }}"
 ##
 # Adding common users to the system.
 #
 - name: add common users
+  become: yes
   user: name="{{ item.name }}"
         password='{{ item.passwd }}'
         state=present
@@ -30,6 +34,7 @@
     - { name: 'cd3ef', passwd: "{{ var_cd3ef_password }}" }
 
 - name: add common user public keys
+  become: yes
   authorized_key: user={{ item.name }} key="{{ item.pubkeyfile }}" state=present
   tags: common
   with_items:
@@ -43,6 +48,7 @@
 # Removing old user accounts
 #
 - name: Remove old user accounts
+  become: yes
   user: name="{{ item }}" state=absent remove=yes
   with_items:
     - scott.turnbull
@@ -52,6 +58,7 @@
 # We might want to tighten this. Sudo pwd is helpful and more secure.
 # If ops/stage user ubuntu: could have restrictive settings.
 - name: Modifiy admins so they need no sudo password
+  become: yes
   tags: common
   lineinfile: dest=/etc/sudoers state=present regexp='^%admin ALL\=' line='%admin ALL=(ALL) NOPASSWD:ALL' validate='visudo -cf %s'
 
@@ -59,6 +66,7 @@
 # Install base packages
 #
 - name: install base packages
+  become: yes
   tags: packages
   apt: pkg={{ item }} state=latest update_cache=true
   with_items:
@@ -93,12 +101,14 @@
         is_postfix.rc != 0 and ('already exists' not in is_postfix.stderr)
 
 - name: Aliasing email addresses
+  become: yes
   tags: configuration
   copy: src='aliases' dest=/etc/aliases owner=root group=root mode=0644 backup=yes
   register: result_aliasing
   when: is_postfix|failed 
 
 - name: Activate email aliases
+  become: yes
   tags: configuration
   shell: newaliases
   when: result_aliasing|changed
@@ -108,6 +118,7 @@
 # Workaround in lieu of monitoring application.
 #
 - name: Add diskcheck.py
+  become: yes
   tags: configuration
   git: repo=https://github.com/cdahlhausen/ops_scripts.git
        dest=/srv/ops_scripts

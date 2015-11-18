@@ -111,7 +111,7 @@
   - name: add rails key to bash_profile if necessary
     when: rails_key_present|failed
     lineinfile:
-      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
+      dest=/home/{{system_default_user}}/.profile
       state=present
       line="export RAILS_SECRET_KEY='{{ rails_key.stdout }}'"
 
@@ -126,7 +126,7 @@
   - name: add devise key to bash_profile if necessary
     when: devise_key_present|failed
     lineinfile:
-      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
+      dest=/home/{{system_default_user}}/.profile
       state=present
       line="export DEVISE_SECRET_KEY='{{ devise_key.stdout }}'"
 
@@ -142,19 +142,19 @@
     tags: rails
 
   - lineinfile:
-      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
+      dest=/home/{{system_default_user}}/.profile
       state=present
       line='export FEDORA_USER=fedoraAdmin'
     tags: rails
 
   - lineinfile:
-      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
+      dest=/home/{{system_default_user}}/.profile
       state=present
       line='export FEDORA_PASS=fedoraAdmin'
     tags: rails
 
   - lineinfile:
-      dest={% if ansible_distribution == "MacOSX"%}/Users/{{system_default_user}}/.    bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
+      dest=/home/{{system_default_user}}/.profile
       state=present
       line="export FEDORA_URL='http://127.0.0.1:8983/fedora'"
     tags: rails

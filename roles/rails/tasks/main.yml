@@ -68,7 +68,7 @@
 
 # Set the right ruby interpreter
   - name: set ruby interpreter to {{ ruby_version }}
-    command: chdir=/var/www/{{ ansible_fqdn }}/fluctus rbenv local {{ ruby_version }}
+    shell: . /home/{{ system_default_user}}/.profile chdir=/var/www/{{ ansible_fqdn }}/fluctus rbenv local {{ ruby_version }}
     environment:
       PATH: "{{ path }}"
     tags: rbenv

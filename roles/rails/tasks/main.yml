@@ -45,10 +45,16 @@
     when: not good_java.stdout == 'Yes'
     tags: packages
 
-
 # Checkout Fluctus
-# MOVED TO fluctus global play
-  - stat: path=~/aptrust/fluctus/app/models/
+  - name: Create fluctus directory
+    become: yes
+    file: >
+      state=directory
+      path=/var/www/{{ ansible_fqdn }}/fluctus
+      owner="{{system_default_user}}"
+      mode=755
+
+  - stat: path=/var/www/{{ ansible_fqdn }}/fluctus
     register: fluctus
 
   - name: checkout fluctus repo

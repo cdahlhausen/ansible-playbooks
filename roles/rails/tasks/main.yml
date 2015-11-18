@@ -68,21 +68,22 @@
 
 # Set the right ruby interpreter
   - name: set ruby interpreter to {{ ruby_version }}
-    command: chdir=~/aptrust/fluctus rbenv local {{ ruby_version }}
+    command: chdir=/var/www{{ ansible_fqdn }}/fluctus rbenv local {{ ruby_version }}
     environment:
       PATH: "{{ path }}"
     tags: rbenv
 
+CHECK IF WE REALLY WANT TO MOVE FLUCUTS TO /VAR/WWW. IF SO WE'LL NEED TO UPDATE ALL PATHS HERE> IT MIGHT BE HAND TO SET AN ENV VAR FOR THE PATH. 
 # Install bundler in local rbenv
   - name: install bundler
-    command: chdir=~/aptrust/fluctus gem install bundler
+    command: chdir=/var/www{{ ansible_fqdn }}/fluctus gem install bundler
     environment:
       PATH: "{{ path }}"
     tags: rails
 
 # Load gems into the local rbenv
   - name: install items in fluctus gemfile
-    command: chdir=~/aptrust/fluctus bundle install
+    command: chdir=/var/www{{ ansible_fqdn }}/fluctus bundle install
     environment:
       PATH: "{{ path }}"
     tags: rails
@@ -101,7 +102,7 @@
     ignore_errors: yes
 
   - name: generate rails secret key
-    shell: chdir=~/aptrust/fluctus bundle exec rake secret
+    shell: chdir=/var/www{{ ansible_fqdn }}/fluctus bundle exec rake secret
     register: rails_key
     when: rails_key_present|failed
     environment:
@@ -116,7 +117,7 @@
       line="export RAILS_SECRET_KEY='{{ rails_key.stdout }}'"
 
   - name: generate devise secret key
-    shell: chdir=~/aptrust/fluctus bundle exec rake secret
+    shell: chdir=/var/www{{ ansible_fqdn }}/fluctus bundle exec rake secret
     when: devise_key_present|failed
     register: devise_key
     environment:

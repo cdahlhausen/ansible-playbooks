@@ -43,6 +43,10 @@ var_cd3ef_sshkey: "{{ vault_cd3ef_sshkey }}"
 #var_andrewdiamond_password: "{{ vault_andrewdiamond_password }}"
 #var_andrewdiamond_sshkey: "{{ vault_andrewdiamond_sshkey }}"
 
+var_aptdeploy_password: "{{ vault_aptdeploy_password }}"
+var_aptdeploy_sshkey: "{{ vault_aptdeploy_sshkey }}"
+var_aptdeploy_sshkey_private: "{{ vault_aptdeploy_sshkey_private }}"
+
 ###
 # SSL Certificates
 ##

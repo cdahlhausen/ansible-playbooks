@@ -1,3 +1,16 @@
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
 FIELDS = ['cmd', 'command', 'start', 'end', 'delta', 'msg', 'stdout', 'stderr']
 
 def human_log(res):
@@ -5,8 +18,10 @@ def human_log(res):
     if type(res) == type(dict()):
         for field in FIELDS:
             if field in res.keys():
-                encoded_field = res[field].encode('utf-8')
-                print '\n{0}:\n{1}'.format(field, encoded_field)
+              # use default encoding, check out sys.setdefaultencoding
+                print u'\n{0}:\n{1}'.format(field, res[field])
+                # or use specific encoding, e.g. utf-8
+                #print '\n{0}:\n{1}'.format(field, res[field].encode('utf-8'))
 
 class CallbackModule(object):
 

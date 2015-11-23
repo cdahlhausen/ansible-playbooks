@@ -3,9 +3,17 @@
     vars_files:
         - "group_vars/all.yml"
         - "group_vars/vault.yml"
+
+    environment:
+      DEBIAN_FRONTEND: noninteractive
+      GOPATH: /home/{{ system_default_user }}/go
+      RBENV_ROOT: /home/{{system_default_user}}/.rbenv
+      PATH:   /bin:/usr/bin:/usr/local/go/bin:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin
+
     vars:
         playbook_name: fluctus
-    # SSL
+
+        # SSL
         ssl_cert: "{{ var_ssl_cert }}"
         ssl_key: "{{ var_ssl_key }}"
         ssl_chain: "{{ var_ssl_chain }}"

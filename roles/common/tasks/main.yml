@@ -1,20 +1,13 @@
 # Message of the day explaining server is under control of Ansible.
 #
 - name: MOTD
-  template: src=motd.j2 dest=/etc/motd owner=root mode=0644
   become: yes
+  template: src=motd.j2 dest=/etc/motd owner=root mode=0644
   tags: common
 
-## Making sure github.com is a known_host
-- name: Ensure github.com is a known host
-  lineinfile:
-    dest: /home/{{ system_default_user }}/.ssh/known_hosts
-    create: yes
-    state: present
-    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
-    regexp: "^github\\.com"
-  become: yes
-  become_user: "{{ system_default_user }}"
+- name: Create Deploy group
+  group: name=deploy state=present gid=1234
+
 ##
 # Adding common users to the system.
 #
@@ -23,15 +16,16 @@
   user: name="{{ item.name }}"
         password='{{ item.passwd }}'
         state=present
-        groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm' }}{% else %}{{'adm' }}{% endif %}
+        groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm,deploy' }}{% else %}{{'adm,deploy' }}{% endif %}
         shell='/bin/bash'
   tags: common
   # Don't show and log the password hash to everybody.
-  no_log: True
+  # no_log: True
   with_items:
 #    PW hash file needs to be added. mkpasswd -m
 #    - { name: 'andrew.diamond', passwd: "{{ lookup('file', 'creds/andrew.diamond') }}" }
     - { name: 'cd3ef', passwd: "{{ var_cd3ef_password }}" }
+    - { name: "{{ system_default_user}}", passwd: "{{ var_aptdeploy_password }}" }
 
 - name: add common user public keys
   become: yes
@@ -44,6 +38,16 @@
 #    - { name: 'cd3ef', pubkeyfile: "{{ var_cd3ef_sshkey }}" }
 #    - { name: 'andrew.diamond', pubkeyfile: "http://github.com/diamondap.keys" }
     - { name: 'cd3ef', pubkeyfile: "http://github.com/cdahlhausen.keys" }
+    - { name: "{{system_default_user}}", pubkeyfile: "{{var_aptdeploy_sshkey }}" }
+
+- name: add deploy user's private key
+  become: yes
+  become_user: "{{ system_default_user }}"
+  copy: >
+    content="{{var_aptdeploy_sshkey_private}}"
+    dest=/home/{{system_default_user}}/.ssh/id_rsa
+    mode=0600
+    owner="{{system_default_user}}"
 #
 # Removing old user accounts
 #
@@ -53,6 +57,16 @@
   with_items:
     - scott.turnbull
   tags: remove_user
+
+## Making sure github.com is a known_host
+- name: Ensure github.com is a known host
+  become_user: "{{ system_default_user }}"
+  lineinfile:
+    dest: /home/{{ system_default_user }}/.ssh/known_hosts
+    create: yes
+    state: present
+    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    regexp: "^github\\.com"
 
 
 # We might want to tighten this. Sudo pwd is helpful and more secure.
@@ -141,3 +155,4 @@
 #  - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
 #    action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="$ubuntu_release-updates" state=absent
 
+#

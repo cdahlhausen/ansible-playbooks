@@ -56,22 +56,15 @@
         rbenv_users: "{{ system_default_user }}"
 
     roles:
-    #      - common
-    #  - hostname
-    #  - apache
-    #  - ssl
-    #  - postgresql
+      - common
+      - hostname
+      - apache
+      - ssl
       - go
+      - zzet.rbenv
+      - rails
 
     tasks:
-    - name: Create fluctus directory
-      file: >
-        state=directory
-        path=/var/www/{{ ansible_fqdn }}/{{ playbook_name }}
-        owner="{{system_default_user}}"
-        mode=755
-      become: yes
-
     - name: Install required packages
       apt: name="{{ item }}" state=present
       with_items:
@@ -80,11 +73,5 @@
         - nodejs
         - sqlite3
         - libsqlite3-dev
-
-    - name: Checkout Fluctus repository
-      git:
-        repo=git://github.com/APTrust/fluctus
-        dest="/var/www/{{ ansible_fqdn }}/{{ playbook_name }}"
-        accept_hostkey=True
 
 

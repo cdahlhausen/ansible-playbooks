@@ -27,7 +27,6 @@
         - packages
         - rails dependencies
 
-
 # Check to see if the Oracle JVM version 7 is already installed.
 # Install it if it's not already there.
 
@@ -46,45 +45,41 @@
     tags: packages
 
 # Checkout Fluctus
-  - name: Create fluctus directory
-    become: yes
-    file: >
-      state=directory
-      path=/var/www/{{ ansible_fqdn }}/fluctus
-      owner="{{system_default_user}}"
-      mode=755
+#  - name: Create fluctus directory
+#    become: yes
+#    file: >
+#      state=directory
+#      path=/var/www/{{ ansible_fqdn }}/fluctus
+#      owner="{{system_default_user}}"
+#      mode=755
 
-  - stat: path=/var/www/{{ ansible_fqdn }}/fluctus
-    register: fluctus
+#  - stat: path=/var/www/{{ ansible_fqdn }}/fluctus
+#    register: fluctus
 
   - name: checkout fluctus repo
     become: yes
+    become_user: "{{ system_default_user }}"
     git:
       repo=git@github.com:APTrust/fluctus.git
-      dest=~/aptrust/fluctus
+      dest=/var/www/{{ ansible_fqdn }}/fluctus
       version=0.3.1
-    when: not fluctus.stat.exists
+#    when: not fluctus.stat.exists
     tags: fluctus
 
 # Set the right ruby interpreter
   - name: set ruby interpreter to {{ ruby_version }}
-    shell: . /home/{{ system_default_user}}/.profile chdir=/var/www/{{ ansible_fqdn }}/fluctus rbenv local {{ ruby_version }}
-    environment:
-      PATH: "{{ path }}"
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus rbenv local {{ ruby_version }}
     tags: rbenv
 
 # Install bundler in local rbenv
   - name: install bundler
-    command: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem install bundler
-    environment:
-      PATH: "{{ path }}"
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem install bundler
     tags: rails
 
 # Load gems into the local rbenv
   - name: install items in fluctus gemfile
+    #    shell: . /home/{{ system_default_user}}/.profile && chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle install
     command: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle install
-    environment:
-      PATH: "{{ path }}"
     tags: rails
 
 # Generate Rails keys if they don't already exist
@@ -104,8 +99,6 @@
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake secret
     register: rails_key
     when: rails_key_present|failed
-    environment:
-      PATH: "{{ path }}"
     tags: rails
 
   - name: add rails key to bash_profile if necessary
@@ -119,8 +112,6 @@
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake secret
     when: devise_key_present|failed
     register: devise_key
-    environment:
-      PATH: "{{ path }}"
     tags: rails
 
   - name: add devise key to bash_profile if necessary
@@ -169,7 +160,7 @@
     tags: rails
 
   - name: migrate test database
-    script: rails_migrate_db.sh
+    shell: . /home/{{ system_default_user}}/.profile chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
     environment:
       PATH: "{{ path }}"
       RAILS_ENV: "test"

@@ -31,30 +31,20 @@
 # Install it if it's not already there.
 
 # TODO: Get rid of scripts and put logic in here.
+# TODO: Move this into its own role. this aint noting to do with rails.
   - name: check java version
     script: has_oracle_1.7.sh
     no_log: true
     register: good_java
 
 # TODO: Get rid of scripts and put logic in here.
+# TODO: Move this into its own role. this aint noting to do with rails.
   - name: install oracle jvm
     script: install_oracle_jvm.sh
     sudo: yes
     no_log: true
     when: not good_java.stdout == 'Yes'
     tags: packages
-
-# Checkout Fluctus
-#  - name: Create fluctus directory
-#    become: yes
-#    file: >
-#      state=directory
-#      path=/var/www/{{ ansible_fqdn }}/fluctus
-#      owner="{{system_default_user}}"
-#      mode=755
-
-#  - stat: path=/var/www/{{ ansible_fqdn }}/fluctus
-#    register: fluctus
 
   - name: checkout fluctus repo
     become: yes
@@ -63,7 +53,6 @@
       repo=git@github.com:APTrust/fluctus.git
       dest=/var/www/{{ ansible_fqdn }}/fluctus
       version=0.3.1
-#    when: not fluctus.stat.exists
     tags: fluctus
 
 # Set the right ruby interpreter
@@ -75,11 +64,6 @@
   - name: install bundler
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem install bundler
     tags: rails
-
-
-# DEbug step to get gem info
-  - name: gimme some gem
-    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem env
 
 # Load gems into the local rbenv
   - name: install items in fluctus gemfile

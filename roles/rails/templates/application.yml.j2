@@ -1,0 +1,13 @@
+development: &dev
+    GOOGLE_KEY:
+    GOOGLE_SECRET:
+    SOLR_URL: http://localhost:8983/solr/development
+    FEDORA_URL: http://localhost:8983/fedora
+    FEDORA_USER: fedoraAdmin
+    FEDORA_PASS: fedoraAdmin
+    FEDORA_NAMESPACE: aptrust-dev
+    RAILS_SECRET_KEY: {{ rails_secret_key }}
+    DEVISE_SECRET_KEY: {{ devise_secret_key }}
+
+test:
+    <<: *dev

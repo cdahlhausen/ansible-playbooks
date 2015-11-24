@@ -76,10 +76,14 @@
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem install bundler
     tags: rails
 
+
+# DEbug step to get gem info
+  - name: gimme some gem
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem env
+
 # Load gems into the local rbenv
   - name: install items in fluctus gemfile
-    #    shell: . /home/{{ system_default_user}}/.profile && chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle install
-    command: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle install
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle install
     tags: rails
 
 # Generate Rails keys if they don't already exist
@@ -126,7 +130,8 @@
     register: jetty
 
   - name: set up jetty/solr
-    script: setup_jetty.sh
+    #    script: setup_jetty.sh
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus rails g hydra:jetty
     when: not jetty.stat.exists
     environment:
       PATH: "{{ path }}"
@@ -154,14 +159,13 @@
 # Bring the dev and test databases up to date.
 # If the the test db is not up to date, you can't run spec tests.
   - name: migrate dev database
-    script: rails_migrate_db.sh
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
     environment:
-      PATH: "{{ path }}"
+      RAILS_ENV: "dev"
     tags: rails
 
   - name: migrate test database
-    shell: . /home/{{ system_default_user}}/.profile chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
     environment:
-      PATH: "{{ path }}"
       RAILS_ENV: "test"
     tags: rails

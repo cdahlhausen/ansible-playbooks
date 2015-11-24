@@ -12,6 +12,7 @@
 
     vars:
         playbook_name: fluctus
+        fluctus_app_root: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"
 
         # SSL
         ssl_cert: "{{ var_ssl_cert }}"

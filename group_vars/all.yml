@@ -10,6 +10,10 @@
 # System Default User
 ##
 system_default_user: "{% if ansible_bios_version != 'VirtualBox' %}ubuntu{% else %}vagrant{% endif %}"
+system_deploy_user: aptdeploy
+system_deploy_group: deploy
+
+ansible_become_pass: "{{ vault_aptdeploy_password }}"
 
 ## 
 # Ruby Variables

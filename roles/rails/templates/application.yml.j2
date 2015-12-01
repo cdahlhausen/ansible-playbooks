@@ -6,8 +6,8 @@ development: &dev
     FEDORA_USER: fedoraAdmin
     FEDORA_PASS: fedoraAdmin
     FEDORA_NAMESPACE: aptrust-dev
-    RAILS_SECRET_KEY: {{ rails_secret_key }}
-    DEVISE_SECRET_KEY: {{ devise_secret_key }}
+    RAILS_SECRET_KEY: ENV['RAILS_SECRET_KEY']
+    DEVISE_SECRET_KEY: ENV['DEVISE_SECRET_KEY']
 
 test:
     <<: *dev

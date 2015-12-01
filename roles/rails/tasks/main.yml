@@ -73,41 +73,58 @@
 # Generate Rails keys if they don't already exist
 # We don't do the usual lineinfile because we don't
 # want to keep overwriting the keys.
-  - name: check for rails secret key
-    command: grep RAILS_SECRET_KEY /home/{{ system_default_user }}/.profile
-    register: rails_key_present
-    ignore_errors: yes
 
-  - name: check for devise secret key
-    command: grep DEVISE_SECRET_KEY ~/.profile
-    register: devise_key_present
+# TODO: Make this a handler and use notify.
+  - name: check for existence of rails and devise key 
+    shell: grep {{item.env}}  /home/{{system_default_user}}/.profile
+    with_items:
+      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
+      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
+    register: secretkey_present
     ignore_errors: yes
+    tags: railskey
 
-  - name: generate rails secret key
+  - name: generate {{item.name}}
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake secret
-    register: rails_key
-    when: rails_key_present|failed
-    tags: rails
+    register: secretey_gen
+    when: secretkey_present|failed
+    ignore_errors: yes
+    with_items:
+      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
+      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
+    tags: railskey
 
-  - name: add rails key to bash_profile if necessary
-    when: rails_key_present|failed
+  - name: add {{item.name}} key to bash_profile
+    when: secretkey_present|failed
     lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line="export RAILS_SECRET_KEY='{{ rails_key.stdout }}'"
+      line="export {{item.env}}='{{ item.name.stdout }}'"
+    with_items:
+      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
+      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
+    tags: railskey
 
-  - name: generate devise secret key
-    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake secret
-    when: devise_key_present|failed
-    register: devise_key
-    tags: rails
+  - name: set {{item.name}} fact
+    when: secretkey_present|failed
+    set_fact: "{{item.name}}:{{item.name.stdout}}"
+    with_items:
+      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
+      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
+    tags: railskey
 
-  - name: add devise key to bash_profile if necessary
-    when: devise_key_present|failed
-    lineinfile:
-      dest=/home/{{system_default_user}}/.profile
-      state=present
-      line="export DEVISE_SECRET_KEY='{{ devise_key.stdout }}'"
+
+# Set up Fluctus config
+# TODO: Move this into its own role. this aint noting to do with rails.
+# TODO: This is a stop gap. use template instead.
+  - name: Setting fluctus app configuration
+    template:
+        src: "application.yml.j2"
+        dest: "{{ fluctus_app_root }}/config/application.yml"
+        owner: "{{system_default_user}}"
+        group: "{{system_deploy_group}}"
+        mode: 0644
+    when: (devise_key_present|failed) or (rails_key_present|failed)
 
 # Set up Jetty/Solr
   - stat: path=/var/www/{{ ansible_fqdn }}/fluctus/jetty/lib

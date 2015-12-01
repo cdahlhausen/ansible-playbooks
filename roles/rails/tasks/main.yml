@@ -86,7 +86,7 @@
 
   - name: generate {{item.name}}
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake secret
-    register: secretey_gen
+    register: secretkey_gen
     when: secretkey_present|failed
     ignore_errors: yes
     with_items:
@@ -124,7 +124,7 @@
         owner: "{{system_default_user}}"
         group: "{{system_deploy_group}}"
         mode: 0644
-    when: (devise_key_present|failed) or (rails_key_present|failed)
+    when: (secretkey_present|failed)
 
 # Set up Jetty/Solr
   - stat: path=/var/www/{{ ansible_fqdn }}/fluctus/jetty/lib

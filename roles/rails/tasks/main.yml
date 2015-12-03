@@ -84,44 +84,50 @@
 # want to keep overwriting the keys.
 
 # TODO: Make this a handler and use notify.
-  - name: check for existence of rails and devise key 
-    shell: grep {{item.env}}  /home/{{system_default_user}}/.profile
+  - name: check for existence of rails and devise key
+    shell: grep {{item}}  /home/{{system_default_user}}/.profile
+    register: key_present
     with_items:
-      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
-      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
-    register: secretkey_present
+      - RAILS_SECRET_KEY
+      - DEVISE_SECRET_KEY
     ignore_errors: yes
     tags: railskey
 
-  - name: generate {{item.name}}
+  - name: generate secret keys
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake secret
-    register: secretkey_gen
-    when: secretkey_present|failed
+    register: result
+    when: key_present|failed
     ignore_errors: yes
     with_items:
-      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
-      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
+      - RAILS_SECRET_KEY
+      - DEVISE_SECRET_KEY
     tags: railskey
 
-  - name: add {{item.name}} key to bash_profile
-    when: secretkey_present|failed
+  - name: set key as fact
+    when: key_present|failed
+    set_fact: "RAILS_SECRET_KEY={{result.results[0].stdout}}"
+    tags: railskey
+
+  - name: set devise key as fact
+    when: key_present|failed
+    set_fact: "DEVISE_SECRET_KEY={{result.results[1].stdout}}"
+    tags: railskey
+
+  - name: add rails key to bash_profile
+    when: key_present|failed
     lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line="export {{item.env}}='{{ item.name.stdout }}'"
-    with_items:
-      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
-      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
+      line="export RAILS_SECRET_KEY={{RAILS_SECRET_KEY}}"
     tags: railskey
 
-  - name: set {{item.name}} fact
-    when: secretkey_present|failed
-    set_fact: "{{item.name}}:{{item.name.stdout}}"
-    with_items:
-      - { name: 'rails_secret_key', env: 'RAILS_SECRET_KEY' }
-      - { name: 'devise_secret_key', env: 'DEVISE_SECRET_KEY' }
+  - name: add devise key to bash_profile
+    when: key_present|failed
+    lineinfile:
+      dest=/home/{{system_default_user}}/.profile
+      state=present
+      line="export DEVISE_SECRET_KEY={{DEVISE_SECRET_KEY}}"
     tags: railskey
-
 
 # Set up Fluctus config
 # TODO: Move this into its own role. this aint noting to do with rails.
@@ -143,10 +149,10 @@
     #    script: setup_jetty.sh
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus rails g hydra:jetty
     when: not jetty.stat.exists
-    environment:
-      PATH: "{{ path }}"
+
     tags: rails
 
+# TODO: Might not need this as figaro loads the env for fluctus.
   - lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
@@ -165,13 +171,12 @@
       line="export FEDORA_URL='http://127.0.0.1:8983/fedora'"
     tags: rails
 
-
 # Bring the dev and test databases up to date.
 # If the the test db is not up to date, you can't run spec tests.
   - name: migrate dev database
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
     environment:
-      RAILS_ENV: "dev"
+      RAILS_ENV: "development"
     tags: rails
 
   - name: migrate test database

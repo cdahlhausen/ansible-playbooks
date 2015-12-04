@@ -139,17 +139,18 @@
         owner: "{{system_default_user}}"
         group: "{{system_deploy_group}}"
         mode: 0644
-    when: (secretkey_present|failed)
+    when: key_present|failed
 
 # Set up Jetty/Solr
   - stat: path=/var/www/{{ ansible_fqdn }}/fluctus/jetty/lib
     register: jetty
+    tags: rails
 
   - name: set up jetty/solr
     #    script: setup_jetty.sh
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus rails g hydra:jetty
+    become_user: "{{system_default_user}}"
     when: not jetty.stat.exists
-
     tags: rails
 
 # TODO: Might not need this as figaro loads the env for fluctus.

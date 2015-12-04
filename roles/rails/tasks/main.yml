@@ -118,7 +118,7 @@
     lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line="export RAILS_SECRET_KEY={{RAILS_SECRET_KEY}}"
+      line="export RAILS_SECRET_KEY=\'{{RAILS_SECRET_KEY}}\'"
     tags: railskey
 
   - name: add devise key to bash_profile
@@ -126,7 +126,7 @@
     lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line="export DEVISE_SECRET_KEY={{DEVISE_SECRET_KEY}}"
+      line="export DEVISE_SECRET_KEY=\'{{DEVISE_SECRET_KEY}}\'"
     tags: railskey
 
 # Set up Fluctus config

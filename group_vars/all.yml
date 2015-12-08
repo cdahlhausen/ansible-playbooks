@@ -58,11 +58,14 @@ var_aptdeploy_sshkey_private: "{{ vault_aptdeploy_sshkey_private }}"
 # SSL Certificates
 ##
 var_ssl_cert: "{{ vault_ssl_cert }}"
-var_ssl_key: "{{ vault_ssl_key }}"
-var_ssl_chain: "{{ vault_ssl_chain }}"
+var_ssl_key: "{{ vault_ssl_key }}"  
 var_ssl_cert_path: "{{ vault_ssl_cert_path }}"
 var_ssl_key_path: "{{ vault_ssl_key_path }}"
-var_ssl_chain_path: "{{ vault_ssl_chain_path }}"
+
+var_vagrant_ssl_cert: "{{ vault_vagrant_ssl_cert }}"
+var_vagrant_ssl_key: "{{ vault_vagrant_ssl_key }}"
+var_vagrant_ssl_cert_path: "{{ vault_vagrant_ssl_cert_path }}"
+var_vagrant_ssl_key_path: "{{ vault_vagrant_ssl_key_path }}"
 
 ##
 # AWS Credentials

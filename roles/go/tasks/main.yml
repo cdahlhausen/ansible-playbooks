@@ -82,15 +82,6 @@
     shell: curl https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz | sudo tar xz -C /usr/local
     tags: go-binaries
 
-#CD3EF: This is discriminating vim users :) If we use our own users to login, we can use `sudo -E` to preserve our env.
-  - name: set editor in .bash_profile
-    lineinfile: >
-      dest={% if ansible_distribution == "MacOSX"%}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
-      create=yes
-      mode=0644
-      state=present
-      line="export EDITOR=emacs"
-
   - name: set aws access key in .bash_profile
     lineinfile: >
       dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}

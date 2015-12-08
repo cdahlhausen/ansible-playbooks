@@ -1,0 +1,55 @@
+---
+- name: Add phusion key
+  apt_key: keyserver='keyserver.ubuntu.com' id=16378A33A6EF16762922526E561F9B9CAC40B2F7
+
+- name: Install apt-transport-https
+  apt: name=apt-transport-https
+
+- name: Add phusion repository
+  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main'
+
+# - name: Adding Brightbox PPA for Ruby
+#  apt_repository: repo='ppa:brightbox/ruby-ng'
+#  when: ansible_distribution == 'Ubuntu'
+
+- name: Install Packages
+  apt: name={{item}}
+  with_items:
+  # - ruby{{ruby_version}}
+  # - ruby{{ruby_version}}-dev
+  - build-essential
+  - apache2-mpm-worker
+  - apache2-dev
+  - libssl-dev
+  - libcurl4-openssl-dev
+  - libapr1-dev
+  - libaprutil1-dev
+  - ca-certificates
+
+  # - name: Set default ruby
+  # command: update-alternatives --install /usr/bin/{{item}} {{item}} /usr/bin/{{item}}{{ruby_version}} 100
+  # when: ansible_distribution == 'Debian'
+  # args:
+  #  creates: /usr/bin/{{item}}
+  # with_items:
+  # - ruby
+  # - erb
+  # - gem
+  # - irb
+  # - rake
+  # - rdoc
+  # - ri
+  # - testrb
+
+- name: Install passenger
+  apt: name=libapache2-mod-passenger
+
+- name: Upload Passenger configuration
+  template: src={{item}}.j2 dest=/etc/apache2/mods-available/{{item}}
+  with_items:
+  - passenger.conf
+  - passenger.load
+  notify: restart apache2
+
+- name: Enable passenger
+  apache2_module: state=present name=passenger

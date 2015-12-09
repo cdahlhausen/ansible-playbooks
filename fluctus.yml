@@ -21,12 +21,23 @@
         RAILS_ENV: 'development'
 
         # SSL
-        ssl_cert: "{{ var_ssl_cert }}"
-        ssl_key: "{{ var_ssl_key }}"
-        ssl_chain: "{{ var_ssl_chain }}"
+        # TODO: Conditional for aptrust.org/local.dev
+        ssl_cert: |
+          {% if ansible_bios_version != 'VirtualBox' %}
+              {{ var_vagrant_ssl_cert }}
+          {% else %}
+              {{var_ssl_cert }}
+          {% endif %}
+        ssl_key: |
+          {% if ansible_bios_version != 'VirtualBox' %}
+              {{ var_vagrant_ssl_key }}
+          {% else %}
+              {{var_vagrant_ssl_key }}
+          {% endif %}
+        #        ssl_cert: "{{ var_ssl_cert }}"
+        # ssl_key: "{{ var_ssl_key }}"
         ssl_cert_path: "{{ var_ssl_cert_path }}"
         ssl_key_path: "{{ var_ssl_key_path }}"
-        ssl_chain_path: "{{ var_ssl_chain_path }}"
 
     # APACHE
         apache_vhosts:
@@ -43,14 +54,30 @@
           - servername: "{{ ansible_fqdn }}"
             documentroot: "/var/www/{{ ansible_fqdn }}/{{ playbook_name }}"
             serveradmin: "ops@aptrust.org"
-            certificate_file: "{{ var_ssl_cert_path }}"
-            certificate_key_file: "{{ var_ssl_key_path }}"
-            certificate_chain_file: "{{ var_ssl_chain_path }}"
+            certificate_file: "{{ ssl_cert_path }}"
+            certificate_key_file: "{{ ssl_key_path }}"
+            # TODO: Make this into a template? or rewrite apache role
+            extra_parameters: |
+                    PassengerEnabled on
+                    PassengerBaseURI /
+                    PassengerAppRoot "{{ fluctus_app_root}}"
+                    PassengerAppEnv production
+                    PassengerFriendlyErrorPages off
+                    # Make Passenger load environment vars before starting Rails app.
+                    PassengerRuby /usr/local/bin/fluctus_passenger_wrapper.sh
+                    AllowEncodedSlashes NoDecode
+                    PassengerAllowEncodedSlashes on
+                    # Run at least 2 workers.
+                    PassengerMinInstances 2
 
         apache_mods_enabled:
             - rewrite.load
+            - socache_shmcb.load
             - ssl.load
+            - ssl.conf
+
         apache_mods_disabled: []
+        apache_remove_default_vhost: true
 
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"

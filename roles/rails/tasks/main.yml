@@ -22,7 +22,7 @@
         - zip
         - mailutils
     environment:
-        DEBIAN_FRONTEND: noninteractive
+       DEBIAN_FRONTEND: noninteractive
     tags:
         - packages
         - rails dependencies
@@ -53,6 +53,8 @@
       repo=git@github.com:APTrust/fluctus.git
       dest=/var/www/{{ ansible_fqdn }}/fluctus
       version=0.3.1
+      force="{{force_update}}"
+      accept_hostkey=yes
     tags: fluctus
 
   - name: change group ownership of fluctus to www-data

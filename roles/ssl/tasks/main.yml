@@ -27,6 +27,7 @@
   tags: ssl
 
 - name: Copy ssl intermediate cert chain
+  when: ssl_chain is defined
   become: yes
   copy:
     content="{{ ssl_chain }}"

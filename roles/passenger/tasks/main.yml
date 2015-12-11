@@ -3,10 +3,12 @@
   apt_key: keyserver='keyserver.ubuntu.com' id=16378A33A6EF16762922526E561F9B9CAC40B2F7
 
 - name: Install apt-transport-https
-  apt: name=apt-transport-https
+  apt: name=apt-transport-https state=present
 
 - name: Add phusion repository
-  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main'
+  # THIS DOES NOT WORK ANYMORE. Passenger had breaking changes in version 5.
+  #  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main'
+  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger/4 {{ansible_distribution_release}} main'
 
 # - name: Adding Brightbox PPA for Ruby
 #  apt_repository: repo='ppa:brightbox/ruby-ng'
@@ -15,7 +17,7 @@
 - name: Install Packages
   apt: name={{item}}
   with_items:
-  # - ruby{{ruby_version}}
+  #  - ruby{{ruby_version}}
   # - ruby{{ruby_version}}-dev
   - build-essential
   - apache2-mpm-worker
@@ -42,7 +44,11 @@
   # - testrb
 
 - name: Install passenger
-  apt: name=libapache2-mod-passenger
+  apt: name=passenger=1:4.0.59-1~trusty1 state=present
+
+- name: Install passenger apache mod
+  apt: name=libapache2-mod-passenger=1:4.0.59-1~trusty1 state=present
+
 
 - name: Upload Passenger configuration
   template: src={{item}}.j2 dest=/etc/apache2/mods-available/{{item}}

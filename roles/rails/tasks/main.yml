@@ -183,16 +183,25 @@
       line="export FEDORA_URL='http://127.0.0.1:8983/fedora'"
     tags: rails
 
+
+  - name: copy passenger_wrapper in its place
+    become: yes
+    template:
+      src: "fluctus_passenger_wrapper.sh.j2"
+      dest: "/usr/local/bin/fluctus_passenger_wrapper.sh"
+      owner: "{{system_default_user}}"
+      group: "{{system_default_user}}"
+      mode: 0774
+    tags: wrapper
+
 # Bring the dev and test databases up to date.
 # If the the test db is not up to date, you can't run spec tests.
   - name: migrate dev database
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
-    environment:
-      RAILS_ENV: "development"
+    when: RAILS_ENV == 'development'
     tags: rails
 
   - name: migrate test database
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
-    environment:
-      RAILS_ENV: "test"
+    when: RAILS_ENV == 'development'
     tags: rails

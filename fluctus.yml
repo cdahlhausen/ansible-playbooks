@@ -23,21 +23,13 @@
         # SSL
         # TODO: Conditional for aptrust.org/local.dev
         ssl_cert: |
-          {% if ansible_bios_version != 'VirtualBox' %}
-              {{ var_vagrant_ssl_cert }}
-          {% else %}
-              {{var_ssl_cert }}
-          {% endif %}
+          {% if ansible_bios_version != 'VirtualBox' %}{{ var_ssl_cert }}{% else %}{{var_vagrant_ssl_cert }}{% endif %}
         ssl_key: |
-          {% if ansible_bios_version != 'VirtualBox' %}
-              {{ var_vagrant_ssl_key }}
-          {% else %}
-              {{var_vagrant_ssl_key }}
-          {% endif %}
-        #        ssl_cert: "{{ var_ssl_cert }}"
-        # ssl_key: "{{ var_ssl_key }}"
-        ssl_cert_path: "{{ var_ssl_cert_path }}"
-        ssl_key_path: "{{ var_ssl_key_path }}"
+          {% if ansible_bios_version != 'VirtualBox' %}{{ var_ssl_key }}{% else %}{{var_vagrant_ssl_key }}{% endif %}
+        ssl_cert_path: |
+           {% if ansible_bios_version != 'VirtualBox' %}{{ var_ssl_cert_path }}{% else %}{{var_vagrant_ssl_cert_path }}{% endif %}
+        ssl_key_path: |
+          {% if ansible_bios_version != 'VirtualBox' %}{{ var_ssl_key_path }}{% else %}{{var_vagrant_ssl_key_path }}{% endif %} 
 
     # APACHE
         apache_vhosts:
@@ -83,6 +75,9 @@
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"
     #AWS_SECRET_ACCESS_KEY: "{{ var_aws_secret_access_key }}"
 
+    #AWS_SES_USER: ""
+    #AWS_SES_PASSWORD: ""
+
     # RUBY and RBENV
         rbenv:
           env: user
@@ -90,14 +85,27 @@
           ruby_version: 2.1.5
         rbenv_users: "{{ system_default_user }}"
 
+    # Passenger
+    # OLD: passenger_webserver: apache
+    #        passenger_root: "{{fluctus_app_root}}"
+
+    # Passenger wants to know.
+        ruby_version: 2.1.5
+
+    # SSL certs
+        ssl_certs_common_name: "{{ansible_fqdn}}"
+
     roles:
       - common
       - hostname
-      - apache
       - ssl
+    #  - jdauphant.ssl-certs
+      - apache
       - go
       - zzet.rbenv
-      - rails
+      - passenger
+      - { role: rails, force_update: yes}
+
 
     tasks:
     - name: Install required packages

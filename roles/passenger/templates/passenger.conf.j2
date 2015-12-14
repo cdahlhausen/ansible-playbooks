@@ -1,5 +1,6 @@
 <IfModule mod_passenger.c>
   PassengerRoot {{passenger_root}}
-  PassengerDefaultRuby /usr/bin/ruby{{ruby_version}}
+  # Using user's RBENV shim
+  PassengerDefaultRuby /home/{{system_default_user}}/shims/ruby
   PassengerFriendlyErrorPages {{ 'On' if passenger_friendly_error_pages else 'Off' }}
 </IfModule>

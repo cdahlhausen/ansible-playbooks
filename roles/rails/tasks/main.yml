@@ -30,22 +30,6 @@
 # Check to see if the Oracle JVM version 7 is already installed.
 # Install it if it's not already there.
 
-# TODO: Get rid of scripts and put logic in here.
-# TODO: Move this into its own role. this aint noting to do with rails.
-  - name: check java version
-    script: has_oracle_1.7.sh
-    no_log: true
-    register: good_java
-
-# TODO: Get rid of scripts and put logic in here.
-# TODO: Move this into its own role. this aint noting to do with rails.
-  - name: install oracle jvm
-    script: install_oracle_jvm.sh
-    sudo: yes
-    no_log: true
-    when: not good_java.stdout == 'Yes'
-    tags: packages
-
   - name: checkout fluctus repo
     become: yes
     become_user: "{{ system_default_user }}"

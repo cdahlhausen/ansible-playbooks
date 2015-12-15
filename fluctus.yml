@@ -50,14 +50,15 @@
             certificate_file: "{{ ssl_cert_path }}"
             certificate_key_file: "{{ ssl_key_path }}"
             # TODO: Make this into a template? or rewrite apache role
-            extra_parameters: |
+            extra_directory_parameters: |
                     PassengerEnabled on
                     PassengerBaseURI /
                     PassengerAppRoot "{{ fluctus_app_root}}"
-                    PassengerAppEnv production
+                    PassengerAppEnv "{{ RAILS_ENV }}"
                     PassengerFriendlyErrorPages off
                     # Make Passenger load environment vars before starting Rails app.
                     PassengerRuby /usr/local/bin/fluctus_passenger_wrapper.sh
+            extra_parameters: |
                     AllowEncodedSlashes NoDecode
                     PassengerAllowEncodedSlashes on
                     # Run at least 2 workers.

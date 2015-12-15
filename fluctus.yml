@@ -102,11 +102,13 @@
       - hostname
       - ssl
     #  - jdauphant.ssl-certs
-      - apache
+      - apache2
+      - oracle-java7
       - go
       - zzet.rbenv
       - passenger
       - { role: rails, force_update: yes}
+      - tomcat7
 
 
     tasks:

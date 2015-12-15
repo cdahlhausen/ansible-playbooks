@@ -5,7 +5,7 @@ apache_listen_port: 80
 apache_listen_port_ssl: 443
 
 apache_create_vhosts: true
-apache_vhosts_filename: "{{ ansible_fqdn }}_{{ playbook_name }}"
+apache_vhosts_filename: "{{ ansible_fqdn }}_{{ playbook_name }}.conf"
 
 # On Debian/Ubuntu, a default virtualhost is included in Apache's configuration.
 # Set this to `true` to remove that default.

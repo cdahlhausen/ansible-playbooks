@@ -71,7 +71,11 @@
             - ssl.conf
 
         apache_mods_disabled: []
-        apache_remove_default_vhost: true
+        apache_remove_default_vhost: false 
+
+    # Tomcat 7
+        tomcat7_enabled: true
+        tomcat7_hostname: localhost
 
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"

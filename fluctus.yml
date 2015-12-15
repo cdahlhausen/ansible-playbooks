@@ -91,10 +91,6 @@
           ruby_version: 2.1.5
         rbenv_users: "{{ system_default_user }}"
 
-    # Passenger
-    # OLD: passenger_webserver: apache
-    #        passenger_root: "{{fluctus_app_root}}"
-
     # Passenger wants to know.
         ruby_version: 2.1.5
 

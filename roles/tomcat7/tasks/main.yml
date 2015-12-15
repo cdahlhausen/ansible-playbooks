@@ -26,7 +26,7 @@
     src: server.xml.j2
     dest: /etc/tomcat7/server.xml
     owner: root
-    group: root
+    group: tomcat7 
     mode: 0644
   notify: restart tomcat
 

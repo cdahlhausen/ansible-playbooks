@@ -1,0 +1,38 @@
+---
+- name: Ensure tomcat7 packages are installed (RedHat).
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - tomcat7
+    - tomcat7-webapps
+    - tomcat7-admin-webapps
+  when: ansible_os_family == 'RedHat'
+
+- name: Update apt cache (Debian).
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+  when: ansible_os_family == 'Debian'
+
+- name: Ensure tomcat7 is installed (Debian).
+  apt:
+    name: tomcat7
+    state: installed
+  when: ansible_os_family == 'Debian'
+
+- name: Copy tomcat7 server.xml.
+  template:
+    src: server.xml.j2
+    dest: /etc/tomcat7/server.xml
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart tomcat
+
+- name: Ensure tomcat7 is running.
+  service:
+    name: tomcat7
+    state: started
+    enabled: yes
+  when: tomcat7_enabled

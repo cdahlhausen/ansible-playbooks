@@ -19,6 +19,7 @@
         fluctus_app_root: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"
         # Environment vars don't seem to work for when-conditionals. Duplicate this as var for now.
         RAILS_ENV: 'development'
+        RBENV_ROOT: /home/{{system_default_user}}/.rbenv
 
         # SSL
         # TODO: Conditional for aptrust.org/local.dev

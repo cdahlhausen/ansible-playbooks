@@ -1,0 +1,12 @@
+---
+- name: restart apache
+  service:
+    name: "{{ apache_daemon }}"
+    state: restarted
+
+- name: create document_root
+  # create a directory if it doesn't exist
+  file: 
+    path="{{ documentroot }}" 
+    state=directory 
+    mode=0755

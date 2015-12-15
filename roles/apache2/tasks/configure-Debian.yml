@@ -1,0 +1,63 @@
+---
+- name: Configure Apache.
+  lineinfile:
+    dest: "{{ apache_server_root }}/ports.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items: apache_ports_configuration_items
+  notify: restart apache
+
+- name: Enable Apache mods.
+  become: yes
+  file:
+    src: "{{ apache_server_root }}/mods-available/{{ item }}"
+    dest: "{{ apache_server_root }}/mods-enabled/{{ item }}"
+    state: link
+  with_items: apache_mods_enabled
+  notify: restart apache
+
+- name: Disable Apache mods.
+  become: yes
+  file:
+    path: "{{ apache_server_root }}/mods-enabled/{{ item }}"
+    state: absent
+  with_items: apache_mods_disabled
+  notify: restart apache
+
+- name: Add apache vhosts configuration.
+  become: yes
+  template:
+    src: "vhosts-{{ apache_vhosts_version }}.conf.j2"
+    dest: "{{ apache_conf_path }}/sites-available/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: apache_create_vhosts
+
+- name: Add vhost symlink in sites-enabled.
+  become: yes
+  file:
+    src: "{{ apache_conf_path }}/sites-available/{{ apache_vhosts_filename }}"
+    dest: "{{ apache_conf_path }}/sites-enabled/{{ apache_vhosts_filename }}"
+    state: link
+  when: apache_create_vhosts
+  notify: restart apache
+
+- name: Add vhost directory
+  become: yes
+  file:
+    path={% for vhost in apache_vhosts and apache_vhosts_ssl %}{{ vhost.documentroot }}{% endfor %}
+    mode=0755
+    state=directory
+    owner="{{system_default_user}}"
+  tags: create_dir
+  when: apache_create_vhosts
+
+- name: Remove default vhost in sites-enabled.
+  become: yes
+  file:
+    path: "{{ apache_conf_path }}/sites-enabled/{{ apache_default_vhost_filename }}"
+    state: absent
+  notify: restart apache
+  when: apache_remove_default_vhost

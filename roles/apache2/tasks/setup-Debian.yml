@@ -1,0 +1,13 @@
+---
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=86400
+
+- name: Ensure Apache is installed.
+  become: yes
+  apt: "name={{ item }} state=installed"
+  with_items: apache_packages
+
+- name: Install w3m to make apache2ctl work
+  become: yes
+  apt: name='w3m' state=installed
+  with_items: apache_packages

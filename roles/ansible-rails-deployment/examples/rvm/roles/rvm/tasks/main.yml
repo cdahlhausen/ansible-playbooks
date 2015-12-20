@@ -1,0 +1,56 @@
+- apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - git-core
+    - curl
+    - build-essential
+    - libssl-dev
+    - libpq-dev
+    - nodejs
+
+- stat: path=/etc/profile.d/rvm.sh
+  register: rvm_folder
+
+- name: install rvm
+  shell: "curl -sSL https://get.rvm.io | bash -s stable --ruby=2.1.2"
+  when: rvm_folder.stat.isdir is not defined
+
+- file:
+    src: /usr/local/rvm/environments/ruby-2.1.2
+    dest: /usr/local/rvm/environments/default
+    state: link
+
+- lineinfile:
+    dest: "/home/vagrant/.bashrc"
+    regexp: "^export PATH=/usr/local/rvm/bin"
+    line: "export PATH=/usr/local/rvm/bin:$PATH"
+    insertafter: BOF
+    state: present
+
+- name: "adjust GEM HOME for user"
+  lineinfile:
+    dest: "/home/vagrant/.bashrc"
+    regexp: "^export GEM_HOME"
+    line: "export GEM_HOME=$HOME/.gem"
+    insertbefore: BOF
+    state: present
+
+- name: "add gem paths to path"
+  lineinfile:
+    dest: "/home/vagrant/.bashrc"
+    regexp: "^export PATH=.GEM_HOME"
+    line: "export PATH=$GEM_HOME/bin:$PATH"
+    insertafter: "GEM_HOME"
+    state: present
+
+- name: "adjust GEM HOME for user"
+  lineinfile:
+    dest: "/home/vagrant/.bashrc"
+    regexp: "^source /usr/local/rvm/scripts/rvm"
+    line: "source /usr/local/rvm/scripts/rvm"
+    insertbefore: BOF
+
+- name: install bundler
+  shell: gem install bundler

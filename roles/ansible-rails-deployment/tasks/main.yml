@@ -1,0 +1,57 @@
+---
+- merge:
+    dicts:
+      - "{{ default_environment }}"
+      - "{{ custom_environment }}"
+    var: command_environment
+
+# note: mostly for convenience when ssh'ing to your server so you can run ruby related commands properly
+- name: add GEM_HOME to .bashrc
+  lineinfile:
+    dest: "{{ home_directory }}/.bashrc"
+    insertafter: BOF
+    regexp: ^export.GEM_HOME
+    line: "export GEM_HOME={{ gem_home }}"
+    state: present
+
+- name: update PATH with $GEM_HOME/bin
+  lineinfile:
+    dest: "{{ home_directory }}/.bashrc"
+    insertafter: ^export.GEM_HOME
+    regexp: ^export.PATH=.GEM_HOME
+    line: "export PATH=$GEM_HOME/bin:$PATH"
+    state: present
+
+- name: execute bundler
+  command: chdir="{{ build_path }}" bundle install --path='{{ shared_bundle_path }}' {{ bundle_install_options|default(default_bundle_install_options) }}
+  register: bundler
+  changed_when: "'Installing' in bundler or 'Updating' in bundler or 'upgrade' in bundler"
+  environment: command_environment
+
+- name: check schema for diffs
+  diff:
+    paths: "{{ migrate_diff_paths }}"
+  when: migrate
+  register: rails_schema
+
+- debug: var=rails_schema
+
+- name: migrate the database
+  command: chdir="{{ build_path }}" bundle exec rake db:migrate
+  environment: command_environment
+  when: migrate and (force_migrate or rails_schema|changed)
+
+- name: check assets for diffs
+  diff:
+    paths: "{{ asset_precompile_diff_paths }}"
+  when: compile_assets
+  register: assets
+
+- name: precompile asset files if necessary
+  command: chdir="{{ build_path }}" bundle exec rake assets:precompile
+  environment: command_environment
+  when: compile_assets and (assets|changed or force_asset_compilation)
+
+- name: copy asset files when not changed
+  shell: "cp -R {{ current_path }}/public/assets {{ build_path }}/public/assets"
+  when: compile_assets and assets is defined and not assets.changed

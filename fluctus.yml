@@ -101,7 +101,7 @@
       - common
       - hostname
       - ssl
-    #  - jdauphant.ssl-certs
+      - jdauphant.ssl-certs
       - apache2
       - oracle-java7
       - go
@@ -109,6 +109,7 @@
       - passenger
       - { role: rails, force_update: yes}
       - tomcat7
+      - solr
 
 
     tasks:

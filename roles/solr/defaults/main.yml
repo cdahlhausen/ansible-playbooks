@@ -1,4 +1,5 @@
 ---
+
 solr_workspace: /srv
 
 solr_create_user: true
@@ -10,7 +11,9 @@ solr_mirror: "http://archive.apache.org/dist"
 
 solr_service_name: solr
 # solr_install_path: /opt/solr
-solr_install_path: /usr/share/tomcat7-root
+# This is bad practice and creates a dependency.
+# TODO: Refactor. Maybe combine Solr/Tomcat roles.
+solr_install_path: /var/lib/tomcat7/webapps
 solr_home: /var/solr
 solr_log_file_path: /var/log/solr.log
 

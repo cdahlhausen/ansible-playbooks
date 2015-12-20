@@ -11,6 +11,7 @@
   set_fact:
     "solr_filename=solr-{{ solr_version }}"
   when: "solr_version.split('.')[0] == '4'"
+  tags: solrnew
 
 - name: Set solr_filename for Solr 3.x.
   set_fact:
@@ -22,28 +23,46 @@
     url: "{{ solr_mirror }}/lucene/solr/{{ solr_version }}/{{ solr_filename }}.tgz"
     dest: "{{ solr_workspace }}/{{ solr_filename }}.tgz"
     force: no
+  tags: solrnew
 
-- name: Expand Solr war in /srv.
+- stat: path={{solr_workspace}}/{{solr_filename}}
+  no_log: True
+  register: solr_dir
+
+- name: Unarchive solr
   command: >
-    "tar -xf {{ solr_filename}}.tgz {{ solr_filename}}/dist/{{solr_filename}}.war --strip-components 2"
-    creates="{{ solr_workspace }}/{{ solr_filename }}.war"
-    chdir="{{ solr_workspace }}"
+    tar -xvf {{solr_workspace}}/{{ solr_filename}}.tgz
+    chdir={{ solr_workspace }}
+  when: not solr_dir.stat.exists
+  tags: solrnew
+
+- name: Copy Solr libraries into /usr/share/tomcat7/lib
+  command:
+  # "cp -rnv {{ solr_workspace}}/{{solr_filename}}/example/lib/ext/. /usr/share/tomcat7/lib/"
+    "cp -rnv {{ solr_workspace}}/{{solr_filename}}/dist/solrj-lib/. /usr/share/tomcat7/lib/"
+
+- name: Copy Solr log4j into /etc/tomcat7
+  command:
+    cp "{{ solr_workspace}}/{{solr_filename}}/example/resources/log4j.properties" /etc/tomcat7
+    creates=/etc/tomcat7/log4j.properties
+  tags: solrnew
 
 - name: Check if Solr is already installed.
-  stat: "path={{ solr_workspace }}/{{ solr_filename }}.war"
+  stat: "path={{ solr_install_path }}/{{ solr_filename }}.war"
   register: solr_war_file
 
-- name: Copy Solr into place.
-  command: "cp -r {{ solr_workspace }}/{{ solr_filename }}.war {{ solr_install_path }}"
+- name: Copy Solr.war to /var/lib/tomcat7/webapps
+  command:
+    "cp -nv {{ solr_workspace}}/{{solr_filename}}/dist/{{solr_filename}}.war {{solr_install_path}}/{{solr_filename}}.war"
   when: not solr_war_file.stat.exists
 
-- name: Ensure Solr install files are owned by the solr_user.
-  file:
-    path: "{{ solr_install_path }}"
-    owner: "{{ solr_user }}"
-    group: "{{ solr_user }}"
-    recurse: yes
-  when: not solr_war_file.stat.exists
+  # - name: Ensure Solr install files are owned by the solr_user.
+  # file:
+  #  path: "{{ solr_install_path }}"
+  #  owner: "{{ solr_user }}"
+  #  group: tomcat7
+  #  recurse: yes
+  # when: not solr_war_file.stat.exists
 
 - include: solr-home.yml
 - include: init-script.yml

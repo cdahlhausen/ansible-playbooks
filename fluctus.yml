@@ -30,7 +30,7 @@
         ssl_cert_path: |
            {% if ansible_bios_version != 'VirtualBox' %}{{ var_ssl_cert_path }}{% else %}{{var_vagrant_ssl_cert_path }}{% endif %}
         ssl_key_path: |
-          {% if ansible_bios_version != 'VirtualBox' %}{{ var_ssl_key_path }}{% else %}{{var_vagrant_ssl_key_path }}{% endif %} 
+          {% if ansible_bios_version != 'VirtualBox' %}{{ var_ssl_key_path }}{% else %}{{var_vagrant_ssl_key_path }}{% endif %}
 
     # APACHE
         apache_vhosts:

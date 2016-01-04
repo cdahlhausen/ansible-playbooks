@@ -71,11 +71,11 @@
 
 # TODO: Make this a handler and use notify.
   - name: check for existence of rails and devise key
-    shell: grep {{item}}  /home/{{system_default_user}}/.profile | tr -d "export {{item}}=''"
+    shell: grep {{item}} /home/{{system_default_user}}/.profile
     register: key_present
     with_items:
-      - RAILS_SECRET_KEY
-      - DEVISE_SECRET_KEY
+      - "export RAILS_SECRET_KEY="
+      - "export DEVISE_SECRET_KEY="
     ignore_errors: yes
     tags: railskey
 
@@ -89,13 +89,26 @@
       - DEVISE_SECRET_KEY
     tags: railskey
 
-
-  - name: set key as fact if already generated
+  - name: grep the existing key to set as fact
     when: key_present
-    set_fact: "{{item.name}}={{item.value}}"
+    shell: grep {{item}}  /home/{{system_default_user}}/.profile | tr -d "export {{item}}=''"
+    register: existing_key
     with_items:
-      - { name: RAILS_SECRET_KEY, value: '{{key_present.results[0].stdout}}'}
-      - { name: DEVISE_SECRET_KEY, value: '{{key_present.results[1].stdout}}'}
+      - RAILS_SECRET_KEY
+      - DEVISE_SECRET_KEY
+    ignore_errors: yes
+    tags: railskey
+
+  # Workaround as set_fact does not allow looping over arrays
+  - name: set RAILS key as fact if already generated
+    when: key_present
+    set_fact: RAILS_SECRET_KEY="{{existing_key.results[0].stdout}}"
+    tags: railskey
+
+  # Workaround as set_fact does not allow looping over arrays
+  - name: set DEVISE key as fact if already generated
+    when: key_present
+    set_fact: DEVISE_SECRET_KEY="{{existing_key.results[1].stdout}}"
     tags: railskey
 
   - name: set key as fact

@@ -21,3 +21,6 @@ solr_host: "0.0.0.0"
 solr_port: "8983"
 solr_xms: "256M"
 solr_xmx: "512M"
+
+solr_cores: ['production','development','test','demo']
+solr_default_core: 'development'

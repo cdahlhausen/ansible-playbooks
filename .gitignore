@@ -1,3 +1,6 @@
+# hidden vault_pw
+.vault_password
+
 # build products...
 *.py[co]
 build

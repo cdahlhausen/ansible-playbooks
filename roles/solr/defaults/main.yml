@@ -1,6 +1,6 @@
 ---
 
-solr_workspace: /srv
+solr_workspace: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust{% else %}/srv/{% endif %}"
 
 solr_create_user: true
 solr_user: solr
@@ -14,7 +14,7 @@ solr_service_name: solr
 # This is bad practice and creates a dependency.
 # TODO: Refactor. Maybe combine Solr/Tomcat roles.
 solr_install_path: /var/lib/tomcat7/webapps
-solr_home: /var/solr
+solr_home: "{{solr_workspace}}/solr/home"
 solr_log_file_path: /var/log/solr.log
 
 solr_host: "0.0.0.0"

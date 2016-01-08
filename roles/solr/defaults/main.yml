@@ -1,6 +1,6 @@
 ---
 
-solr_workspace: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust{% else %}/srv/{% endif %}"
+solr_workspace: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust{% else %}/srv{% endif %}"
 
 solr_create_user: true
 solr_user: solr

@@ -32,11 +32,5 @@
     {% for core in solr_cores %}
         <core name="{{core}}" instanceDir="{{core}}-core" />
     {% endfor %}
-<!--
-    <core name="production" instanceDir="production-core" />
-    <core name="development" instanceDir="development-core" />
-    <core name="test" instanceDir="test-core" />
-    <core name="demo" instanceDir="demo-core" />
--->
   </cores>
 </solr>

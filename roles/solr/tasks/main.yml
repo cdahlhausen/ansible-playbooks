@@ -28,23 +28,30 @@
   command: >
     tar -xvf {{solr_workspace}}/{{ solr_filename}}.tgz
     chdir={{ solr_workspace }}
-  when: not solr_dir.stat.exists
+    creates={{solr_workspace}}/{{solr_filename}}
   tags: solrnew
 
-- name: Copy Solr libraries into /usr/share/tomcat7/lib
-  command:
-  # "cp -rnv {{ solr_workspace}}/{{solr_filename}}/example/lib/ext/. /usr/share/tomcat7/lib/"
-    "cp -rnv {{ solr_workspace}}/{{solr_filename}}/dist/solrj-lib/. /usr/share/tomcat7/lib/"
+- name: Copy Solr components into place
+  shell: >
+    cp -rnv {{ item.src }} {{ item.dest }}
+    creates={{ item.creates }}
+  with_items:
+    # Solr example configuration and war file
+    - src: "{{ solr_dir }}/dist/{{solr_filename}}.war"
+      dest: "{{ solr_install_path }}/solr.war"
+      creates: "{{solr_install_path}}/solr.war"
 
-- name: Copy Solr log4j into /etc/tomcat7
-  command:
-    cp "{{ solr_workspace}}/{{solr_filename}}/example/resources/log4j.properties" /etc/tomcat7
-    creates=/etc/tomcat7/log4j.properties
+    # Solr log4j logging configuration
+    - src: "{{ solr_dir }}/example/lib/ext/*"
+      dest: "/var/lib/tomcat7/shared/"
+      creates: "/var/lib/tomcat7/shared/log4j-1.2.16.jar"
+
+    # Solr log4j.properties
+    - src: "{{ solr_dir }}/example/resources/log4j.properties"
+      dest: "/var/lib/tomcat7/shared/classes/log4j.properties"
+      creates: "/var/lib/tomcat7/shared/classes/log4j.properties"
+      notify: restart tomcat
   tags: solrnew
-
-- name: Check if Solr is already installed.
-  stat: "path={{ solr_install_path }}/solr.war"
-  register: solr_war_file
 
 - name: Copy Solr.war to /var/lib/tomcat7/webapps
   command:

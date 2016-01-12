@@ -23,7 +23,6 @@
   tags: solrcore
 
 - name: Create missing core dir.
-  # shell: "cp -rn {{ solr_workspace }}/{{ solr_filename}}/example/solr/* {{ solr_home }}/{{item}}"
   file:
     path: "{{ solr_home }}/{{item.item}}"
     recurse: yes
@@ -42,7 +41,7 @@
   when: "{{item.stat.exists}} == false"
   tags: solrcore
 
-- name: Fix the example solrconfig.xml file.
+- name: Fix the conf.properties
   replace:
     dest: "{{ solr_home }}/collection1/conf/solrconfig.xml"
     regexp: ^.+solr\.install\.dir.+$

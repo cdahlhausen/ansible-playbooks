@@ -56,11 +56,25 @@
     owner: "{{solr_user}}"
     group: "{{solr_user}}"
     mode: 0640
+  tags: solrcore
 
-- name: Ensure Solr home files are owned by the solr_user.
+- name: Copying solr-webapp.xml template
+  template:
+    src: solr-webapp.xml.j2
+    dest: "/etc/tomcat7/Catalina/localhost/solr.xml"
+    owner: "root"
+    group: "tomcat7"
+    mode: 0644
+  notify: restart tomcat
+  tags: solrcore
+
+- name: Ensure Solr home files are owned by the tomcat7 user.
   file:
     path: "{{ solr_home }}"
-    owner: "{{ solr_user }}"
-    group: "{{ solr_user }}"
+    owner: "tomcat7"
+    group: "tomcat7"
     recurse: yes
   when: not solr_example.stat.exists
+  tags: solrcore
+
+

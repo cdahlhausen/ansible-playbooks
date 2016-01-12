@@ -53,18 +53,26 @@
       notify: restart tomcat
   tags: solrnew
 
-- name: Copy Solr.war to /var/lib/tomcat7/webapps
+# Not sure if this is needed. Leftover from original geerlinguy play.
+- name: Copy Solr libraries into /usr/share/tomcat7/lib
   command:
-    "cp -nv {{ solr_workspace}}/{{solr_filename}}/dist/{{solr_filename}}.war {{solr_install_path}}/solr.war"
-  when: not solr_war_file.stat.exists
+    "cp -rnv {{ solr_dir}}/dist/solrj-lib/. /usr/share/tomcat7/lib/"
 
-  # - name: Ensure Solr install files are owned by the solr_user.
-  # file:
-  #  path: "{{ solr_install_path }}"
-  #  owner: "{{ solr_user }}"
-  #  group: tomcat7
-  #  recurse: yes
-  # when: not solr_war_file.stat.exists
+- name: Ensure Solr install files are owned by the solr_user.
+  file:
+    path: "{{ solr_install_path }}/solr"
+    owner: "{{ solr_user }}"
+    group: tomcat7
+    recurse: yes
+
+- name: Ensure log file is created and has proper permissions.
+  file:
+    path: "/var/log/solr.log"
+    state: touch
+    owner: "{{ solr_user }}"
+    group: root
+    mode: 0664
+  changed_when: false
 
 - include: solr-home.yml
 - include: init-script.yml

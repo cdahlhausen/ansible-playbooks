@@ -1,0 +1,7 @@
+# This is a placeholder to setup a local dev environment
+# with multiple VirtualBoxes to simulate the APTrust infrastructure
+# This playbook will install homebrew (if host is OSX), vagrant, vagrant plugin landrush (dnsmasq) and provision a test environment. 
+
+---
+- hosts: localhost
+  connection: local

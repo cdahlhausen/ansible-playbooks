@@ -43,10 +43,69 @@
 
 - name: Fix the conf.properties
   replace:
-    dest: "{{ solr_home }}/collection1/conf/solrconfig.xml"
-    regexp: ^.+solr\.install\.dir.+$
-    replace: ""
-  when: "not solr_example.stat.exists and solr_version.split('.')[0] == '4'"
+    dest: "{{ solr_home }}/{{item}}/core.properties"
+    regexp: collection1$
+    replace: "{{ item }}"
+  with_items: solr_cores
+
+- name: tmp
+  set_fact: solr_dir=/srv/solr-4.7.2
+  tags: symlink
+
+# TODO: research if this is actually necessary.
+- name: Symlink Solr contrib and dist
+  file:
+    src: "{{solr_dir}}/{{item}}"
+    dest: "{{solr_home}}/{{item}}"
+    owner: tomcat7
+    group: "{{solr_user}}"
+    state: link
+  with_items:
+    - contrib
+    - dist
+  tags: symlink
+
+# TODO: change relative paths of default solrconfig.xml
+- name: Fix lib paths of default solrconfig.xml
+  replace:
+    dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
+    regexp: '<lib dir="../../../'
+    replace: '<lib dir="../../'
+  with_items: solr_cores
+  tags: symlink
+
+# Note: This creates a dependency and breaks reusability of the solr role.
+- name: Symlink Solr schema to fluctus schema
+  file:
+    src: "{{fluctus_solrschema}}"
+    dest: "{{solr_home}}/{{item}}/conf/schema.xml"
+    owner: tomcat7
+    group: "{{solr_user}}"
+    state: link
+    force: yes
+  with_items: solr_cores
+  when: fluctus_solrconfig and fluctus_solrschema
+  tags: symlink
+
+# Note: This creates a dependency and breaks reusability of the solr role.
+# Note: force:yes will always result in a change. It is used to remove existing file and replace it with a symlink
+- name: Symlink Solr solrconfig to fluctus solrconfig
+  file:
+    src: "{{fluctus_solrconfig}}"
+    dest: "{{solr_home}}/{{item}}/conf/solrconfig.xml"
+    owner: tomcat7
+    group: "{{solr_user}}"
+    state: link
+    force: yes
+  with_items: solr_cores
+  register: symlinked_solr
+# TODO: revisit this as it breaks once either var is not defined.
+  when: (fluctus_solrconfig is defined) and (fluctus_solrschema is defined)
+  tags: symlink
+
+- name: debug register
+  debug: msg="{{symlinked_solr}}"
+  tags: symlink
 
 - name: Copying solr.xml template
   template:

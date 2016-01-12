@@ -20,9 +20,9 @@
     force: no
   tags: solrnew
 
-- stat: path={{solr_workspace}}/{{solr_filename}}
-  no_log: True
-  register: solr_dir
+- name: Set solr_dir
+  set_fact: solr_dir="{{solr_workspace}}/{{solr_filename}}"
+  tags: solr_dir
 
 - name: Unarchive solr
   command: >

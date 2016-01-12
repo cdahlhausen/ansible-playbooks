@@ -1,14 +1,17 @@
 ---
+# TODO: Check if solr.xml should be in there or not.
 - name: Check if solr_home is already set up.
   stat: "path={{ solr_home }}/solr.xml"
   register: solr_example
+  tags: solrcore
 
 - name: Ensure solr_home directory exists.
   file:
     path: "{{ solr_home }}"
+    recurse: yes
     state: directory
-    owner: "{{ solr_user }}"
-    group: "{{ solr_user }}"
+    owner: "tomcat7"
+    group: "tomcat7"
     mode: 0755
   when: not solr_example.stat.exists
 

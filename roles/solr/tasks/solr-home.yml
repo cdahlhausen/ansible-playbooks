@@ -5,7 +5,13 @@
   register: solr_example
   tags: solrcore
 
-- name: Ensure solr_home directory exists.
+- name: Check if solr core directories exist.
+  stat: "path={{ solr_home}}/{{item}}"
+  with_items: solr_cores
+  register: solr_core_dir
+  tags: solrcore
+
+- name: Ensure solr_home directory exists and has correct permissions.
   file:
     path: "{{ solr_home }}"
     recurse: yes

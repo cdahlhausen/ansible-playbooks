@@ -107,6 +107,17 @@
   debug: msg="{{symlinked_solr}}"
   tags: symlink
 
+# TODO: change relative paths of default solrconfig.xml
+- name: Temp workaround to fix lib paths of fluctus solrconfig.xml
+  replace:
+    dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
+    regexp: '<lib dir="/mnt/aptrust/solr/solr-4.7.2/'
+    replace: '<lib dir="../../'
+  with_items: solr_cores
+  when: "{{symlinked_solr.changed}} == true"
+  tags: symlink
+
+# Note omitting solr.xml in fluctus repo as cores are defined in Ansible.
 - name: Copying solr.xml template
   template:
     src: solr.xml.j2
@@ -134,5 +145,3 @@
     recurse: yes
   when: not solr_example.stat.exists
   tags: solrcore
-
-

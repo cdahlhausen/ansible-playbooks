@@ -20,6 +20,21 @@
     group: "tomcat7"
     mode: 0755
   when: not solr_example.stat.exists
+  tags: solrcore
+
+- name: Create missing core dir.
+  # shell: "cp -rn {{ solr_workspace }}/{{ solr_filename}}/example/solr/* {{ solr_home }}/{{item}}"
+  file:
+    path: "{{ solr_home }}/{{item.item}}"
+    recurse: yes
+    state: directory
+    owner: "tomcat7"
+    group: "tomcat7"
+    mode: 0755
+  with_items: "{{solr_core_dir.results}}"
+  when: "{{item.stat.exists}} == false"
+  register: missing_solr_core_dirs
+  tags: solrcore
 
 - name: Copy Solr example into solr_home.
   # shell: "cp -r {{ solr_install_path }}/example/solr/* {{ solr_home }}"

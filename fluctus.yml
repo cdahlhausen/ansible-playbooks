@@ -17,6 +17,10 @@
     vars:
         playbook_name: fluctus
         fluctus_app_root: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"
+        # Used for solr role to symlink configurations
+        fluctus_solrconfig: "{{fluctus_app_root}}/solr_conf/conf/solrconfig-4.7.xml"
+        fluctus_solrschema: "{{fluctus_app_root}}/solr_conf/conf/schema.xml"
+
         # Environment vars don't seem to work for when-conditionals. Duplicate this as var for now.
         RAILS_ENV: 'development'
         RBENV_ROOT: /home/{{system_default_user}}/.rbenv
@@ -71,7 +75,7 @@
             - ssl.conf
 
         apache_mods_disabled: []
-        apache_remove_default_vhost: false 
+        apache_remove_default_vhost: false
 
     # Tomcat 7
         tomcat7_enabled: true

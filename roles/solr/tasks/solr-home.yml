@@ -37,9 +37,10 @@
   tags: solrcore
 
 - name: Copy Solr example into solr_home.
-  # shell: "cp -r {{ solr_install_path }}/example/solr/* {{ solr_home }}"
-  shell: "cp -r {{ solr_workspace }}/{{ solr_filename}}/example/solr/* {{ solr_home }}"
-  when: not solr_example.stat.exists
+  shell: cp -rn "{{ solr_workspace }}/{{ solr_filename}}/example/solr/collection1/." "{{ solr_home }}/{{item.item}}"
+  with_items: "{{solr_core_dir.results}}"
+  when: "{{item.stat.exists}} == false"
+  tags: solrcore
 
 - name: Fix the example solrconfig.xml file.
   replace:

@@ -75,4 +75,5 @@
   changed_when: false
 
 - include: solr-home.yml
-- include: init-script.yml
+# Init script is not needed when running under Tomcat.
+# - include: init-script.yml

@@ -21,12 +21,28 @@
     state: installed
   when: ansible_os_family == 'Debian'
 
+- name: Fix catalina.properties server loader directories
+  replace:
+    dest: /etc/tomcat7/catalina.properties
+    regexp: ^(server\.loader\=)(\${catalina.home})(.*)(\${catalina.home})(.*)
+    replace: '\1${catalina.base}\3${catalina.base}\5'
+    backup: yes
+  tags: tomcatreplace
+
+- name: Fix catalina.properties shared loader directories
+  replace:
+    dest: /etc/tomcat7/catalina.properties
+    regexp: ^(shared\.loader\=)(\${catalina.home})(.*)(\${catalina.home})(.*)
+    replace: '\1${catalina.base}\3${catalina.base}\5'
+    backup: yes
+  tags: tomcatreplace
+
 - name: Copy tomcat7 server.xml.
   template:
     src: server.xml.j2
     dest: /etc/tomcat7/server.xml
     owner: root
-    group: tomcat7 
+    group: tomcat7
     mode: 0644
   notify: restart tomcat
 

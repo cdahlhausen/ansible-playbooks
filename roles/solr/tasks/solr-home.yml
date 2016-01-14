@@ -44,7 +44,7 @@
 - name: Fix the conf.properties
   replace:
     dest: "{{ solr_home }}/{{item}}/core.properties"
-    regexp: collection1$
+    regexp: collection1
     replace: "{{ item }}"
   with_items: solr_cores
 

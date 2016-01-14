@@ -30,7 +30,7 @@
   -->
   <cores adminPath="/admin/cores" defaultCoreName="{{solr_default_core}}">
     {% for core in solr_cores %}
-        <core name="{{core}}" instanceDir="{{core}}-core" />
+        <core name="{{core}}" instanceDir="{{core}}" />
     {% endfor %}
   </cores>
 </solr>

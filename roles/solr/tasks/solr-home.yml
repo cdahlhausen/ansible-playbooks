@@ -48,7 +48,7 @@
     replace: "{{ item }}"
   with_items: solr_cores
 
-- name: tmp
+- name: tmp for debugging
   set_fact: solr_dir=/srv/solr-4.7.2
   tags: symlink
 
@@ -70,7 +70,7 @@
   replace:
     dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
     regexp: '<lib dir="../../../'
-    replace: '<lib dir="../../'
+    replace: '<lib dir="{{solr_home}}/'
   with_items: solr_cores
   tags: symlink
 
@@ -100,19 +100,17 @@
   with_items: solr_cores
   register: symlinked_solr
 # TODO: revisit this as it breaks once either var is not defined.
-  when: (fluctus_solrconfig is defined) and (fluctus_solrschema is defined)
-  tags: symlink
-
-- name: debug register
-  debug: msg="{{symlinked_solr}}"
+#  when: (fluctus_solrconfig is defined) and (fluctus_solrschema is defined)
   tags: symlink
 
 # TODO: change relative paths of default solrconfig.xml
+# Note: This is a duplicate of a fix lib task above but is necessary
+# to ensure portability of solr role if used without fluctus.
 - name: Temp workaround to fix lib paths of fluctus solrconfig.xml
   replace:
     dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
     regexp: '<lib dir="/mnt/aptrust/solr/solr-4.7.2/'
-    replace: '<lib dir="../../'
+    replace: '<lib dir="{{solr_home}}/'
   with_items: solr_cores
   when: "{{symlinked_solr.changed}} == true"
   tags: symlink
@@ -143,5 +141,4 @@
     owner: "tomcat7"
     group: "tomcat7"
     recurse: yes
-  when: not solr_example.stat.exists
   tags: solrcore

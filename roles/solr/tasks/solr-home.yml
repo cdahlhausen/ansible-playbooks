@@ -65,13 +65,15 @@
     - dist
   tags: symlink
 
-# TODO: change relative paths of default solrconfig.xml
+# TODO: change relative paths of default solrconfig.xml once
+# all machines have been Ansible deployed.
 - name: Fix lib paths of default solrconfig.xml
   replace:
     dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
     regexp: '<lib dir="../../../'
-    replace: '<lib dir="{{solr_home}}/'
+    replace: '<lib dir="{{solr_home}}"'
   with_items: solr_cores
+  when: not fluctus_solrconfig
   tags: symlink
 
 # Note: This creates a dependency and breaks reusability of the solr role.

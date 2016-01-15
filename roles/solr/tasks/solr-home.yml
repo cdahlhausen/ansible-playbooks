@@ -105,19 +105,20 @@
 #  when: (fluctus_solrconfig is defined) and (fluctus_solrschema is defined)
   tags: symlink
 
-# TODO: change relative paths of default solrconfig.xml
+# TODO: change relative paths of default solrconfig.xml once all
+# servers re-deployed using Ansible.
 # Note: This is a duplicate of a fix lib task above but is necessary
 # to ensure portability of solr role if used without fluctus.
 - name: Temp workaround to fix lib paths of fluctus solrconfig.xml
   replace:
     dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
-    regexp: '<lib dir="/mnt/aptrust/solr/solr-4.7.2/'
-    replace: '<lib dir="{{solr_home}}/'
+    regexp: '(<lib dir=")(/mnt/aptrust/solr/solr-4.7.2/)(.*)'
+    replace: '\1{{solr_home}}/\3'
   with_items: solr_cores
   when: "{{symlinked_solr.changed}} == true"
   tags: symlink
 
-# Note omitting solr.xml in fluctus repo as cores are defined in Ansible.
+# Note: omitting solr.xml in fluctus repo as cores are defined in Ansible.
 - name: Copying solr.xml template
   template:
     src: solr.xml.j2

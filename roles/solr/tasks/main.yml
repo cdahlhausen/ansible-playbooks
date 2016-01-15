@@ -39,31 +39,22 @@
     # Solr example configuration and war file
     - src: "{{ solr_dir }}/dist/{{solr_filename}}.war"
       dest: "{{ solr_install_path }}/solr.war"
-      creates: "{{solr_install_path}}/solr.war"
+      creates: "{{ solr_install_path }}/solr.war"
 
     # Solr log4j logging configuration
     - src: "{{ solr_dir }}/example/lib/ext/*"
-      dest: "/var/lib/tomcat7/shared/"
+      dest: "/usr/share/tomcat7/lib/"
       creates: "/var/lib/tomcat7/shared/log4j-1.2.16.jar"
+
+    # Not sure if this is needed. Leftover from original geerlinguy play.
+    - src: "{{ solr_dir}}/dist/solrj-lib/*"
+      dest: "/usr/share/tomcat7/lib/"
 
     # Solr log4j.properties
     - src: "{{ solr_dir }}/example/resources/log4j.properties"
-      dest: "/var/lib/tomcat7/shared/classes/log4j.properties"
-      creates: "/var/lib/tomcat7/shared/classes/log4j.properties"
-      notify: restart tomcat
+      dest: "/usr/share/tomcat7/lib/"
+      creates: "/usr/share/tomcat7/lib/log4j.properties"
   tags: solrnew
-
-# Not sure if this is needed. Leftover from original geerlinguy play.
-- name: Copy Solr libraries into /usr/share/tomcat7/lib
-  command:
-    "cp -rnv {{ solr_dir}}/dist/solrj-lib/. /usr/share/tomcat7/lib/"
-
-- name: Ensure Solr install files are owned by the solr_user.
-  file:
-    path: "{{ solr_install_path }}/solr"
-    owner: "{{ solr_user }}"
-    group: tomcat7
-    recurse: yes
 
 - name: Ensure log file is created and has proper permissions.
   file:

@@ -1,5 +1,4 @@
 ---
-# TODO: Check if solr.xml should be in there or not.
 - name: Check if solr_home is already set up.
   stat: "path={{ solr_home }}/solr.xml"
   register: solr_example
@@ -21,6 +20,12 @@
     mode: 0755
   when: not solr_example.stat.exists
   tags: solrcore
+
+- name: Copy solr.war to solr_home
+  shell: >
+    cp -rnv "{{solr_install_path}}/solr.war" "{{solr_home}}"
+    creates="{{solr_home}}/solr.war"
+  when: solr_example.stat.exists
 
 - name: Create missing core dir.
   file:
@@ -48,11 +53,6 @@
     replace: "{{ item }}"
   with_items: solr_cores
 
-- name: tmp for debugging
-  set_fact: solr_dir=/srv/solr-4.7.2
-  tags: symlink
-
-# TODO: research if this is actually necessary.
 - name: Symlink Solr contrib and dist
   file:
     src: "{{solr_dir}}/{{item}}"

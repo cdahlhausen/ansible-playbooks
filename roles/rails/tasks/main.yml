@@ -44,11 +44,16 @@
   - name: change group ownership of fluctus to www-data
     file: path="{{ fluctus_app_root }}" state=directory recurse=yes group=www-data
 
+  - name: Check if local rbenv is set.
+    stat: path="{{fluctus_app_root}}/.ruby-version"
+    register: ruby_version
+
 # Set the right ruby interpreter
   - name: set ruby interpreter to {{ ruby_version }}
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus rbenv local {{ ruby_version }}
     become: yes
     become_user: "{{ system_default_user }}"
+    when: not ruby_version.stat.exists
     tags: rbenv
 
 # Install bundler in local rbenv

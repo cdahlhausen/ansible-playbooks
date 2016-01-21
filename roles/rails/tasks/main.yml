@@ -57,6 +57,7 @@
     tags: rbenv
 
 # Install bundler in local rbenv
+# TODO: Rewrite this to use ansible gem module to avoid reinstalling bundler on every play.
   - name: install bundler
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem install bundler
     become: yes
@@ -64,6 +65,7 @@
     tags: rails
 
 # Load gems into the local rbenv
+# TODO: Rewrite this to use ansible bundler module to avoid reinstalling gems on every play.
   - name: install items in fluctus gemfile
     become: yes
     become_user: "{{ system_default_user }}"
@@ -109,6 +111,7 @@
     when: key_present|success
     shell: grep {{item}}  /home/{{system_default_user}}/.profile | tr -d "export {{item}}=''"
     register: existing_key
+    no_log: true
     with_items:
       - RAILS_SECRET_KEY
       - DEVISE_SECRET_KEY

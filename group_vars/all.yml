@@ -15,9 +15,9 @@ system_deploy_group: deploy
 
 ansible_become_pass: "{{ vault_aptdeploy_password }}"
 
-## 
+##
 # Ruby Variables
-## 
+##
 ruby_version: 2.1.5
 
 ##
@@ -73,3 +73,8 @@ var_vagrant_ssl_key_path: "{{ vault_vagrant_ssl_key_path }}"
 var_aws_access_key_id: "{% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_access_prod_key_id }}{% else %}{{ vault_aws_access_dev_key_id }}{% endif %}"
 var_aws_secret_access_key: "{% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_secret_access_prod_key}}{% else %}{{ vault_aws_secret_access_dev_key }}{% endif %}"
 
+var_fluctus_prod_db_host: "{{ vault_fluctus_prod_db_host}}"
+var_fluctus_prod_db_pwd: "{{ vault_fluctus_prod_db_pwd}}"
+
+var_fluctus_dev_db_host: "{{ vault_fluctus_dev_db_host}}"
+var_fluctus_dev_db_pwd: "{{ vault_fluctus_dev_db_pwd}}"

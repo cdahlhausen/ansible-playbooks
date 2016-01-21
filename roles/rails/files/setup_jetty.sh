@@ -7,7 +7,7 @@
 #
 
 if [ ! -e ~/aptrust/fluctus/jetty/lib ]; then
-    . ~/.bash_profile
+    . ~/.profile
     cd ~/aptrust/fluctus
     rails g hydra:jetty
 fi

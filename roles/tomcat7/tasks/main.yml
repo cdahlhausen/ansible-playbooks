@@ -25,21 +25,43 @@
     - tomcat7-admin
   when: ansible_os_family == 'Debian'
 
-- name: Fix catalina.properties server loader directories
-  replace:
-    dest: /etc/tomcat7/catalina.properties
-    regexp: ^(server\.loader\=)(\${catalina.home})(.*)(\${catalina.home})(.*)
-    replace: '\1${catalina.base}\3${catalina.base}\5'
-    backup: yes
-  tags: tomcatreplace
+# - name: Set CATALINA_BASE because Ubuntu sucks.
+#  lineinfile:
+#      dest: /etc/default/tomcat7
+#      insertafter: "TOMCAT7_GROUP"
+#      line: "CATALINA_BASE=/var/lib/tomcat7"
+#      state: present
+#  with_items:
+#      - "CATALINA_BASE=/var/lib/tomcat7"
+#      - "CATALINA_HOME=/usr/share/tomcat7"
+  # - name: Fix catalina.properties server loader directories
+  #  replace:
+  #  dest: /etc/tomcat7/catalina.properties
+  #  regexp: ^(server\.loader\=)(\${catalina.home})(.*)(\${catalina.home})(.*)
+  #  replace: '\1${catalina.base}\3${catalina.base}\5'
+  #  backup: yes
+  # tags: tomcatreplace
 
-- name: Fix catalina.properties shared loader directories
-  replace:
-    dest: /etc/tomcat7/catalina.properties
-    regexp: ^(shared\.loader\=)(\${catalina.home})(.*)(\${catalina.home})(.*)
-    replace: '\1${catalina.base}\3${catalina.base}\5'
-    backup: yes
-  tags: tomcatreplace
+  # - name: Fix catalina.properties shared loader directories
+  # replace:
+  # dest: /etc/tomcat7/catalina.properties
+  #  regexp: ^(shared\.loader\=)(\${catalina.home})(.*)(\${catalina.home})(.*)
+  #  replace: '\1${catalina.base}\3${catalina.base}\5'
+  #  backup: yes
+  # tags: tomcatreplace
+
+# Note: Ubuntu bug https://bugs.launchpad.net/ubuntu/+source/tomcat7/+bug/1232258
+- name: Symlink tomcat7 directories to fix Ubuntu package issues.
+  file:
+    src: "/var/lib/tomcat7/{{ item }}"
+    dest: "/usr/share/tomcat7/{{ item }}"
+    owner: tomcat7
+    group: tomcat7
+    state: link
+  with_items:
+    - common
+    - server
+    - shared
 
 - name: Copy tomcat7 server.xml.
   template:

@@ -74,7 +74,9 @@ var_aws_access_key_id: "{% if ansible_bios_version != 'VirtualBox' %}{{ vault_aw
 var_aws_secret_access_key: "{% if ansible_bios_version != 'VirtualBox' %}{{ vault_aws_secret_access_prod_key}}{% else %}{{ vault_aws_secret_access_dev_key }}{% endif %}"
 
 var_fluctus_prod_db_host: "{{ vault_fluctus_prod_db_host}}"
+var_fluctus_prod_db_user: "{{ vault_fluctus_prod_db_user}}"
 var_fluctus_prod_db_pwd: "{{ vault_fluctus_prod_db_pwd}}"
 
 var_fluctus_dev_db_host: "{{ vault_fluctus_dev_db_host}}"
+var_fluctus_dev_db_user: "{{ vault_fluctus_dev_db_user}}"
 var_fluctus_dev_db_pwd: "{{ vault_fluctus_dev_db_pwd}}"

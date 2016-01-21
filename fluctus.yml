@@ -20,6 +20,10 @@
         # Used for solr role to symlink configurations
         fluctus_solrconfig: "{{fluctus_app_root}}/solr_conf/conf/solrconfig-4.7.xml"
         fluctus_solrschema: "{{fluctus_app_root}}/solr_conf/conf/schema.xml"
+        # TODO: Add a conditional to choose dev,prod based on environment (rails_env)
+        fluctus_db_host: "{{var_fluctus_dev_db_host}}"
+        fluctus_db_user: "{{var_fluctus_dev_db_user}}"
+        fluctus_db_pwd: "{{var_fluctus_dev_db_pwd}}"
 
         # Environment vars don't seem to work for when-conditionals. Duplicate this as var for now.
         RAILS_ENV: 'development'

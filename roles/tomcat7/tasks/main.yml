@@ -17,8 +17,12 @@
 
 - name: Ensure tomcat7 is installed (Debian).
   apt:
-    name: tomcat7
+    name: "{{ item }}"
     state: installed
+  with_items:
+    - tomcat7
+    - tomcat7-docs
+    - tomcat7-admin
   when: ansible_os_family == 'Debian'
 
 - name: Fix catalina.properties server loader directories

@@ -212,6 +212,14 @@
 
 # Bring the dev and test databases up to date.
 # If the the test db is not up to date, you can't run spec tests.
+
+  - name: Create development log
+    file:
+      path: "{{ fluctus_app_root}}/log/development.log"
+      owner: "{{system_default_user}}"
+      state: touch
+      mode: 0666
+
   - name: migrate dev database
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
     when: RAILS_ENV == 'development'

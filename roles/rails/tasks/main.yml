@@ -173,9 +173,9 @@
     register: jetty
     tags: rails
 
+# Note: This can be removed if Tomcat is used for local dev and prod
   - name: set up jetty/solr
-    #    script: setup_jetty.sh
-    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus rails g hydra:jetty
+    shell: chdir={{ fluctus_app_root }} executable=/bin/sh rails g hydra:jetty
     become_user: "{{system_default_user}}"
     when: not jetty.stat.exists
     tags: rails

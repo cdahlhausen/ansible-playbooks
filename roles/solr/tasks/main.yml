@@ -46,10 +46,6 @@
       dest: "/usr/share/tomcat7/lib/"
       creates: "/usr/share/tomcat7/log4j-1.2.16.jar"
 
-    # Not sure if this is needed. Leftover from original geerlinguy play.
-    - src: "{{ solr_dir}}/dist/solrj-lib/*"
-      dest: "/usr/share/tomcat7/lib/"
-
     # Solr log4j.properties
     - src: "{{ solr_dir }}/example/resources/log4j.properties"
       dest: "/usr/share/tomcat7/lib/"

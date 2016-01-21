@@ -221,11 +221,15 @@
       mode: 0666
 
   - name: migrate dev database
+    become: yes
+    become: "{{ system_default_user }}"
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
     when: RAILS_ENV == 'development'
     tags: rails
 
   - name: migrate test database
+    become: yes
+    become: "{{ system_default_user }}"
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
     when: RAILS_ENV == 'development'
     tags: rails

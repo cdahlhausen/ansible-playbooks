@@ -80,6 +80,7 @@
     # Tomcat 7
         tomcat7_enabled: true
         tomcat7_hostname: localhost
+        tomcat_catalina_port: 8080 #Used for rails role, solr.yml
 
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"

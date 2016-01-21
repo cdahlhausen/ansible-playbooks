@@ -70,6 +70,17 @@
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle install
     tags: rails
 
+# Replacing solr.yml in fluctus repo to use Tomcat
+# TODO: rethink placing this here as it implies a dependency of an installed tomcat.
+  - name: Replacing solr.yml in fluctus
+    template:
+        src: "solr.yml.j2"
+        dest: "{{ fluctus_app_root }}/config/solr.yml"
+        owner: "{{system_default_user}}"
+        group: "{{system_deploy_group}}"
+        mode: 0644
+    tags: rails
+
 # Generate Rails keys if they don't already exist
 # We don't do the usual lineinfile because we don't
 # want to keep overwriting the keys.
@@ -182,7 +193,7 @@
   - lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line="export FEDORA_URL='http://127.0.0.1:8983/fedora'"
+      line="export FEDORA_URL='http://127.0.0.1:{{tomcat_catalina_port}}/fedora"
     tags: rails
 
 

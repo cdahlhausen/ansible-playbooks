@@ -34,6 +34,7 @@
     group: root
     mode: 0644
   when: apache_create_vhosts
+  notify: restart apache
 
 - name: Add vhost symlink in sites-enabled.
   become: yes

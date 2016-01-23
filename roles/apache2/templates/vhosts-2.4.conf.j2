@@ -48,17 +48,25 @@ DirectoryIndex index.php index.html
 {% if vhost.serveradmin is defined %}
   ServerAdmin {{ vhost.serveradmin }}
 {% endif %}
-  <Directory "{{ vhost.documentroot }}">
-    AllowOverride All
-    Options -Indexes +FollowSymLinks
-    Require all granted
-    {% if vhost.extra_directory_parameters is defined %}
-        {{ vhost.extra_directory_parameters }}
+
+    <Directory "{{ vhost.documentroot }}">
+        AllowOverride All
+        Options -Indexes +FollowSymLinks
+        Require all granted
+        {% if vhost.extra_directory_parameters is defined %}
+            {{ vhost.extra_directory_parameters }}
+        {% endif %}
+    </Directory>
+        {% if vhost.extra_parameters is defined %}
+            {{ vhost.extra_parameters }}
+        {% endif %}
+    {% if vhost.documentroot_static is defined %}
+    <Directory "{{ vhost.documentroot_static }}">
+        AllowOverride All
+        Options -Indexes +FollowSymLinks
+        Require all granted
+    </Directory>
     {% endif %}
-  </Directory>
-{% if vhost.extra_parameters is defined %}
-  {{ vhost.extra_parameters }}
-{% endif %}
 </VirtualHost>
 
 {% endfor %}

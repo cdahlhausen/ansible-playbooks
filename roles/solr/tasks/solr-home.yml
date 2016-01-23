@@ -53,6 +53,13 @@
     replace: "{{ item }}"
   with_items: solr_cores
 
+- name: Check symlinks for contrib and dist.
+  stat: path="{{solr_dir}}/{{item}}"
+  with_items:
+    - contrib
+    - dist
+  register: cdsymlink
+
 - name: Symlink Solr contrib and dist
   file:
     src: "{{solr_dir}}/{{item}}"
@@ -60,9 +67,10 @@
     owner: tomcat7
     group: "{{solr_user}}"
     state: link
-  with_items:
-    - contrib
-    - dist
+  with_items: cdsymlink.results
+  when:
+    - not item | skipped
+    - item.stat.exists == false
   tags: symlink
 
 # TODO: change relative paths of default solrconfig.xml once

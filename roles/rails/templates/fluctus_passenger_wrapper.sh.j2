@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Environment settings for the Fluctus Rails application.
+# Fluctus is our custom Hydra head. It’s installed under
+# {{ fluctus_app_root }} Phusion Passenger loads
+# these environment variables before starting the Rails app.
+# The following line in /etc/apache2/sites-available/{{ansible_fqdn}}.conf
+# causes Passenger to load this script:
+#
+# PassengerRuby /usr/local/bin/fluctus_passenger_wrapper.sh
+#
+export RAILS_ENV="{{RAILS_ENV}}"
+export FLUCTUS_DB_USER="{{fluctus_db_user}}"
+export FLUCTUS_DB_HOST="{{fluctus_db_host}}"
+export FLUCTUS_DB_PWD="{{fluctus_db_pwd}}"
+export SOLR_URL="http://localhost:8080/solr/{{RAILS_ENV}}"
+export FEDORA_URL="http://localhost:8080/fedora"
+export FEDORA_USER="{{fedora_user}}"
+export FEDORA_PASS="{{fedora_pwd}}"
+export FEDORA_NAMESPACE="{{fedora_namespace}}"
+export DEVISE_SECRET_KEY="{{DEVISE_SECRET_KEY}}"
+export RAILS_SECRET_KEY="{{RAILS_SECRET_KEY}}"
+export AWS_SES_USER="{{fluctus_aws_ses_user}}"
+export AWS_SES_PASSWORD="{{fluctus_aws_ses_password}}"
+
+exec "{{RBENV_ROOT}}/shims/ruby" "$@"

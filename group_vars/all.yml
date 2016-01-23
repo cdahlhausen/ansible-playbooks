@@ -80,3 +80,8 @@ var_fluctus_prod_db_pwd: "{{ vault_fluctus_prod_db_pwd}}"
 var_fluctus_dev_db_host: "{{ vault_fluctus_dev_db_host}}"
 var_fluctus_dev_db_user: "{{ vault_fluctus_dev_db_user}}"
 var_fluctus_dev_db_pwd: "{{ vault_fluctus_dev_db_pwd}}"
+
+# Fedora
+var_fedora_user: "{{vault_fedora_user}}"
+var_fedora_pwd: "{{vault_fedora_pwd}}"
+var_fedora_namespace: 'aptrust'

@@ -213,12 +213,17 @@
 # Bring the dev and test databases up to date.
 # If the the test db is not up to date, you can't run spec tests.
 
+  - name: Check if development.log exists.
+    stat: path="{{ fluctus_app_root}}/log/development.log"
+    register: development_log
+
   - name: Create development log
     file:
       path: "{{ fluctus_app_root}}/log/development.log"
       owner: "{{system_default_user}}"
       state: touch
       mode: 0666
+    when: not development_log.stat.exists
 
   - name: migrate dev database
     become: yes

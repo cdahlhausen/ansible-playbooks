@@ -15,13 +15,16 @@
     apt_repository: repo='deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main' state=present
     when: ansible_distribution in [ 'Debian' ]
 
+  - name: Check if oracle-java is installed
+    command: dpkg-query -l oracle-java7-installer
+    changed_when: no
+    register: deb_check
+
   - name: Accept Oracle license
     debconf: name="{{oracle_installer_key}}" question='shared/{{oracle_license_key}}' value='true' vtype='select'
-
-  - name: Update apt cache.
-    apt: update_cache=yes cache_valid_time=86400
+    when: deb_check.stdout.find('no packages found') != -1
 
   - name: Install packages
     apt: name={{item}} state=present update_cache=yes
     with_items: oracle_packages
-
+    when: deb_check.stdout.find('no packages found') != -1

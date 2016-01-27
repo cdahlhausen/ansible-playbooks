@@ -138,5 +138,6 @@
         - nodejs
         - sqlite3
         - libsqlite3-dev
+        - expect
 
 

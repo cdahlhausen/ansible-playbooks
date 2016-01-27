@@ -18,6 +18,7 @@
   - name: Check if oracle-java is installed
     command: dpkg-query -l oracle-java7-installer
     changed_when: no
+    no_log: true
     register: deb_check
 
   - name: Accept Oracle license

@@ -1,0 +1,44 @@
+---
+
+- stat: path="{{fedora_workspace}}/fcrepo-installer-{{fedora_version}}.jar"
+  register: fedora_jar
+
+- name: Make sure fedora home exists.
+  file:
+    path: "{{fedora_home}}"
+    recurse: yes
+    state: directory
+    owner: "{{system_default_user}}"
+    group: "tomcat7"
+    mode: 0755
+
+- name: Download Fedora
+  get_url: >
+    url="http://downloads.sourceforge.net/project/fedora-commons/fedora/"{{fedora_version}}"/fcrepo-installer-"{{fedora_version}}".jar?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Ffedora-commons%2Ffiles%2Ffedora%2F"{{fedora_version}}"%2Ffcrepo-installer-"{{fedora_version}}".jar%2Fdownload&ts=1453915399&use_mirror=ufpr"
+    dest="{{fedora_workspace}}"
+    sha256sum=40d3fe844cf8d20d9556e369792d162c2eb54c46274126da6734db09d0a3521c
+  register: fedora_download
+  when: fedora_version.split('.')[0] == '3' and not fedora_jar.stat.exists
+
+- name: Extract fedora.war
+  command: chdir="{{fedora_workspace}}" unzip -j fcrepo-installer-"{{fedora_version}}".jar resources/fedora.war
+  when: fedora_version.split('.')[0] == '3' and fedora_download.changed
+
+
+# Copy fedora.xml first, then fedora.war
+- name: Copy fedora.xml file to Mr Tomcat.
+  template:
+    src: fedora.xml.j2
+    dest: /etc/tomcat7/Catalina/localhost/fedora.xml
+    owner: tomcat7
+    group: tomcat7
+    mode: 0640
+  when: fedora_app_server == 'tomcat'
+
+- name: Copy fedora.war to Mr Tomcat.
+  shell: cp fedora.war /var/lib/tomcat7/webapps
+  args:
+    chdir: "{{fedora_workspace}}"
+    creates: "/var/lib/tomcat7/webapps/fedora.war"
+  notify: reload tomcat
+  when: fedora_app_server == 'tomcat'

@@ -1,0 +1,14 @@
+---
+dependencies:
+  - oracle-java7
+
+galaxy_info:
+  author: cd3ef
+  description: "Fedora Repository"
+  company: "APTrust / University of Virginia"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all

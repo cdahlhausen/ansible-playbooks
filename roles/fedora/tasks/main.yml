@@ -34,14 +34,14 @@
   command: chdir="{{fedora_home}}" unzip -qu "{{fedora_home}}"/fedorahome.zip -d "{{fedora_home}}" creates="{{fedora_home}}/server"
   when: fedora_version.split('.')[0] == '3' and fedora_download.changed
 
-
 - name: Copy fedora.xml file to Mr Tomcat.
   template:
     src: fedora.xml.j2
     dest: /etc/tomcat7/Catalina/localhost/fedora.xml
     owner: tomcat7
     group: tomcat7
-    mode: 0640
+    mode: 0644
+  notify: reload tomcat
   when: fedora_app_server == 'tomcat'
 
 - name: Copy fedora.war to Mr Tomcat.
@@ -53,3 +53,5 @@
   when: fedora_app_server == 'tomcat'
 
 # Todo: Look into setting up logging/logrotation.
+
+

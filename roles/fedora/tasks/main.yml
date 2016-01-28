@@ -24,8 +24,17 @@
   command: chdir="{{fedora_workspace}}" unzip -j fcrepo-installer-"{{fedora_version}}".jar resources/fedora.war
   when: fedora_version.split('.')[0] == '3' and fedora_download.changed
 
+- name: Extract fedorahome
+  become: "{{system_default_user}}"
+  command: chdir="{{fedora_workspace}}" unzip -ju fcrepo-installer-"{{fedora_version}}".jar resources/fedorahome.zip -d "{{fedora_home}}" creates="{{fedora_home}}/fedorahome.zip"
+  when: fedora_version.split('.')[0] == '3' and fedora_download.changed
 
-# Copy fedora.xml first, then fedora.war
+# Note: For some reason Ansible doesn't parse concat (&&) unzips.Therefore this.
+- name: Extract fedorahome to fedorahome.
+  command: chdir="{{fedora_home}}" unzip -qu "{{fedora_home}}"/fedorahome.zip -d "{{fedora_home}}" creates="{{fedora_home}}/server"
+  when: fedora_version.split('.')[0] == '3' and fedora_download.changed
+
+
 - name: Copy fedora.xml file to Mr Tomcat.
   template:
     src: fedora.xml.j2
@@ -42,3 +51,5 @@
     creates: "/var/lib/tomcat7/webapps/fedora.war"
   notify: reload tomcat
   when: fedora_app_server == 'tomcat'
+
+# Todo: Look into setting up logging/logrotation.

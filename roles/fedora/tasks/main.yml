@@ -10,11 +10,11 @@
     state: directory
     owner: "{{system_default_user}}"
     group: "tomcat7"
-    mode: 0755
+    mode: 0775
 
 - name: Download Fedora
   get_url: >
-    url="http://downloads.sourceforge.net/project/fedora-commons/fedora/"{{fedora_version}}"/fcrepo-installer-"{{fedora_version}}".jar?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Ffedora-commons%2Ffiles%2Ffedora%2F"{{fedora_version}}"%2Ffcrepo-installer-"{{fedora_version}}".jar%2Fdownload&ts=1453915399&use_mirror=ufpr"
+    url="http://sourceforge.net/projects/fedora-commons/files/fedora/"{{fedora_version}}"/fcrepo-installer-"{{fedora_version}}".jar/download"
     dest="{{fedora_workspace}}"
     sha256sum=40d3fe844cf8d20d9556e369792d162c2eb54c46274126da6734db09d0a3521c
   register: fedora_download

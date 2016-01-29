@@ -10,8 +10,19 @@ fedora_db: 'fedora3'
 fedora_db_user: 'fedoraAdmin'
 fedora_db_pwd: 'fedoraAdmin'
 
+fedora_server_port: 8080
+fedora_redirect_port: 8443
+fedora_shutdown_port: 8005
+
+fedora_server_host: 'localhost'
+fedora_repository_name: 'Fedora Repository'
+fedora_admin_email: "ops@aptrust.org"
 
 # Note: These conditionals are not pretty and placed wrongly. Rethink later.
 fedora_home: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust/fedora{% else %}/srv/fedora{% endif %}"
 fedora_workspace: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust{% else %}/srv{% endif %}"
+
+# Fedora config parameters
+fedora_call_user: 'fedoraIntCallUser'
+fedora_call_pwd: 'changeme'
 

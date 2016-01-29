@@ -5,7 +5,7 @@ dependencies:
     #  - { role: 'mysql', when: fedora_db_server == 'mysql' }
 
 galaxy_info:
-  author: cd3ef
+  author: Christian Dahlhausen (cd3ef)
   description: "Fedora Repository"
   company: "APTrust / University of Virginia"
   license: "license (BSD, MIT)"

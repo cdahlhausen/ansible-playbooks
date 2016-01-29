@@ -4,7 +4,14 @@ fedora_version: 3.7.0
 
 # Can be Tomcat or Jetty.
 fedora_app_server: 'tomcat'
+fedora_db_server: 'postgresql'
+
+fedora_db: 'fedora3'
+fedora_db_user: 'fedoraAdmin'
+fedora_db_pwd: 'fedoraAdmin'
+
 
 # Note: These conditionals are not pretty and placed wrongly. Rethink later.
 fedora_home: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust/fedora{% else %}/srv/fedora{% endif %}"
 fedora_workspace: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust{% else %}/srv{% endif %}"
+

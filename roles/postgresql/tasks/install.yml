@@ -11,6 +11,7 @@
   apt_key:
     id: "{{ postgresql_apt_key_id }}"
     url: "{{ postgresql_apt_key_url }}"
+    validate_certs: no
     state: present
   when: postgresql_apt_key_url and postgresql_apt_key_id
 

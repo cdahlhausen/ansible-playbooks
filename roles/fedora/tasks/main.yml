@@ -52,6 +52,20 @@
   notify: reload tomcat
   when: fedora_app_server == 'tomcat'
 
+
+# DB Setup
+# TODO: Separate this in fedora-db.yml and include in main file.
+- name: Create fedora database.
+  postgresql_db: name={{fedora_db}}
+  when: fedora_db_server == 'postgresql'
+
+- name: Create fedora database user.
+  postgresql_user: name={{fedora_db_user}} password={{fedora_db_pwd}} state=present db={{fedora_db}}
+  # Add check if postgresql is running?
+  when: fedora_db_server == 'postgresql'
+
+# TODO: Add option for remote DB connections. This task would probably just update config templates for connection information.
+
 # Todo: Look into setting up logging/logrotation.
 
 

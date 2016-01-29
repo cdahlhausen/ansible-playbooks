@@ -61,11 +61,22 @@
 
 - name: Create fedora database user.
   postgresql_user: name={{fedora_db_user}} password={{fedora_db_pwd}} state=present db={{fedora_db}}
-  # Add check if postgresql is running?
   when: fedora_db_server == 'postgresql'
 
 # TODO: Add option for remote DB connections. This task would probably just update config templates for connection information.
 
-# Todo: Look into setting up logging/logrotation.
+# TODO: Look into setting up logging/logrotation.
 
-
+# Setup config files
+- name: Update Fedora config files
+  template:
+    src: "{{item}}.j2"
+    dest: "{{fedora_home}}/server/config/{{item}}"
+    owner: tomcat7
+    group: "{{system_default_user}}"
+    mode: 0640
+    backup: yes
+  with_items:
+    - beSecurity.xml
+    - fedora-users.xml
+    - fedora.fcfg

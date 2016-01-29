@@ -74,7 +74,7 @@
     dest: "{{fedora_home}}/server/config/{{item}}"
     owner: tomcat7
     group: "{{system_default_user}}"
-    mode: 0640
+    mode: 0775
     backup: yes
   with_items:
     - beSecurity.xml

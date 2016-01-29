@@ -1,0 +1,14 @@
+<?xml version='1.0' ?>
+  <users>
+    <user name="{{fedora_db_user}}" password="{{fedora_db_user}}">
+      <attribute name="fedoraRole">
+        <value>administrator</value>
+      </attribute>
+    </user>
+    <user name="{{fedora_call_user}}" password="{{fedora_call_pwd}}">
+      <attribute name="fedoraRole">
+        <value>fedoraInternalCall-1</value>
+        <value>fedoraInternalCall-2</value>
+      </attribute>
+    </user>
+  </users>

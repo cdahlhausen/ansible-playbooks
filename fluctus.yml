@@ -127,6 +127,7 @@
       - { role: rails, force_update: yes}
       - tomcat7
       - solr
+      - fedora
 
 
     tasks:

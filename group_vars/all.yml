@@ -1,5 +1,5 @@
 # all.yml
-# This file includes all needed group_vars and maps them to their vault vars.
+# This file includes all needed group_vars and maps them to their vault vars if these are sensitive.
 # The vault vars are encrypted using ansible-vault.
 #
 # Source:
@@ -10,9 +10,10 @@
 # System Default User
 ##
 system_default_user: "{% if ansible_bios_version != 'VirtualBox' %}ubuntu{% else %}vagrant{% endif %}"
+system_default_email: "ops@aptrust.org"
+
 system_deploy_user: aptdeploy
 system_deploy_group: deploy
-
 ansible_become_pass: "{{ vault_aptdeploy_password }}"
 
 ##

@@ -1,11 +1,11 @@
 development: &dev
     GOOGLE_KEY:
     GOOGLE_SECRET:
-    SOLR_URL: http://localhost:8983/solr/development
-    FEDORA_URL: http://localhost:8983/fedora
-    FEDORA_USER: fedoraAdmin
-    FEDORA_PASS: fedoraAdmin
-    FEDORA_NAMESPACE: aptrust-dev
+    SOLR_URL: http://localhost:8080/solr/development
+    FEDORA_URL: http://localhost:8080/fedora
+    FEDORA_USER: {{fedora_user}}
+    FEDORA_PASS: {{fedora_pwd}}
+    FEDORA_NAMESPACE: {{fedora_namespace}}
     RAILS_SECRET_KEY: ENV['RAILS_SECRET_KEY']
     DEVISE_SECRET_KEY: ENV['DEVISE_SECRET_KEY']
 

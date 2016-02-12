@@ -1,0 +1,33 @@
+#Install Options
+#Fri Feb 12 19:14:01 UTC 2016
+keystore.file=included
+ri.enabled=false
+messaging.enabled=false
+apia.auth.required=false
+database.jdbcDriverClass=org.postgresql.Driver
+database.postgresql.jdbcDriverClass=org.postgresql.Driver
+upstream.auth.enabled=false
+tomcat.ssl.port={{fedora_redirect_port}}
+ssl.available=true
+database.jdbcURL=jdbc\:postgresql\://localhost/{{fedora_db}}
+database.password={{fedora_db_pwd}}
+database.username={{fedora_db_user}}
+fesl.authz.enabled=false
+tomcat.shutdown.port={{fedora_shutdown_port}}
+deploy.local.services=false
+database.postgresql.driver=included
+xacml.enabled=true
+tomcat.http.port={{fedora_server_port}}
+fedora.serverHost={{fedora_server_host}}
+database=postgresql
+database.driver=included
+fedora.serverContext=fedora
+llstore.type=akubra-fs
+tomcat.home=/var/lib/tomcat7
+fedora.home={{fedora_home}}
+install.type=custom
+database.postgresql.jdbcURL=jdbc\:postgresql\://localhost/{{fedora_db}}
+servlet.engine=existingTomcat
+apim.ssl.required=true
+fedora.admin.pass={{fedora_db_pwd}}
+apia.ssl.required=false

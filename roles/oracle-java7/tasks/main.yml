@@ -16,16 +16,22 @@
     when: ansible_distribution in [ 'Debian' ]
 
   - name: Check if oracle-java is installed
-    command: dpkg-query -l oracle-java7-installer
-    changed_when: no
-    no_log: true
+    command: dpkg-query -W 'oracle-java7-installer'
     register: deb_check
+    ignore_errors: True
+    #    failed_when: deb_check.rc > 1
+    failed_when: deb_check.rc == 1
 
   - name: Accept Oracle license
     debconf: name="{{oracle_installer_key}}" question='shared/{{oracle_license_key}}' value='true' vtype='select'
-    when: deb_check.stdout.find('no packages found') != -1
+    with_items: oracle_packages
+    when: deb_check|failed
+
+    #  - name: Automatically select the Oracle License
+    # shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+    #  changed_when: false
 
   - name: Install packages
-    apt: name={{item}} state=present update_cache=yes
+    apt: name={{item}} state=present update_cache=yes force=yes
     with_items: oracle_packages
-    when: deb_check.stdout.find('no packages found') != -1
+    when: deb_check|failed

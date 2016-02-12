@@ -2,6 +2,7 @@
 dependencies:
   - oracle-java7
   - { role: 'postgresql', when: fedora_db_server == 'postgresql' }
+  - { role: 'tomcat7', when: fedora_app_server == 'tomcat' }
     #  - { role: 'mysql', when: fedora_db_server == 'mysql' }
 
 galaxy_info:

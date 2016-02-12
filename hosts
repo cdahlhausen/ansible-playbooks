@@ -16,6 +16,8 @@ system_default_user=ubuntu
 [test-servers]
 apt-test hostname_name=test hostname_fqdn=test.aptrust.org  # Fluctus Server
 apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  # Test Ingest+Restore+Utility
+apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
+
 #dpn-test
 
 [production-servers]

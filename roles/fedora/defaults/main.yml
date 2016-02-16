@@ -18,7 +18,7 @@ fedora_shutdown_port: 8005
 fedora_server_host: 'localhost'
 fedora_repository_name: 'APTrust Fedora Repository'
 fedora_admin_email: "ops@aptrust.org"
-fedora_oai_namespace: {{ansible_fqdn}}
+fedora_oai_namespace: "{{ansible_fqdn}}"
 fedora_pid_namespace: "aptrust-{{ansible_nodename}}"
 
 # Note: These conditionals are not pretty and placed wrongly. Rethink later.

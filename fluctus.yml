@@ -128,10 +128,10 @@
       - go
       - zzet.rbenv
       - passenger
-      - { role: rails, force_update: yes}
       - tomcat7
       - solr
       - fedora
+      - { role: rails, force_update: yes}
 
 
     tasks:

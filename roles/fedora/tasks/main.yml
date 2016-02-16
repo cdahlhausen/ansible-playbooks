@@ -1,5 +1,4 @@
 ---
-
 - stat: path="{{fedora_workspace}}/fcrepo-installer-{{fedora_version}}.jar"
   register: fedora_jar
 
@@ -21,8 +20,8 @@
   when: fedora_version.split('.')[0] == '3' and not fedora_jar.stat.exists
 
 - name: Extract fedora.war
-  command: chdir="{{fedora_workspace}}" unzip -j fcrepo-installer-"{{fedora_version}}".jar resources/fedora.war
-  when: fedora_version.split('.')[0] == '3' and fedora_download.changed
+  command: chdir="{{fedora_workspace}}" unzip -j fcrepo-installer-"{{fedora_version}}".jar resources/fedora.war creates="{{fedora_workspace}}/fedora.war"
+  when: fedora_version.split('.')[0] == '3'
 
 - name: Extract fedorahome
   become: "{{system_default_user}}"

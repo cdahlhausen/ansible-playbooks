@@ -6,12 +6,13 @@
   set_fact:
     "solr_filename=solr-{{ solr_version }}"
   when: "solr_version.split('.')[0] == '5'"
+  tags: [solrnew, solr_dir]
 
 - name: Set solr_filename for Solr 4.x.
   set_fact:
     "solr_filename=solr-{{ solr_version }}"
   when: "solr_version.split('.')[0] == '4'"
-  tags: solrnew, solr_dir
+  tags: [solrnew, solr_dir]
 
 - name: Download Solr.
   get_url:

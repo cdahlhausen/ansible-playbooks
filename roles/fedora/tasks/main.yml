@@ -54,13 +54,15 @@
 
 
 # DB Setup
+# TODO: Check if this is still necessary given the installer.
 # TODO: Separate this in fedora-db.yml and include in main file.
-- name: Create fedora database.
-  postgresql_db: name={{fedora_db}} encoding='UTF-8' owner={{fedora_db_user}}
+- name: Create fedora database user.
+  postgresql_user: name={{fedora_db_user}} password={{fedora_db_pwd}} state=present login_host={{fedora_db_host}}
   when: fedora_db_server == 'postgresql'
 
-- name: Create fedora database user.
-  postgresql_user: name={{fedora_db_user}} password={{fedora_db_pwd}} state=present db={{fedora_db}}
+# TODO: Check if this is still necessary given the installer.
+- name: Create fedora database.
+  postgresql_db: name={{fedora_db}} encoding='UTF-8' owner={{fedora_db_user}} login_host={{fedora_db_host}}
   when: fedora_db_server == 'postgresql'
 
 # TODO: Add option for remote DB connections. This task would probably just update config templates for connection information.

@@ -6,6 +6,7 @@ fedora_version: 3.7.0
 fedora_app_server: 'tomcat'
 fedora_db_server: 'postgresql'
 
+fedora_db_host: 'localhost'
 fedora_db: 'fedora3'
 fedora_db_user: 'fedoraAdmin'
 fedora_db_pwd: 'fedoraAdmin'
@@ -15,7 +16,7 @@ fedora_redirect_port: 8443
 fedora_shutdown_port: 8005
 
 fedora_server_host: 'localhost'
-fedora_repository_name: 'Fedora Repository'
+fedora_repository_name: 'APTrust Fedora Repository'
 fedora_admin_email: "ops@aptrust.org"
 
 # Note: These conditionals are not pretty and placed wrongly. Rethink later.

@@ -70,6 +70,38 @@
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle install
     tags: rails
 
+## SOLR Component
+# TODO: Move this in separate task file and include it here.
+# Note: It is expected that Tomcat7 and Solr are already installed
+  - name: Symlink Solr schema to fluctus schema
+    file:
+      src: "{{fluctus_solrschema}}"
+      dest: "{{solr_home}}/{{item}}/conf/schema.xml"
+      owner: tomcat7
+      group: "{{solr_user}}"
+      state: link
+      force: yes
+    with_items: solr_cores
+    when: fluctus_solrconfig and fluctus_solrschema
+    tags: symlink
+
+# Note: This creates a dependency and breaks reusability of the solr role.
+# Note: force:yes will always result in a change. It is used to remove existing file and replace it with a symlink
+  - name: Symlink Solr solrconfig to fluctus solrconfig
+    file:
+      src: "{{fluctus_solrconfig}}"
+      dest: "{{solr_home}}/{{item}}/conf/solrconfig.xml"
+      owner: tomcat7
+      group: "{{solr_user}}"
+      state: link
+      force: yes
+    with_items: solr_cores
+    register: symlinked_solr
+  # TODO: revisit this as it breaks once either var is not defined.
+  #  when: (fluctus_solrconfig is defined) and (fluctus_solrschema is defined)
+    tags: symlink
+
+#
 # Replacing solr.yml in fluctus repo to use Tomcat
 # TODO: rethink placing this here as it implies a dependency of an installed tomcat.
   - name: Replacing solr.yml in fluctus

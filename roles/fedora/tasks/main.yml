@@ -76,10 +76,31 @@
     src: "{{item}}.j2"
     dest: "{{fedora_home}}/server/config/{{item}}"
     owner: tomcat7
-    group: "{{system_default_user}}"
-    mode: 0775
     backup: yes
   with_items:
     - beSecurity.xml
     - fedora-users.xml
     - fedora.fcfg
+  notify: reload tomcat
+
+# Update fedora webapp
+- name: Update applicationContext.xml
+  template:
+    src: "applicationContext.xml.j2"
+    dest: "/var/lib/tomcat7/webapps/fedora/WEB-INF/applicationContext.xml"
+    owner: tomcat7
+    mode: 0744
+    backup: yes
+  notify: reload tomcat
+
+
+- name: Set fedora.home permissions.
+  file:
+    path: "{{ fedora_home }}"
+    recurse: yes
+    state: directory
+    owner: "tomcat7"
+    group: "tomcat7"
+    mode: 0755
+
+

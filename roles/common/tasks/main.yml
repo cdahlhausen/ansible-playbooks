@@ -10,10 +10,11 @@
 
 - name: Create /mnt/aptrust if not mounted already.
   file:
-    path:/mnt/aptrust
-    owner:"{{system_default_user}}"
-    group:"{{system_deploy_group}}"
-    mode:0755
+    path: /mnt/aptrust
+    owner: "{{system_default_user}}"
+    group: "{{system_deploy_group}}"
+    mode: 0755
+    state: directory
   when: ansible_bios_version != 'Virtualbox'
 
 ##

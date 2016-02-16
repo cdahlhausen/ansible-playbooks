@@ -23,15 +23,22 @@
   command: chdir="{{fedora_workspace}}" unzip -j fcrepo-installer-"{{fedora_version}}".jar resources/fedora.war creates="{{fedora_workspace}}/fedora.war"
   when: fedora_version.split('.')[0] == '3'
 
-- name: Extract fedorahome
-  become: "{{system_default_user}}"
-  command: chdir="{{fedora_workspace}}" unzip -ju fcrepo-installer-"{{fedora_version}}".jar resources/fedorahome.zip -d "{{fedora_home}}" creates="{{fedora_home}}/fedorahome.zip"
-  when: fedora_version.split('.')[0] == '3' and fedora_download.changed
+- name: Copy install.properties to fedora_home
+  template:
+    src: install.properties.j2
+    dest: "{{fedora_home}}/install.properties"
+    owner: "{{system_default_user}}"
+    group: tomcat7
+    mode: 0644
+  tags: fedora_install
 
-# Note: For some reason Ansible doesn't parse concat (&&) unzips.Therefore this.
-- name: Extract fedorahome to fedorahome.
-  command: chdir="{{fedora_home}}" unzip -qu "{{fedora_home}}"/fedorahome.zip -d "{{fedora_home}}" creates="{{fedora_home}}/server"
-  when: fedora_version.split('.')[0] == '3' and fedora_download.changed
+# Run the installer with install.properties
+- name: Execute fedora installer
+  shell:  echo yes | java -jar fcrepo-installer-{{fedora_version}}.jar {{fedora_home}}/install.properties
+  args:
+    chdir: "{{fedora_workspace}}"
+    creates: "{{fedora_home}}/server"
+  tags: fedora_install
 
 - name: Copy fedora.xml file to Mr Tomcat.
   template:
@@ -51,22 +58,17 @@
   notify: reload tomcat
   when: fedora_app_server == 'tomcat'
 
-
 # DB Setup
-# TODO: Check if this is still necessary given the installer.
-# TODO: Separate this in fedora-db.yml and include in main file.
 - name: Create fedora database user.
   postgresql_user: name={{fedora_db_user}} password={{fedora_db_pwd}} state=present login_host={{fedora_db_host}}
   when: fedora_db_server == 'postgresql'
 
-# TODO: Check if this is still necessary given the installer.
 - name: Create fedora database.
   postgresql_db: name={{fedora_db}} encoding='UTF-8' owner={{fedora_db_user}} login_host={{fedora_db_host}}
   when: fedora_db_server == 'postgresql'
 
-# TODO: Add option for remote DB connections. This task would probably just update config templates for connection information.
-
-# TODO: Look into setting up logging/logrotation.
+# TODO: Look into setting up logging/logrotation. Logs in fedora/server/logs by
+# default.
 
 # Setup config files
 - name: Update Fedora config files

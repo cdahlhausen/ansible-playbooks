@@ -1,6 +1,6 @@
 # all.yml
-# This file includes all needed group_vars and maps them to their vault vars if these are sensitive.
-# The vault vars are encrypted using ansible-vault.
+# This file includes all needed group_vars and maps them to their vault vars
+# if these are sensitive. The vault vars are encrypted using ansible-vault.
 #
 # Source:
 # http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults

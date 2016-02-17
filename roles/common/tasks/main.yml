@@ -25,7 +25,7 @@
   user: name="{{ item.name }}"
         password='{{ item.passwd }}'
         state=present
-        groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm,deploy' }}{% else %}{{'adm,deploy' }}{% endif %}
+        groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm,deploy,www-data' }}{% else %}{{'adm,deploy,www-data' }}{% endif %}
         shell='/bin/bash'
   tags: common
   # Don't show and log the password hash to everybody.

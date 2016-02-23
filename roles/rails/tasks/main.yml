@@ -21,16 +21,15 @@
         - nodejs
         - zip
         - mailutils
+        - expect
     environment:
        DEBIAN_FRONTEND: noninteractive
     tags:
         - packages
         - rails dependencies
 
-# Check to see if the Oracle JVM version 7 is already installed.
-# Install it if it's not already there.
-
-  - name: checkout fluctus repo
+#TODO: Template version in fluctus.yml
+  - name: Checkout fluctus repo
     become: yes
     become_user: "{{ system_default_user }}"
     git:
@@ -113,6 +112,19 @@
         mode: 0644
     tags: rails
 
+# TODO: change relative paths of default solrconfig.xml once all
+# servers re-deployed using Ansible.
+# Note: This is a duplicate of a fix lib task above but is necessary
+# to ensure portability of solr role if used without fluctus.
+  - name: Temp workaround to fix lib paths of fluctus solrconfig.xml
+    replace:
+      dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
+      regexp: '(<lib dir=")(/mnt/aptrust/solr/solr-4.7.2/)(.*)'
+      replace: '\1{{solr_home}}/\3'
+    with_items: solr_cores
+    when: "{{symlinked_solr.changed}} == true"
+    tags: symlink
+
 # Generate Rails keys if they don't already exist
 # We don't do the usual lineinfile because we don't
 # want to keep overwriting the keys.
@@ -187,8 +199,6 @@
     tags: railskey
 
 # Set up Fluctus config
-# TODO: Move this into its own role. this aint noting to do with rails.
-# TODO: This is a stop gap. use template instead.
   - name: Setting fluctus app configuration
     template:
         src: "application.yml.j2"
@@ -196,37 +206,37 @@
         owner: "{{system_default_user}}"
         group: "{{system_deploy_group}}"
         mode: 0644
-    when: key_present|failed
+        #    when: key_present|failed
 
 # Set up Jetty/Solr
   - stat: path=/var/www/{{ ansible_fqdn }}/fluctus/jetty/lib
     register: jetty
     tags: rails
 
-# Note: This can be removed if Tomcat is used for local dev and prod
+# Note: This can be removed if Tomcat is used for local dev and prod.
   - name: set up jetty/solr
     shell: chdir={{ fluctus_app_root }} executable=/bin/sh rails g hydra:jetty
     become_user: "{{system_default_user}}"
-    when: not jetty.stat.exists
+    when: jetty.stat.exists == True
     tags: rails
 
 # TODO: Might not need this as figaro loads the env for fluctus.
   - lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line='export FEDORA_USER=fedoraAdmin'
+      line="export FEDORA_USER={{fedora_user}}"
     tags: rails
 
   - lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line='export FEDORA_PASS=fedoraAdmin'
+      line="export FEDORA_PASS={{fedora_user}}"
     tags: rails
 
   - lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line="export FEDORA_URL='http://127.0.0.1:{{tomcat_catalina_port}}/fedora"
+      line="export FEDORA_URL=http://127.0.0.1:{{tomcat_catalina_port}}/fedora"
     tags: rails
 
 

@@ -268,13 +268,28 @@
   - name: migrate dev database
     become: yes
     become: "{{ system_default_user }}"
-    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
-    when: RAILS_ENV == 'development'
-    tags: rails
+    tags: dbmigrate
 
-  - name: migrate test database
-    become: yes
-    become: "{{ system_default_user }}"
-    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate
-    when: RAILS_ENV == 'development'
-    tags: rails
+  - name: migrate dev database
+    # become: yes
+    # become: "{{ system_default_user }}"
+    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate --trace
+    tags: [rails, dbmigrate]
+
+  - name: Copy expect script template
+    template:
+      src: fluctus_admin_setup.expect
+      dest: "{{fluctus_app_root}}/script/fluctus_admin_setup.expect"
+      mode: 0755
+    tags: setup_fluctus_admin
+
+  - name: Setup admin user
+    shell: chdir="{{fluctus_app_root}}/script" expect -f fluctus_admin_setup.expect
+    ignore_errors: yes
+    tags: setup_fluctus_admin
+
+  - set_fact: demo=False
+
+  - name: Populate_db with demo data.
+    shell: chdir="{{fluctus_app_root}}" rake fluctus:populate_db
+    when: demo == True

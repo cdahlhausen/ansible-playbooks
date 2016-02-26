@@ -19,7 +19,7 @@
     command: dpkg-query -W 'oracle-java7-installer'
     register: deb_check
     ignore_errors: True
-    #    failed_when: deb_check.rc > 1
+    changed_when: False
     failed_when: deb_check.rc == 1
 
   - name: Accept Oracle license

@@ -13,9 +13,8 @@
 
 - name: Download Fedora
   get_url: >
-    url="http://sourceforge.net/projects/fedora-commons/files/fedora/"{{fedora_version}}"/fcrepo-installer-"{{fedora_version}}".jar/download"
+    url="http://repo1.maven.org/maven2/org/fcrepo/fcrepo-installer/{{fedora_version}}/fcrepo-installer-{{fedora_version}}.jar"
     dest="{{fedora_workspace}}"
-    sha256sum=40d3fe844cf8d20d9556e369792d162c2eb54c46274126da6734db09d0a3521c
   register: fedora_download
   when: fedora_version.split('.')[0] == '3' and not fedora_jar.stat.exists
 

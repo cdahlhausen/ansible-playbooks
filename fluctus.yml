@@ -131,7 +131,7 @@
       - tomcat7
       - solr
       - fedora
-      - { role: rails, force_update: yes}
+      - { role: fluctus, force_update: yes}
 
 
     tasks:

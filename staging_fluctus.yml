@@ -9,7 +9,7 @@
       HOME: /home/{{ system_default_user }}
       GOPATH: /home/{{ system_default_user }}/go
       RBENV_ROOT: /home/{{system_default_user}}/.rbenv
-      RAILS_ENV: 'development'
+      RAILS_ENV: 'demo'
       RAILS_SECRET_KEY: "{{ RAILS_SECRET_KEY}}"
       DEVISE_SECRET_KEY: "{{ DEVISE_SECRET_KEY}}"
       PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -32,7 +32,7 @@
         fedora_namespace: 'aptrust'
 
         # Environment vars don't seem to work for when-conditionals. Duplicate this as var for now.
-        RAILS_ENV: 'development'
+        RAILS_ENV: 'demo'
         RBENV_ROOT: /home/{{system_default_user}}/.rbenv
 
         # SSL

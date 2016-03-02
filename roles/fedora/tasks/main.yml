@@ -37,6 +37,9 @@
   args:
     chdir: "{{fedora_workspace}}"
     creates: "{{fedora_home}}/server"
+  environment:
+    CATALINA_HOME: /var/lib/tomcat7
+    FEDORA_HOME: "{{fedora_home}}"
   tags: fedora_install
 
 - name: Copy fedora.xml file to Mr Tomcat.

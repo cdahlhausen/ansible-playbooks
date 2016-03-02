@@ -75,28 +75,19 @@
 # default.
 
 # Setup config files
+# TODO: Look up what permissions the installer sets after running to avoid changed status here.
 - name: Update Fedora config files
   template:
     src: "{{item}}.j2"
     dest: "{{fedora_home}}/server/config/{{item}}"
     owner: tomcat7
+    mode: 0664
     backup: yes
   with_items:
     - beSecurity.xml
     - fedora-users.xml
     - fedora.fcfg
-  notify: reload tomcat
-
-# Update fedora webapp
-- name: Update applicationContext.xml
-  template:
-    src: "applicationContext.xml.j2"
-    dest: "/var/lib/tomcat7/webapps/fedora/WEB-INF/applicationContext.xml"
-    owner: tomcat7
-    mode: 0744
-    backup: yes
-  notify: reload tomcat
-
+  register: config_changes
 
 - name: Set fedora.home permissions.
   file:
@@ -107,4 +98,17 @@
     group: "tomcat7"
     mode: 0755
 
+# Update fedora webapp
+- name: Update applicationContext.xml
+  template:
+    src: "applicationContext.xml.j2"
+    dest: "/var/lib/tomcat7/webapps/fedora/WEB-INF/applicationContext.xml"
+    owner: tomcat7
+    mode: 0744
+    backup: yes
+  register: context_changes
+
+- name: Reload tomcat to digest changes.
+  service: name=tomcat7 state=restarted
+  when: (config_changes or context_changes) and fedora_app_server == 'tomcat'
 

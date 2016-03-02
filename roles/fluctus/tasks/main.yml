@@ -205,7 +205,6 @@
         owner: "{{system_default_user}}"
         group: "{{system_deploy_group}}"
         mode: 0644
-        #    when: key_present|failed
 
 # Set up Jetty/Solr
   - stat: path=/var/www/{{ ansible_fqdn }}/fluctus/jetty/lib
@@ -237,7 +236,6 @@
       state=present
       line="export FEDORA_URL=http://127.0.0.1:{{tomcat_catalina_port}}/fedora"
     tags: rails
-
 
   - name: copy passenger_wrapper in its place
     become: yes

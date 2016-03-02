@@ -1,12 +1,6 @@
 ---
-#
-# Rails setup.
-#
-
 # Install libraries required for building various gems
-# that our Rails app uses. Be sure to update cache first,
-# since the typical Vagrant Ubuntu VM ships with an out-
-# of-date apt cache.
+# that fluctus uses.
   - name: install required packages
     sudo: yes
     apt: pkg={{item}} state=present update_cache=yes
@@ -28,19 +22,18 @@
         - packages
         - rails dependencies
 
-#TODO: Template version in fluctus.yml
   - name: Checkout fluctus repo
     become: yes
     become_user: "{{ system_default_user }}"
     git:
       repo=git@github.com:APTrust/fluctus.git
       dest=/var/www/{{ ansible_fqdn }}/fluctus
-      version=0.3.1
       force="{{force_update}}"
       accept_hostkey=yes
-    tags: fluctus
+    register: git_checkout
+    tags: [fluctus, gitcheckout]
 
-  - name: change group ownership of fluctus to www-data
+  - name: Change group ownership of fluctus to www-data
     file: path="{{ fluctus_app_root }}" state=directory recurse=yes group=www-data
 
 # Set the right ruby interpreter
@@ -54,7 +47,8 @@
     tags: rbenv
 
 # Install bundler in local rbenv
-# TODO: Rewrite this to use ansible gem module to avoid reinstalling bundler on every play.
+# TODO: Rewrite this to use ansible gem module to avoid reinstalling bundler
+# on every play.
   - name: install bundler
     shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus gem install bundler
     become: yes
@@ -62,7 +56,8 @@
     tags: rails
 
 # Load gems into the local rbenv
-# TODO: Rewrite this to use ansible bundler module to avoid reinstalling gems on every play.
+# TODO: Rewrite this to use ansible bundler module to avoid reinstalling gems
+# on every play. Requires Ansible 2.0.0
   - name: install items in fluctus gemfile
     become: yes
     become_user: "{{ system_default_user }}"
@@ -85,7 +80,8 @@
     tags: symlink
 
 # Note: This creates a dependency and breaks reusability of the solr role.
-# Note: force:yes will always result in a change. It is used to remove existing file and replace it with a symlink
+# Note: force:yes will always result in a change. It is used to remove existing
+# file and replace it with a symlink
   - name: Symlink Solr solrconfig to fluctus solrconfig
     file:
       src: "{{fluctus_solrconfig}}"
@@ -95,12 +91,13 @@
       state: link
       force: yes
     with_items: solr_cores
+    when: fluctus_solrconfig
     register: symlinked_solr
   # TODO: revisit this as it breaks once either var is not defined.
   #  when: (fluctus_solrconfig is defined) and (fluctus_solrschema is defined)
-    tags: symlink
+    tags: [fluctus, symlink]
 
-#
+
 # Replacing solr.yml in fluctus repo to use Tomcat
 # TODO: rethink placing this here as it implies a dependency of an installed tomcat.
   - name: Replacing solr.yml in fluctus
@@ -110,7 +107,7 @@
         owner: "{{system_default_user}}"
         group: "{{system_deploy_group}}"
         mode: 0644
-    tags: rails
+    tags: fluctus
 
 # TODO: change relative paths of default solrconfig.xml once all
 # servers re-deployed using Ansible.
@@ -123,7 +120,7 @@
       replace: '\1{{solr_home}}/\3'
     with_items: solr_cores
     when: "{{symlinked_solr.changed}} == true"
-    tags: symlink
+    tags: [fluctus, symlink]
 
 # Generate Rails keys if they don't already exist
 # We don't do the usual lineinfile because we don't
@@ -137,6 +134,7 @@
       - "export RAILS_SECRET_KEY="
       - "export DEVISE_SECRET_KEY="
     ignore_errors: yes
+    changed_when: False
     tags: railskey
 
   - name: generate secret keys
@@ -153,6 +151,7 @@
     when: key_present|success
     shell: grep {{item}}  /home/{{system_default_user}}/.profile | tr -d "export {{item}}=''"
     register: existing_key
+    changed_when: False
     no_log: true
     with_items:
       - RAILS_SECRET_KEY

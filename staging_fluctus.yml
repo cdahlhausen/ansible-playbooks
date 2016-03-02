@@ -13,6 +13,9 @@
       RAILS_SECRET_KEY: "{{ RAILS_SECRET_KEY}}"
       DEVISE_SECRET_KEY: "{{ DEVISE_SECRET_KEY}}"
       PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      FLUCTUS_DB_HOST: fluctus-demo-staging.cbtzcfmydoc1.us-east-1.rds.amazonaws.com
+      FLUCTUS_DB_USER: "{{var_fluctus_dev_db_user}}"
+      FLUCTUS_DB_PWD: "{{var_fluctus_dev_db_pwd}}"
 
     vars:
         playbook_name: fluctus

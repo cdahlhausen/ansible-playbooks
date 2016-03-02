@@ -29,3 +29,4 @@ fedora_workspace: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust{% e
 fedora_call_user: 'fedoraIntCallUser'
 fedora_call_pwd: 'changeme'
 
+fedora_url: "http://{{fedora_server_host}}:{{fedora_server_port}}"

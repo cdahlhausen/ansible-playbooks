@@ -7,7 +7,8 @@
     path: "{{fedora_home}}"
     recurse: yes
     state: directory
-    owner: "{{system_default_user}}"
+    owner: "tomcat7"
+#    owner: "{{system_default_user}}"
     group: "tomcat7"
     mode: 0775
 
@@ -26,7 +27,7 @@
   template:
     src: install.properties.j2
     dest: "{{fedora_home}}/install.properties"
-    owner: "{{system_default_user}}"
+    owner: "tomcat7"
     group: tomcat7
     mode: 0644
   tags: fedora_install
@@ -49,9 +50,10 @@
     owner: tomcat7
     group: tomcat7
     mode: 0644
-  notify: reload tomcat
   when: fedora_app_server == 'tomcat'
 
+# TODO: is this still working, does the installer leave a .war file?
+# Apparently this is removed once the installer runs
 - name: Copy fedora.war to Mr Tomcat.
   shell: cp fedora.war /var/lib/tomcat7/webapps
   args:

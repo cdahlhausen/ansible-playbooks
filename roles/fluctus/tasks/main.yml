@@ -260,6 +260,14 @@
       mode: 0666
     when: not fluctus_log.stat.exists
 
+  - name: Setup default admin user
+    become: "{{ system_default_user }}"
+    become: yes
+    shell: chdir="{{fluctus_app_root}}" bundle exec rake fluctus:setup
+    register: adminuser_result
+    changed_when: adminuser_result.rc != 0
+    tags: fluctus-setup
+
 # Note: This assumes that a database has already been created. For the moment
 # we will keep this a manual process and pre-requisite.
   - name: Run sqlite database migration

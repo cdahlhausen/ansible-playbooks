@@ -144,7 +144,3 @@
         - sqlite3
         - libsqlite3-dev
         - expect
-
-    - name: Setup initial fluctus admin user.
-      shell: chdir="{{fluctus_app_root}}/script" expect -f fluctus_admin_setup.expect
-      ignore_errors: yes

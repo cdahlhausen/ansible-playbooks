@@ -15,7 +15,6 @@
         - nodejs
         - zip
         - mailutils
-        - expect
     environment:
        DEBIAN_FRONTEND: noninteractive
     tags:
@@ -280,20 +279,15 @@
     when: RAILS_ENV != "development"
     tags: [rails, dbmigratei, populatedb]
 
-    - name: Copy expect script template
-    template:
-      src: fluctus_admin_setup.expect
-      dest: "{{fluctus_app_root}}/script/fluctus_admin_setup.expect"
-      mode: 0755
-    tags: setup_fluctus_admin
-
-  - name: Setup admin user
-    shell: chdir="{{fluctus_app_root}}/script" expect -f fluctus_admin_setup.expect
-    ignore_errors: yes
-    tags: setup_fluctus_admin
-
-  - set_fact: demo=False
-
   - name: Populate_db with demo data.
-    shell: chdir="{{fluctus_app_root}}" rake fluctus:populate_db
-    when: demo == True
+    shell: bundle exec rake fluctus:populate_db --trace
+    args:
+      chdir: "{{fluctus_app_root}}"
+      FLUCTUS_DB_USER: "{{fluctus_db_user}}"
+      FLUCTUS_DB_HOST: "{{fluctus_db_host| quote}}"
+      FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"
+      FEDORA_USER: "{{fedora_user}}"
+      FEDORA_PASS: "{{fedora_pwd}}"
+      FEDORA_URL: "http://localhost:8080/fedora"
+      when: RAILS_ENV == "demo"
+    tags: populatedb

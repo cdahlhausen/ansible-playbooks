@@ -261,18 +261,26 @@
       mode: 0666
     when: not fluctus_log.stat.exists
 
-  - name: migrate dev database
+# Note: This assumes that a database has already been created. For the moment
+# we will keep this a manual process and pre-requisite.
+  - name: Run sqlite database migration
     become: yes
     become: "{{ system_default_user }}"
-    tags: dbmigrate
+    shell: chdir="{{fluctus_app_root}}" bundle exec rake db:migrate
+    when: RAILS_ENV == "development"
+    tags: [rails, dbmigrate, populatedb]
 
-  - name: migrate dev database
-    # become: yes
-    # become: "{{ system_default_user }}"
-    shell: chdir=/var/www/{{ ansible_fqdn }}/fluctus bundle exec rake db:migrate --trace
-    tags: [rails, dbmigrate]
+  - name: Run postgres database migration
+    shell: bundle exec rake db:migrate
+    args:
+      chdir: "{{fluctus_app_root}}"
+      FLUCTUS_DB_USER: "{{fluctus_db_user}}"
+      FLUCTUS_DB_HOST: "{{fluctus_db_host}}"
+      FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"
+    when: RAILS_ENV != "development"
+    tags: [rails, dbmigratei, populatedb]
 
-  - name: Copy expect script template
+    - name: Copy expect script template
     template:
       src: fluctus_admin_setup.expect
       dest: "{{fluctus_app_root}}/script/fluctus_admin_setup.expect"

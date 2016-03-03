@@ -1,0 +1,18 @@
+# This file is under control by Ansible for {{inventory_hostname}}
+# DO NOT MODIFY by hand
+LogDir = /var/log
+TmpDir = /var/cache/logwatch
+
+MailTo = {{logwatch_email}}
+MailFrom = "system@{{ansible_fqdn}}"
+Detail = {{logwatch_detail}}
+Range = {{logwatch_range}}
+Output = {{logwatch_output}}
+Format = {{logwatch_format}}
+
+Service = All
+mailer = "/usr/sbin/sendmail -t"
+
+
+
+

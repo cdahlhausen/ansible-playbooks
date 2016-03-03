@@ -1,0 +1,8 @@
+-   hosts: test-servers
+    vars_files:
+        - "group_vars/all.yml"
+        - "group_vars/vault.yml"
+
+    roles:
+      - logwatch
+

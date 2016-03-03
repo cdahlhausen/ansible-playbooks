@@ -59,7 +59,7 @@
     - contrib
     - dist
   register: cdsymlink
-  tags: symb
+  tags: [symb, symlink]
 
 - debug: var=cdsymlink
   tags: symb
@@ -69,11 +69,23 @@
     src: "{{solr_dir}}/{{item.item}}"
     dest: "{{solr_home}}/{{item.item}}"
     owner: tomcat7
-    group: "{{solr_user}}"
+    group: tomcat7
+# TODO: Check if this is ok.
+#    group: "{{solr_user}}"
     state: link
   with_items: cdsymlink.results
-  when:
-    - item.stat.exists == false
+  when: not item.stat.exists
+  tags: [symlink, symb]
+
+- name: Symlink Solr contrib/analysis-extras
+  file:
+    src: "{{solr_dir}}/contrib/analysis-extras"
+    dest: "{{solr_home}}/lib"
+    owner: tomcat7
+    group: tomcat7
+# TODO: Check if this is ok.
+#    group: "{{solr_user}}"
+    state: link
   tags: [symlink, symb]
 
 # TODO: change relative paths of default solrconfig.xml once

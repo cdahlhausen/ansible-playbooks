@@ -93,10 +93,10 @@
 - name: Fix lib paths of default solrconfig.xml
   replace:
     dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
-    regexp: '<lib dir="../../../'
-    replace: '<lib dir="{{solr_home}}"'
+    regexp: '<lib dir="../../..'
+    replace: "<lib dir={{solr_home}}"
   with_items: solr_cores
-  # when: not fluctus_solrconfig
+  when: not fluctus_solrconfig
   tags: symlink
 
 # Note: omitting solr.xml in fluctus repo as cores are defined in Ansible.

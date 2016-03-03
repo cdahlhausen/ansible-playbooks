@@ -1,3 +1,5 @@
 RAILS_ENV: 'development'
 fluctus_app_root: "/var/www/{{ansible_fqdn}}/fluctus"
 force_update: 'no'
+
+fluctus_api_user: "ops@aptrust.org"

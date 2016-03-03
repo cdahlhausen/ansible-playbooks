@@ -106,21 +106,6 @@
       state=present
       line="export PATH=\"$GOPATH/bin:$PATH:/usr/local/go/bin:/home/{{ system_default_user }}/.rbenv/plugins/ruby-build/bin\""
 
-# Following are two settings that allow the Go services to
-# connect to Fluctus. You will have to set the API key manually
-# after the system is running.
-  - name: set fluctus API user in .bash_profile
-    lineinfile:
-      dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
-      state=present
-      line="export FLUCTUS_API_USER='system@aptrust.org'"
-
-  - name: set fluctus API key in .bash_profile
-    lineinfile:
-      dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
-      state=present
-      line="export FLUCTUS_API_KEY='GENERATE API KEY THROUGH WEB UI AND SET IN /home/{{system_default_user}}/.bash_profile'"
-
 
 # Add /usr/local/go/bin to system-wide path var
   - name: add {{item}} to path
@@ -212,7 +197,7 @@
 # dependencies that we would miss using git rather than go get
   - name: Install Go MagicMime lib
     git:
-      repo=https://github.com/rakyll/magicmime.git 
+      repo=https://github.com/rakyll/magicmime.git
       dest=/home/{{ system_default_user }}/go/src/github.com/rakyll/magicmime
       version=672bd9146d1802abfd8a851fb428e6070d524e3
     when: not mimelibs.stat.exists

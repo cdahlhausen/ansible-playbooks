@@ -78,6 +78,17 @@
     when: fluctus_solrconfig and fluctus_solrschema
     tags: symlink
 
+  - name: Symlink solr_conf directory
+    file:
+      src: "{{fluctus_app_root}}/solr_conf/conf"
+      dest: "{{solr_home}}/conf"
+      owner: tomcat7
+      group: "{{solr_user}}"
+      state: link
+      force: yes
+    when: fluctus_solrconfig and fluctus_solrschema
+    tags: solrconfsymlink
+
 # Note: This creates a dependency and breaks reusability of the solr role.
 # Note: force:yes will always result in a change. It is used to remove existing
 # file and replace it with a symlink

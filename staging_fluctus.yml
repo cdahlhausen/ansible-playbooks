@@ -99,8 +99,8 @@
         tomcat_catalina_port: 8080
 
     # Solr
-        solr_cores: ['production','development','test','demo']
-        solr_default_core: 'development'
+        solr_cores: ['production-core','development-core','test-core','demo-core']
+        solr_default_core: 'development-core'
 
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"

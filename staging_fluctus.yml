@@ -100,7 +100,7 @@
 
     # Solr
         solr_cores: ['production-core','development-core','test-core','demo-core']
-        solr_default_core: 'development-core'
+        solr_default_core: 'demo-core'
 
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"

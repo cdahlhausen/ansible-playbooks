@@ -39,6 +39,7 @@ postfix_relaytls: true
 postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
 postfix_sasl_password: "{{ vault_postfix_sasl_password }}"
 
+# Fluctus
 fluctus_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
 fluctus_aws_ses_password: "{{ vault_fluctus_aws_ses_password }}"
 

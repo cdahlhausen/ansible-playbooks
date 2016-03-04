@@ -19,6 +19,10 @@ apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  # Test Inges
 apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
 
 #dpn-test
+[staging-servers]
+apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
+
+[development-servers]
 
 [production-servers]
 apt-live hostname_name=repository hostname_fqdn=repository.aptrust.org

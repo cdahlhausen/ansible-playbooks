@@ -61,9 +61,6 @@
   register: cdsymlink
   tags: [symb, symlink]
 
-- debug: var=cdsymlink
-  tags: symb
-
 - name: Symlink Solr contrib and dist
   file:
     src: "{{solr_dir}}/{{item.item}}"

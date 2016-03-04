@@ -24,4 +24,5 @@
       - hostname
       - common
       - postfix
+      - logwatch
 

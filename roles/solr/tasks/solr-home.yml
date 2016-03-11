@@ -5,7 +5,7 @@
   tags: solrcore
 
 - name: Check if solr core directories exist.
-  stat: "path={{ solr_home}}/{{item}}"
+  stat: "path={{ solr_home}}/{{item}}-core"
   with_items: solr_cores
   register: solr_core_dir
   tags: solrcore
@@ -29,7 +29,7 @@
 
 - name: Create missing core dir.
   file:
-    path: "{{ solr_home }}/{{item.item}}"
+    path: "{{ solr_home }}/{{item.item}}-core"
     recurse: yes
     state: directory
     owner: "tomcat7"
@@ -41,14 +41,14 @@
   tags: solrcore
 
 - name: Copy Solr example into solr_home.
-  shell: cp -rn "{{ solr_workspace }}/{{ solr_filename}}/example/solr/collection1/." "{{ solr_home }}/{{item.item}}"
+  shell: cp -rn "{{ solr_workspace }}/{{ solr_filename}}/example/solr/collection1/." "{{ solr_home }}/{{item.item}}-core"
   with_items: "{{solr_core_dir.results}}"
   when: "{{item.stat.exists}} == false"
   tags: solrcore
 
 - name: Fix the conf.properties
   replace:
-    dest: "{{ solr_home }}/{{item}}/core.properties"
+    dest: "{{ solr_home }}/{{item}}-core/core.properties"
     regexp: collection1
     replace: "{{ item }}"
   with_items: solr_cores
@@ -89,7 +89,7 @@
 # all machines have been Ansible deployed.
 - name: Fix lib paths of default solrconfig.xml
   replace:
-    dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
+    dest: "{{ solr_home }}/{{item}}-core/conf/solrconfig.xml"
     regexp: '<lib dir="../../..'
     replace: "<lib dir={{solr_home}}"
   with_items: solr_cores

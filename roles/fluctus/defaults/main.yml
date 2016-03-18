@@ -3,3 +3,7 @@ fluctus_app_root: "/var/www/{{ansible_fqdn}}/fluctus"
 force_update: 'no'
 
 fluctus_api_user: "ops@aptrust.org"
+
+fluctus_solrconfig: "{{fluctus_app_root}}/solr_conf/conf/solrconfig-4.7.xml"
+fluctus_solrschema: "{{fluctus_app_root}}/solr_conf/conf/schema.xml"
+

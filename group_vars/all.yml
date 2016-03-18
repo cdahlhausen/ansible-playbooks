@@ -16,6 +16,8 @@ system_deploy_user: aptdeploy
 system_deploy_group: deploy
 ansible_become_pass: "{{ vault_aptdeploy_password }}"
 
+sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond]
+
 ##
 # Ruby Variables
 ##

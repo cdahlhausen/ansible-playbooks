@@ -69,7 +69,7 @@
   - name: Symlink Solr schema to fluctus schema
     file:
       src: "{{fluctus_solrschema}}"
-      dest: "{{solr_home}}/{{item}}/conf/schema.xml"
+      dest: "{{solr_home}}/{{item}}-core/conf/schema.xml"
       owner: tomcat7
       group: "{{solr_user}}"
       state: link
@@ -95,7 +95,7 @@
   - name: Symlink Solr solrconfig to fluctus solrconfig
     file:
       src: "{{fluctus_solrconfig}}"
-      dest: "{{solr_home}}/{{item}}/conf/solrconfig.xml"
+      dest: "{{solr_home}}/{{item}}-core/conf/solrconfig.xml"
       owner: tomcat7
       group: "{{solr_user}}"
       state: link

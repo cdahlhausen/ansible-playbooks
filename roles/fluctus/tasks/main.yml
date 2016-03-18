@@ -123,14 +123,19 @@
 # servers re-deployed using Ansible.
 # Note: This is a duplicate of a fix lib task above but is necessary
 # to ensure portability of solr role if used without fluctus.
+# dest: "{{ solr_home }}/{{item}}-core/conf/solrconfig.xml"
   - name: Temp workaround to fix lib paths of fluctus solrconfig.xml
     replace:
-      dest: "{{ solr_home }}/{{item}}/conf/solrconfig.xml"
+      dest: "{{ fluctus_app_root }}/solr_conf/conf/solrconfig-4.7.xml"
       regexp: '(<lib dir=")(/mnt/aptrust/solr/solr-4.7.2/)(.*)'
       replace: '\1{{solr_home}}/\3'
-    with_items: solr_cores
     when: "{{symlinked_solr.changed}} == true"
+    register: tmp_workaround
     tags: [fluctus, symlink]
+
+  - name: restart tomcat manually.
+    service: name=tomcat7 state=restarted
+    when: tmp_workaround|changed
 
 # Following are two settings that allow the Go services to
 # connect to Fluctus. You will have to set the API key manually

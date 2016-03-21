@@ -25,4 +25,6 @@
       - common
       - postfix
       - logwatch
+      - ssh
+      - unattended-upgrades
 

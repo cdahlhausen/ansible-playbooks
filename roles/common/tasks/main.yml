@@ -125,18 +125,6 @@
   failed_when: >
         is_postfix.rc != 0 and ('already exists' not in is_postfix.stderr)
 
-- name: Aliasing email addresses
-  become: yes
-  tags: configuration
-  copy: src='aliases' dest=/etc/aliases owner=root group=root mode=0644 backup=yes
-  register: result_aliasing
-
-- name: Activate email aliases
-  become: yes
-  tags: configuration
-  shell: newaliases
-  when: result_aliasing|changed
-
 ##
 # Add monitoring script for disk space usage.
 # Workaround in lieu of monitoring application.

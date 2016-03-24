@@ -6,10 +6,14 @@
   tags: sendmail
   register: sendmail_installed
 
+- name: Check if Service Exists
+  stat: path=/etc/init.d/sendmail
+  register: service_status
+
 - name: Stopping sendmail service
   service: name=sendmail state=stopped
   tags: sendmail
-  when: sendmail_installed.rc == 0
+  when: sendmail_installed.rc == 0 and service_status.stat.exists
 
 - name: Removing sendmail packages
   apt: name={{ item }}  state=absent force=yes

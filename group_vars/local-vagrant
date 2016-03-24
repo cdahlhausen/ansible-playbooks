@@ -2,3 +2,4 @@
 # group_vars/vagrant
 
 system_default_user: vagrant
+newdeploy: True

@@ -14,7 +14,7 @@ system_default_user=ubuntu
 system_default_user=ubuntu
 
 [test-servers]
-apt-test hostname_name=test hostname_fqdn=test.aptrust.org  # Fluctus Server
+apt-test-repository hostname_name=test hostname_fqdn=test.aptrust.org  # Fluctus Server
 apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  # Test Ingest+Restore+Utility
 apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
 
@@ -25,9 +25,9 @@ apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus St
 [development-servers]
 
 [production-servers]
-apt-live hostname_name=repository hostname_fqdn=repository.aptrust.org
-apt-live-ingest  hostname_name=apt-live-ingest hostname_fqdn=apt-live-ingest.aptrust.org
-apt-live-restore hostname_name=apt-live-restore hostname_fqdn=apt-live-restore.aptrust.org
+apt-prod-repository hostname_name=repository hostname_fqdn=repository.aptrust.org
+apt-prod-ingest  hostname_name=apt-prod-ingest hostname_fqdn=apt-prod-ingest.aptrust.org
+apt-prod-restore hostname_name=apt-prod-restore hostname_fqdn=apt-prod-restore.aptrust.org
 apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org
 #
 

@@ -92,14 +92,20 @@
   tags: [configuration, postfix, postfix-aliases]
 
 - name: configure aliases
-  lineinfile:
+  #  lineinfile:
+  #  dest: /etc/aliases
+  #  regexp: '^{{ item.user }}:\s+{{ item.alias }}'
+  #  line: '{{ item.user }}: {{ item.alias }}'
+  #  owner: root
+  #  group: root
+  #  mode: 0644
+  # with_items: postfix_aliases
+  template:
+    src: etc/aliases.j2
     dest: /etc/aliases
-    regexp: '^{{ item.user }}:\s+{{ item.alias }}'
-    line: '{{ item.user }}: {{ item.alias }}'
     owner: root
     group: root
     mode: 0644
-  with_items: postfix_aliases
   notify:
     - new aliases
     - restart postfix

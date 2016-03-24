@@ -8,6 +8,8 @@
 - name: Create Deploy group
   group: name=deploy state=present gid=1234
 
+# TODO This should be revisited once all machines are ansible managed.
+# Currently this is skipped unless newdeploy is True. False by default.
 - name: Create /mnt/aptrust if not mounted already.
   file:
     path: /mnt/aptrust
@@ -15,7 +17,7 @@
     group: "{{system_deploy_group}}"
     mode: 0755
     state: directory
-  when: ansible_bios_version != 'Virtualbox'
+  when: (ansible_bios_version != 'Virtualbox' and newdeploy == True)
 
 ##
 # Adding common users to the system.

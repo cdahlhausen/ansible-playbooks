@@ -6,10 +6,19 @@
 # http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults
 ---
 
+
 ##
 # System Default User
 ##
-system_default_user: "{% if ansible_bios_version != 'VirtualBox' %}ubuntu{% else %}vagrant{% endif %}"
+
+# This is defined in host vars (e.g. local-vagrant.yml)
+# system_default_user: ubuntu
+
+
+# This variable is used as a conditional for new deploys, to not
+# influence existing, non ansbile managed, machines adversely.
+newdeploy: False
+
 system_default_email: "ops@aptrust.org"
 
 system_deploy_user: aptdeploy

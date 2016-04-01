@@ -27,17 +27,12 @@
 
 - name: Unarchive solr
   become: yes
-  become_user: "{{system_default_user}}"
-  command: >
-    tar -xvf {{solr_workspace}}/{{ solr_filename}}.tgz
-    chdir={{ solr_workspace }}
-    creates={{solr_workspace}}/{{solr_filename}}
+#  become_user: "{{system_default_user}}"
+  command: tar -xvf {{solr_workspace}}/{{ solr_filename}}.tgz chdir={{ solr_workspace }} creates={{solr_workspace}}/{{solr_filename}}
   tags: solrnew
 
 - name: Copy Solr components into place
-  shell: >
-    cp -rnv {{ item.src }} {{ item.dest }}
-    creates={{ item.creates }}
+  shell: cp -rnv {{ item.src }} {{ item.dest }} creates={{ item.creates }}
   with_items:
     # Solr example configuration and war file
     - src: "{{ solr_dir }}/dist/{{solr_filename}}.war"

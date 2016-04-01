@@ -2,7 +2,7 @@
 - stat: path="{{fedora_workspace}}/fcrepo-installer-{{fedora_version}}.jar"
   register: fedora_jar
 
-- name: Make sure fedora home exists.
+- name: Make sure fedora home exists with the right permissions.
   file:
     path: "{{fedora_home}}"
     recurse: yes
@@ -19,6 +19,10 @@
   register: fedora_download
   when: fedora_version.split('.')[0] == '3' and not fedora_jar.stat.exists
 
+# Note: The war file is extracted by the installer task later. This is not
+# needed unless we mounted fedora data directory prior. This will find existing
+# directories and skip the step.
+#
 - name: Extract fedora.war
   command: chdir="{{fedora_workspace}}" unzip -j fcrepo-installer-"{{fedora_version}}".jar resources/fedora.war creates="{{fedora_workspace}}/fedora.war"
   when: fedora_version.split('.')[0] == '3'

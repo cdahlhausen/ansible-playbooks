@@ -36,17 +36,6 @@
     mode: 0644
   tags: fedora_install
 
-# Run the installer with install.properties
-- name: Execute fedora installer
-  shell:  echo yes | java -jar fcrepo-installer-{{fedora_version}}.jar {{fedora_home}}/install.properties
-  args:
-    chdir: "{{fedora_workspace}}"
-    creates: "{{fedora_home}}/server"
-  environment:
-    CATALINA_HOME: /var/lib/tomcat7
-    FEDORA_HOME: "{{fedora_home}}"
-  tags: fedora_install
-
 - name: Copy fedora.xml file to Mr Tomcat.
   template:
     src: fedora.xml.j2
@@ -56,7 +45,21 @@
     mode: 0644
   when: fedora_app_server == 'tomcat'
 
+# Run the installer with install.properties
+- name: Execute fedora installer
+  shell:  echo yes | java -jar fcrepo-installer-{{fedora_version}}.jar {{fedora_home}}/install.properties
+  args:
+    chdir: "{{fedora_workspace}}"
+    creates: "{{fedora_home}}/server"
+  environment:
+    CATALINA_HOME: /var/lib/tomcat7
+    FEDORA_HOME: "{{fedora_home}}"
+  register: fedora_installer
+  tags: fedora_install
+
+
 # TODO: is this still working, does the installer leave a .war file?
+# INSTALLER LEAVES WAR FILE. THIS IS REDUNDANT.
 # Apparently this is removed once the installer runs
 - name: Copy fedora.war to Mr Tomcat.
   shell: cp fedora.war /var/lib/tomcat7/webapps
@@ -64,7 +67,7 @@
     chdir: "{{fedora_workspace}}"
     creates: "/var/lib/tomcat7/webapps/fedora.war"
   notify: reload tomcat
-  when: fedora_app_server == 'tomcat'
+  when: (fedora_app_server == 'tomcat') and (fedora_installer|skipped)
 
 # DB Setup
 - name: Create fedora database user.
@@ -93,6 +96,7 @@
     - fedora.fcfg
   register: config_changes
 
+# Only run if fedora has been installed during this play.
 - name: Set fedora.home permissions.
   file:
     path: "{{ fedora_home }}"
@@ -101,6 +105,7 @@
     owner: "tomcat7"
     group: "tomcat7"
     mode: 0755
+  when: fedora_installer|changed
 
 # Update fedora webapp
 - name: Update applicationContext.xml

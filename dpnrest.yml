@@ -1,6 +1,6 @@
 ---
   - hosts: dpnrest
-    sudo: yes
+    become: yes
     vars:
       playbook_name: dpnrest
       ssl_cert: ~/.ansible/external/files/ssl/aptrust_org.pem

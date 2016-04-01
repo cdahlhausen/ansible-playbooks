@@ -9,10 +9,10 @@
   pre_tasks:
     - name: tests - install python-pycurl
       apt: pkg=python-pycurl state=latest
-      sudo: yes
+      become: yes
 
   roles:
-    - { role: ../../../, sudo: yes }
+    - { role: ../../../, become: yes }
 
   post_tasks:
     - name: tests - add hello_world rack app dir
@@ -24,13 +24,13 @@
 
     - name: tests - disable default apache site
       file: state=absent dest=/etc/apache2/sites-enabled/000-default
-      sudo: yes
+      become: yes
       notify: apache restart
 
     - name: tests - add hello_world webserver site config
       template: src=hello_world.j2 dest=/etc/apache2/sites-enabled/hello_world.conf
       notify: apache restart
-      sudo: yes
+      become: yes
 
 - hosts: all
   #connection: local

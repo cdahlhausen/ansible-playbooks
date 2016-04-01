@@ -1,7 +1,7 @@
 ---
   - hosts: all
     user: "{{ system_default_user }}"
-    sudo: yes
+    become: yes
     vars_files:
       - "group_vars/all.yml"
       - "group_vars/vault.yml"

@@ -3,6 +3,6 @@
 # Run sudo apt-get upgrade on selected servers.
 #
   - hosts: all
-    sudo: yes
+    become: yes
     roles:
       - update

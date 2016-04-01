@@ -38,7 +38,7 @@
 
 # Source control tools. Required for go get
   - name: source control clients
-    sudo: yes
+    become: yes
     apt: pkg={{item}} state=present
     with_items:
         - git
@@ -58,7 +58,7 @@
 # cd magicmime
 # git reset --hard 672bd9146d1802abfd8a851fb428e6070d524e3d
   - name: magicmime dependency
-    sudo: yes
+    become: yes
     apt: pkg={{item}} state=present
     with_items:
         - libmagic-dev
@@ -69,7 +69,7 @@
 
 # Curl is required for the install_go_1.4.sh script
   - name: curl
-    sudo: yes
+    become: yes
     apt: pkg=curl state=present
     tags: packages
 
@@ -78,7 +78,7 @@
 # Using curl instead of get_url module to use streaming the file into tar to avoid # rm the downloaded file afterwards.
   - name: Install Go 1.4
     when: not godir.stat.exists
-    sudo: yes
+    become: yes
     shell: curl https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz | sudo tar xz -C /usr/local
     tags: go-binaries
 
@@ -109,7 +109,7 @@
 
 # Add /usr/local/go/bin to system-wide path var
   - name: add {{item}} to path
-    sudo: yes
+    become: yes
     lineinfile:
       dest=/etc/environment
       state=present
@@ -144,7 +144,7 @@
 
 # Installing gpm as recommended in its repository.
   - name: Install Go Package Manager
-    sudo: yes
+    become: yes
     get_url:
       url="https://raw.githubusercontent.com/pote/gpm/v1.3.2/bin/gpm"
       dest="/usr/local/bin"

@@ -10,7 +10,7 @@
 
 # psdash needs pip and the python dev headers
   - name: install required packages
-    sudo: yes
+    become: yes
     apt: pkg={{item}} state=present update_cache=yes
     with_items:
         - python-dev
@@ -26,7 +26,7 @@
 # we have virtualenv first
   - name: install virtualenv if necessary
     pip: name=virtualenv state=present
-    sudo: yes
+    become: yes
 
 # If the virtualenv has not been created, make it.
   - stat: path=~/psdash
@@ -84,7 +84,7 @@
 # their own supervisor config files.
   - name: copy supervisor config
     when: psdash_supervisor_config == 'yes'
-    sudo: yes
+    become: yes
     template:
       src=supervisord.j2
       dest=/etc/supervisor/conf.d/supervisord.conf

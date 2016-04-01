@@ -4,10 +4,10 @@
 
 # Install rsync
   - name: rsync
-    sudo: yes
+    become: yes
     apt: pkg=rsync state=present
 
 # Install rssh shell to limit what rsync users can do
   - name: rssh
-    sudo: yes
+    become: yes
     apt: pkg=rssh state=present

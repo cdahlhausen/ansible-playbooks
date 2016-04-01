@@ -2,7 +2,7 @@
 # Install libraries required for building various gems
 # that fluctus uses.
   - name: install required packages
-    sudo: yes
+    become: yes
     apt: pkg={{item}} state=present update_cache=yes
     with_items:
         - sqlite3

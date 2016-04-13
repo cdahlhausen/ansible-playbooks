@@ -2,7 +2,7 @@
 localhost ansible_connection=local
 
 [local-vagrant]
-vagrant ansible_port=2222 ansible_user=vagrant hostname_name=vagrant hostname_fqdn=vagrant.local.dev
+fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.local.dev
 fedora ansible_port=2200 ansible_user=vagrant hostname_name=fedora hostname_fqdn=fedora.local.dev
 
 [local-vagrant:vars]

@@ -36,7 +36,7 @@
     file: path="{{ fluctus_app_root }}" state=directory recurse=yes group=www-data
 
 # Set the right ruby interpreter
-  - name: set ruby interpreter's ruby_version
+  - name: set ruby interpreters ruby_version
     shell: rbenv local "{{ruby_version}}"
     args:
       chdir: "/var/www/{{ ansible_fqdn }}/fluctus"
@@ -282,7 +282,7 @@
 
   - name: Create fluctus log
     become: yes
-    become: "{{ system_default_user }}"
+    become_user: "{{ system_default_user }}"
     file:
       path: "{{ fluctus_app_root}}/log/{{RAILS_ENV}}.log"
       owner: "{{system_default_user}}"
@@ -290,27 +290,11 @@
       mode: 0666
     when: not fluctus_log.stat.exists
 
-  - name: Setup default admin user
-    become: "{{ system_default_user }}"
-    become: yes
-    shell: chdir="{{fluctus_app_root}}" bundle exec rake fluctus:setup
-    args:
-      chdir: "{{fluctus_app_root}}"
-      FLUCTUS_DB_USER: "{{fluctus_db_user}}"
-      FLUCTUS_DB_HOST: "{{fluctus_db_host}}"
-      FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"
-      FEDORA_USER: "{{fedora_user}}"
-      FEDORA_PASS: "{{fedora_pwd}}"
-      FEDORA_URL: "http://localhost:8080/fedora"
-    register: adminuser_result
-    changed_when: adminuser_result.rc != 0
-    tags: fluctus-setup
-
 # Note: This assumes that a database has already been created. For the moment
 # we will keep this a manual process and pre-requisite.
   - name: Run sqlite database migration
     become: yes
-    become: "{{ system_default_user }}"
+    become_user: "{{ system_default_user }}"
     shell: chdir="{{fluctus_app_root}}" bundle exec rake db:migrate
     when: RAILS_ENV == "development"
     tags: [rails, dbmigrate, populatedb]

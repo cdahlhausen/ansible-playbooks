@@ -33,8 +33,7 @@
   # Don't show and log the password hash to everybody.
   # no_log: True
   with_items:
-#    PW hash file needs to be added. mkpasswd -m
-#    - { name: 'andrew.diamond', passwd: "{{ lookup('file', 'creds/andrew.diamond') }}" }
+    - { name: 'adiamond', passwd: "{{ var_adiamond_password }}" }
     - { name: 'cd3ef', passwd: "{{ var_cd3ef_password }}" }
     - { name: "{{ system_default_user}}", passwd: "{{ var_aptdeploy_password }}" }
 
@@ -47,7 +46,7 @@
 #    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
 #    - { name: 'cd3ef', pubkeyfile: "{{ inventory_dir }}/group_vars/vault/users/cd3ef/cd3ef2.pub" }
 #    - { name: 'cd3ef', pubkeyfile: "{{ var_cd3ef_sshkey }}" }
-#    - { name: 'andrew.diamond', pubkeyfile: "http://github.com/diamondap.keys" }
+    - { name: 'adiamond', pubkeyfile: "{{ var_adiamond_sskey }}" }
     - { name: 'cd3ef', pubkeyfile: "http://github.com/cdahlhausen.keys" }
     - { name: "{{system_default_user}}", pubkeyfile: "{{var_aptdeploy_sshkey }}" }
 

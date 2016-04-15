@@ -327,9 +327,8 @@
     tags: fluctus-setup
 
   - name: Populate_db with demo data.
-    shell: bundle exec rake fluctus:populate_db --trace
-    args:
-      chdir: "{{fluctus_app_root}}"
+    shell: chdir="{{fluctus_app_root}}" bundle exec rake fluctus:populate_db --trace
+    vars:
       FLUCTUS_DB_USER: "{{fluctus_db_user}}"
       FLUCTUS_DB_HOST: "{{fluctus_db_host| quote}}"
       FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"

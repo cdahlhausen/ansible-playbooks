@@ -14,7 +14,7 @@
 # This is defined in host vars (e.g. local-vagrant.yml)
 # system_default_user: ubuntu
 
-
+include_vars: vault.yml
 # This variable is used as a conditional for new deploys, to not
 # influence existing, non ansbile managed, machines adversely.
 newdeploy: False
@@ -23,9 +23,8 @@ system_default_email: "ops@aptrust.org"
 
 system_deploy_user: aptdeploy
 system_deploy_group: deploy
-ansible_become_pass: "{{ vault_aptdeploy_password }}"
 
-sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond]
+sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond]
 
 ##
 # Ruby Variables
@@ -61,8 +60,8 @@ fluctus_aws_ses_password: "{{ vault_fluctus_aws_ses_password }}"
 var_cd3ef_password: "{{ vault_cd3ef_password }}"
 var_cd3ef_sshkey: "{{ vault_cd3ef_sshkey }}"
 
-#var_andrewdiamond_password: "{{ vault_andrewdiamond_password }}"
-#var_andrewdiamond_sshkey: "{{ vault_andrewdiamond_sshkey }}"
+var_adiamond_password: "{{ vault_adiamond_password }}"
+var_adiamond_sshkey: "{{ vault_adiamond_sshkey }}"
 
 var_aptdeploy_password: "{{ vault_aptdeploy_password }}"
 var_aptdeploy_sshkey: "{{ vault_aptdeploy_sshkey }}"

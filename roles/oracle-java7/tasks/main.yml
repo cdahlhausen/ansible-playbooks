@@ -24,7 +24,7 @@
 
   - name: Accept Oracle license
     debconf: name="{{oracle_installer_key}}" question='shared/{{oracle_license_key}}' value='true' vtype='select'
-    with_items: oracle_packages
+    with_items: "{{ oracle_packages }}"
     when: deb_check|failed
 
     #  - name: Automatically select the Oracle License
@@ -33,5 +33,5 @@
 
   - name: Install packages
     apt: name={{item}} state=present update_cache=yes force=yes
-    with_items: oracle_packages
+    with_items: "{{ oracle_packages }}"
     when: deb_check|failed

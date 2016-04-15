@@ -10,4 +10,4 @@
 - name: Install w3m to make apache2ctl work
   become: yes
   apt: name='w3m' state=installed
-  with_items: apache_packages
+  with_items: "{{apache_packages}}"

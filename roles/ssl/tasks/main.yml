@@ -19,7 +19,7 @@
   become: yes
   copy:
     content="{{ ssl_key }}"
-    dest="{{ ssl_key_path }}"
+    dest="{{ssl_key_path}}"
     force=yes
     owner=root
     group=root
@@ -30,8 +30,8 @@
   when: ssl_chain is defined
   become: yes
   copy:
-    content="{{ ssl_chain }}"
-    dest="{{ ssl_chain_path }}"
+    content="{{ssl_chain}}"
+    dest="{{ssl_chain_path}}"
     owner=root
     group=root
     mode=0755

@@ -10,8 +10,10 @@
       GOPATH: /home/{{ system_default_user }}/go
       RBENV_ROOT: /home/{{system_default_user}}/.rbenv
       RAILS_ENV: 'demo'
+      RAILS_SECRET_KEY: "{{ RAILS_SECRET_KEY}}"
+      DEVISE_SECRET_KEY: "{{ DEVISE_SECRET_KEY}}"
       PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      FLUCTUS_DB_HOST: fluctus-staging-preprod.cbtzcfmydoc1.us-east-1.rds.amazonaws.com
+      FLUCTUS_DB_HOST: fluctus-demo-staging.cbtzcfmydoc1.us-east-1.rds.amazonaws.com
       FLUCTUS_DB_USER: "{{var_fluctus_dev_db_user}}"
       FLUCTUS_DB_PWD: "{{var_fluctus_dev_db_pwd}}"
 
@@ -23,7 +25,7 @@
         fluctus_solrschema: "{{fluctus_app_root}}/solr_conf/conf/schema.xml"
         # TODO: Add a conditional to choose dev,prod based on environment (rails_env)
         # fluctus_db_host: "{{var_fluctus_dev_db_host}}"
-        fluctus_db_host: fluctus-staging-preprod.cbtzcfmydoc1.us-east-1.rds.amazonaws.com
+        fluctus_db_host: fluctus-demo-staging.cbtzcfmydoc1.us-east-1.rds.amazonaws.com
         fluctus_db_user: "{{var_fluctus_dev_db_user}}"
         fluctus_db_pwd: "{{var_fluctus_dev_db_pwd}}"
 
@@ -36,15 +38,16 @@
         RAILS_ENV: 'demo'
         RBENV_ROOT: /home/{{system_default_user}}/.rbenv
 
-        RAILS_SECRET_KEY: "{{ RAILS_SECRET_KEY}}"
-        DEVISE_SECRET_KEY: "{{ DEVISE_SECRET_KEY}}"
-
         # SSL
         # TODO: Conditional for aptrust.org/local.dev
-        ssl_cert: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_cert}}{% else %}{{var_ssl_cert}}{% endif %}"
-        ssl_key: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_key}}{% else %}{{var_ssl_key}}{% endif %}"
-        ssl_cert_path: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_cert_path}}{% else %}{{var_ssl_cert_path}}{% endif %}"
-        ssl_key_path: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_key_path}}{% else %}{{var_ssl_key_path}}{% endif %}"
+        ssl_cert: |
+          {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_cert }}{% else %}{{var_ssl_cert }}{% endif %}
+        ssl_key: |
+          {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_key }}{% else %}{{var_ssl_key }}{% endif %}
+        ssl_cert_path: |
+           {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_cert_path }}{% else %}{{var_ssl_cert_path }}{% endif %}
+        ssl_key_path: |
+          {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_key_path }}{% else %}{{var_ssl_key_path }}{% endif %}
 
     # APACHE
         apache_vhosts:

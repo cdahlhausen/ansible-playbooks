@@ -6,7 +6,7 @@
 
 - name: Check if solr core directories exist.
   stat: "path={{ solr_home}}/{{item}}-core"
-  with_items: solr_cores
+  with_items: "{{solr_cores}}"
   register: solr_core_dir
   tags: solrcore
 
@@ -51,7 +51,7 @@
     dest: "{{ solr_home }}/{{item}}-core/core.properties"
     regexp: collection1
     replace: "{{ item }}"
-  with_items: solr_cores
+  with_items: "{{solr_cores}}"
 
 - name: Check symlinks for contrib and dist.
   stat: path="{{solr_home}}/{{item}}"
@@ -92,7 +92,7 @@
     dest: "{{ solr_home }}/{{item}}-core/conf/solrconfig.xml"
     regexp: '<lib dir="../../..'
     replace: "<lib dir={{solr_home}}"
-  with_items: solr_cores
+  with_items: "{{solr_cores}}"
   when: not fluctus_solrconfig
   tags: symlink
 

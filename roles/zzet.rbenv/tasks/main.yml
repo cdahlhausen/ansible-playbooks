@@ -58,7 +58,7 @@
 
 - name: create plugins directory for selected users
   file: state=directory path={{ rbenv_root }}/plugins
-  with_items: rbenv_users
+  with_items: "{{rbenv_users}}"
   become: true
   become_user: "{{ item }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -74,8 +74,8 @@
     accept_hostkey=true
     force=yes
   with_nested:
-    - rbenv_users
-    - rbenv_plugins
+    - "{{rbenv_users}}"
+    - "{{rbenv_plugins}}"
   become: true
   become_user: "{{ item[0] }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -179,8 +179,8 @@
   become: true
   become_user: "{{ item[1] }}"
   with_together:
-    - ruby_installed.results
-    - rbenv_users
+    - "{{ruby_installed.results}}"
+    - "{{rbenv_users}}"
   when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
   ignore_errors: true
   tags:

@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/Users/christian/work/pp/sterling/src/python2/rubedo/rubedo'
+let g:netrw_dirhist_2='/Users/christian/work/pp/sterling/.git/rebase-merge'
+let g:netrw_dirhist_3='/Users/christian/work/pp/sterling/src/python2/prac/prac/templates/mail'
+let g:netrw_dirhist_4='/Users/christian/scripts/.git'
+let g:netrw_dirhist_5='/Users/christian/scripts'
+let g:netrw_dirhist_6='/Users/christian'
+let g:netrw_dirhist_7='/Users/christian/.vim'
+let g:netrw_dirhist_8='/Users/christian'

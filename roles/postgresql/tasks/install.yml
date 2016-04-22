@@ -9,9 +9,9 @@
 
 - name: PostgreSQL | Add PostgreSQL repository apt-key
   apt_key:
-    id: "{{ postgresql_apt_key_id }}"
-    url: "{{ postgresql_apt_key_url }}"
-    validate_certs: no
+    id: "{{postgresql_apt_key_id}}"
+    url: "{{postgresql_apt_key_url}}"
+    validate_certs: yes
     state: present
   when: postgresql_apt_key_url and postgresql_apt_key_id
 

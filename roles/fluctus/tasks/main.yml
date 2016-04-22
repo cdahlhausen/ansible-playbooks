@@ -296,18 +296,29 @@
     become: yes
     become_user: "{{ system_default_user }}"
     shell: chdir="{{fluctus_app_root}}" bundle exec rake db:migrate
+    vars:
+      FLUCTUS_DB_USER: "{{fluctus_db_user}}"
+      FLUCTUS_DB_HOST: "{{fluctus_db_host}}"
+      FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"
+    environment:
+      DEVISE_SECRET_KEY: '{{DEVISE_SECRET_KEY}}'
+      RAILS_SECRET_KEY: '{{RAILS_SECRET_KEY}}'
     when: RAILS_ENV == "development"
     tags: [rails, dbmigrate, populatedb]
 
   - name: Run postgres database migration
-    shell: bundle exec rake db:migrate
-    args:
-      chdir: "{{fluctus_app_root}}"
+    shell: chdir="{{fluctus_app_root}}" bundle exec rake db:migrate
+    become: yes
+    vars:
       FLUCTUS_DB_USER: "{{fluctus_db_user}}"
       FLUCTUS_DB_HOST: "{{fluctus_db_host}}"
       FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"
+    environment:
+      DEVISE_SECRET_KEY: '{{DEVISE_SECRET_KEY}}'
+      RAILS_SECRET_KEY: '{{RAILS_SECRET_KEY}}'
     when: RAILS_ENV != "development"
-    tags: [rails, dbmigratei, populatedb]
+    tags: [rails, dbmigrate, populatedb]
+
 
   - name: Setup default admin user
     become_user: "{{ system_default_user }}"
@@ -319,7 +330,11 @@
       FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"
       FEDORA_USER: "{{fedora_user}}"
       FEDORA_PASS: "{{fedora_pwd}}"
+    environment:
       FEDORA_URL: "http://localhost:8080/fedora"
+      SOLR_URL: "http://localhost:8080/solr"
+      DEVISE_SECRET_KEY: '{{DEVISE_SECRET_KEY}}'
+      RAILS_SECRET_KEY: '{{RAILS_SECRET_KEY}}'
     register: adminuser_result
 #    changed_when: "{{adminuser_result.rc}} != 0"
     changed_when: "'Name has already been taken' not in adminuser_result.stderr and adminuser_result.rc !=0"
@@ -327,8 +342,8 @@
     tags: fluctus-setup
 
   - name: Populate_db with demo data.
-    shell: chdir="{{fluctus_app_root}}" bundle exec rake fluctus:populate_db --trace
-    vars:
+    shell: chdir="{{fluctus_app_root}}" bundle exec rake fluctus:populate_db
+    args:
       FLUCTUS_DB_USER: "{{fluctus_db_user}}"
       FLUCTUS_DB_HOST: "{{fluctus_db_host| quote}}"
       FLUCTUS_DB_PWD: "{{fluctus_db_pwd}}"
@@ -336,5 +351,5 @@
       FEDORA_PASS: "{{fedora_pwd}}"
       FEDORA_URL: "http://localhost:8080/fedora"
       SOLR_URL: "http://localhost:8080/solr"
-      when: RAILS_ENV == "demo"
+    when: RAILS_ENV == "demo"
     tags: populatedb

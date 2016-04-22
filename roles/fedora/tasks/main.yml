@@ -67,7 +67,19 @@
     chdir: "{{fedora_workspace}}"
     creates: "/var/lib/tomcat7/webapps/fedora.war"
   notify: reload tomcat
-  when: (fedora_app_server == 'tomcat') and (fedora_installer|skipped)
+  register: fedorawar_cp
+  # This has been skipped since the mounted ebs volume already has a fedora
+  # directory and therefore fedora_installer is skipped.
+  # when: (fedora_app_server == 'tomcat') and (fedora_installer|skipped)
+  when: (fedora_app_server == 'tomcat')
+
+- name: Trigger tomcat reload to force unpack war
+  become: yes
+  shell: service tomcat7 force-reload
+  when: fedorawar_cp|changed
+
+
+
 
 # DB Setup
 - name: Create fedora database user.

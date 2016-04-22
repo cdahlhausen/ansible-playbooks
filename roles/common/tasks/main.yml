@@ -39,18 +39,25 @@
 
 - name: add common user public keys
   become: yes
-  authorized_key: user={{ item.name }} key="{{ item.pubkeyfile }}" state=present
-  tags: common
+  authorized_key: user="{{item.name}}" key="{{item.pubkeyfile}}" state=present
   with_items:
 ## Keys can be stored encrypted as a variable in group_vars/vault.yml or directly imported from GitHub
 #    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
 #    - { name: 'cd3ef', pubkeyfile: "{{ inventory_dir }}/group_vars/vault/users/cd3ef/cd3ef2.pub" }
 #    - { name: 'cd3ef', pubkeyfile: "{{ var_cd3ef_sshkey }}" }
-    - { name: 'adiamond', pubkeyfile: "{{ var_adiamond_sskey }}" }
-    - { name: 'cd3ef', pubkeyfile: "http://github.com/cdahlhausen.keys" }
-    - { name: "{{system_default_user}}", pubkeyfile: "{{var_aptdeploy_sshkey }}" }
+    - { name: "adiamond", pubkeyfile: "{{ var_adiamond_sshkey }}" }
+    - { name: "cd3ef", pubkeyfile: "https://github.com/cdahlhausen.keys" }
+    - { name: "{{system_default_user}}", pubkeyfile: "{{var_aptdeploy_sshkey}}" }
+    - { name: "{{system_default_user}}", pubkeyfile: "https://github.com/cdahlhausen.keys"  }
+  tags: [common, pubkeys]
 
-- name: add deploy user's private key
+- name: add common user home settings
+  copy: src=group_vars/users/{{item}} dest=/home/ owner={{item}} group={{item}}
+  with_items:
+    - adiamond
+    - cd3ef
+
+- name: add deploy user private key
   become: yes
   become_user: "{{ system_default_user }}"
   copy: >

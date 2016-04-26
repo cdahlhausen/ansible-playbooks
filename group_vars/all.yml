@@ -97,7 +97,9 @@ var_fluctus_dev_db_pwd: "{{ vault_fluctus_dev_db_pwd}}"
 # Fedora
 var_fedora_user: "{{vault_fedora_user}}"
 var_fedora_pwd: "{{vault_fedora_pwd}}"
-var_fedora_namespace: 'aptrust'
+var_fedora_prod_pwd: "{{vault_fedora_prod_pwd}}"
+var_fedora_pid_namespace: 'aptrust'
+
 
 # Logwatch
 logwatch_email: "ops@aptrust.org"

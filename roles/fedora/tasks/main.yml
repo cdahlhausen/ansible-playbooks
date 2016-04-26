@@ -78,17 +78,27 @@
   shell: service tomcat7 force-reload
   when: fedorawar_cp|changed
 
-
-
-
 # DB Setup
 - name: Create fedora database user.
-  postgresql_user: name={{fedora_db_user}} password={{fedora_db_pwd}} state=present login_host={{fedora_db_host}}
+  postgresql_user: db="{{fedora_db}}"
+                   name="{{fedora_db_user}}"
+                   password="{{fedora_db_pwd}}"
+                   login_user="aptrust_fluctus"
+                   login_password="{{fedora_db_pwd}}"
+                   login_host="{{fedora_db_host}}"
+                   no_password_changes=yes
   when: fedora_db_server == 'postgresql'
+  tags: fedoradb1
 
 - name: Create fedora database.
-  postgresql_db: name={{fedora_db}} encoding='UTF-8' owner={{fedora_db_user}} login_host={{fedora_db_host}}
+  postgresql_db: name="{{fedora_db}}"
+                 encoding='UTF-8'
+                 owner="{{fedora_db_user}}"
+                 login_user="aptrust_fluctus"
+                 login_password="{{fedora_db_pwd}}"
+                 login_host="{{fedora_db_host}}"
   when: fedora_db_server == 'postgresql'
+  tags: fedoradb1
 
 # TODO: Look into setting up logging/logrotation. Logs in fedora/server/logs by
 # default.

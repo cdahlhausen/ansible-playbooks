@@ -257,7 +257,7 @@
   - lineinfile:
       dest=/home/{{system_default_user}}/.profile
       state=present
-      line="export FEDORA_PASS={{fedora_user}}"
+      line="export FEDORA_PASS={{fedora_pwd}}"
     tags: rails
 
   - lineinfile:

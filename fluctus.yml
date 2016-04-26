@@ -28,7 +28,7 @@
         # Fedora
         fedora_user: "{{var_fedora_user}}"
         fedora_pwd: "{{var_fedora_pwd}}"
-        fedora_namespace: 'aptrust'
+        fedora_pid_namespace: 'aptrust'
 
         # Environment vars don't seem to work for when-conditionals. Duplicate this as var for now.
         RAILS_ENV: 'development'

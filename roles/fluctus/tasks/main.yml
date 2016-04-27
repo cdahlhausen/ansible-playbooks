@@ -150,6 +150,7 @@
     with_items:
       - "export FLUCTUS_API_USER='{{fluctus_api_user}}'"
       - "export FLUCTUS_API_KEY='GENERATE API KEY THROUGH WEB UI AND UPDATE ME HERE.'"
+      - "export RAILS_ENV={{RAILS_ENV}}"
 
 # Generate Rails keys if they don't already exist
 # We don't do the usual lineinfile because we don't
@@ -307,7 +308,7 @@
     tags: [rails, dbmigrate, populatedb]
 
   - name: Run postgres database migration
-    shell: chdir="{{fluctus_app_root}}" bundle exec rake db:migrate
+    shell: chdir="{{fluctus_app_root}}" rake db:migrate
     become: yes
     vars:
       FLUCTUS_DB_USER: "{{fluctus_db_user}}"

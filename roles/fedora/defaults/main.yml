@@ -17,7 +17,8 @@ fedora_server_host: 'localhost'
 fedora_repository_name: 'APTrust Fedora Repository'
 fedora_admin_email: "ops@aptrust.org"
 fedora_oai_namespace: "{{ansible_fqdn}}"
-fedora_pid_namespace: "aptrust-{{ansible_nodename}}"
+fedora_pid_namespace: "{{var_fedora_pid_namespace}}"
+
 
 # Note: These conditionals are not pretty and placed wrongly. Rethink later.
 fedora_home: "{% if ansible_bios_version != 'VirtualBox' %}/mnt/aptrust/fedora{% else %}/srv/fedora{% endif %}"

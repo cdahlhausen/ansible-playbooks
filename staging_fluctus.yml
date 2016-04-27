@@ -41,14 +41,10 @@
 
         # SSL
         # TODO: Conditional for aptrust.org/local.dev
-        ssl_cert: |
-          {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_cert }}{% else %}{{var_ssl_cert }}{% endif %}
-        ssl_key: |
-          {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_key }}{% else %}{{var_ssl_key }}{% endif %}
-        ssl_cert_path: |
-           {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_cert_path }}{% else %}{{var_ssl_cert_path }}{% endif %}
-        ssl_key_path: |
-          {% if ansible_bios_version == "VirtualBox" %}{{ var_vagrant_ssl_key_path }}{% else %}{{var_ssl_key_path }}{% endif %}
+        ssl_cert: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_cert}}{% else %}{{var_ssl_cert}}{% endif %}"
+        ssl_key: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_key}}{% else %}{{var_ssl_key}}{% endif %}"
+        ssl_cert_path: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_cert_path}}{% else %}{{var_ssl_cert_path}}{% endif %}"
+        ssl_key_path: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_key_path}}{% else %}{{var_ssl_key_path}}{% endif %}"
 
     # APACHE
         apache_vhosts:

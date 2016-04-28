@@ -148,3 +148,6 @@
         - nodejs
         - sqlite3
         - libsqlite3-dev
+
+    - name: log inodes periodically
+      cron: name="inodes check" minute="*/15" job="df -i /mnt/aptrust > /var/www/repository.aptrust.org/fluctus/log/inodes.log"

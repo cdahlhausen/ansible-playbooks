@@ -103,7 +103,7 @@
     dest: "{{solr_home}}/solr.xml"
     owner: "tomcat7"
     group: "{{solr_user}}"
-    mode: 0640
+    mode: 0644
   tags: solrcore
 
 - name: Copying solr-webapp.xml template

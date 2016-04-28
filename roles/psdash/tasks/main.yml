@@ -29,7 +29,7 @@
     become: yes
 
 # If the virtualenv has not been created, make it.
-  - stat: path=~/psdash
+  - stat: path=/srv/psdash
     register: psdash_venv
 
   - name: create psdash virtualenv if necessary
@@ -41,40 +41,40 @@
 # This takes a while because it has to compile
 # some native extensions.
   - name: install psdash if necessary
-    pip: name=psdash state=present virtualenv=/home/"{{ system_default_user }}"/psdash
+    pip: name=psdash state=present virtualenv=/srv/psdash
 
 # Copy the psdash config file for agents
   - name: copy psdash agent config
     when: psdash_role == 'agent'
     template:
       src=agent_config.j2
-      dest=/home/"{{ system_default_user }}"/.psdash_config.py
+      dest=/srv/psdash/.psdash_config.py
 
 # Copy the psdash config file for the server
   - name: copy psdash agent config
     when: psdash_role == 'server'
     template:
       src=server_config.j2
-      dest=/home/"{{ system_default_user }}"/.psdash_config.py
+      dest=/srv/psdash/.psdash_config.py
 
 # Create an ssl cert on the server, if it does not already have one.
 # This is a self-signed certificate, so you'll get a warning in your
 # browser.
-  - stat: path=/home/"{{ system_default_user }}"/psdash/certs
+  - stat: path=/srv/psdash/certs
     register: certdir
 
   - name: make cert directory if necessary
-    command: mkdir /home/"{{ system_default_user }}"/psdash/certs
+    command: mkdir /srv/psdash/certs
     when: psdash_role == 'server' and not certdir.stat.exists
 
-  - stat: path=/home/"{{ system_default_user }}"/psdash/certs/cert.pem
+  - stat: path=/srv/psdash/cert.pem
     register: cert
 
   - name: create self-signed ssl cert if necessary
     command: openssl req -x509 -newkey rsa:2048 -sha256 -nodes -keyout key.pem -out cert.pem -days 1500 -subj '/CN=psdash.aptrust.org'
     when: psdash_role == 'server' and not cert.stat.exists
     args:
-      chdir: /home/"{{ system_default_user }}"/psdash/certs/
+      chdir: /srv/psdash/certs/
     environment:
       PATH: "/usr/bin"
 

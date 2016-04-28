@@ -11,8 +11,8 @@ PSDASH_LOGS = ['/var/log/boot.log', '/var/log/cloud-init.log', '/var/log/dmesg']
 PSDASH_AUTH_USERNAME = "{{ lookup('env','PSDASH_USER') }}"
 PSDASH_AUTH_PASSWORD = "{{ lookup('env','PSDASH_PWD') }}"
 
-PSDASH_HTTPS_KEYFILE = "/home/{{ system_default_user }}/psdash/certs/key.pem"
-PSDASH_HTTPS_CERTFILE = "/home/{{ system_default_user }}/psdash/certs/cert.pem"
+PSDASH_HTTPS_KEYFILE = "/srv/psdash/certs/key.pem"
+PSDASH_HTTPS_CERTFILE = "/srv/psdash/certs/cert.pem"
 
 PSDASH_NODES = [
     {'name': 'test.aptrust.org', 'host': '54.84.48.153', 'port': 5000},

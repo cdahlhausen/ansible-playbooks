@@ -1,3 +1,10 @@
+
+# Ansible 2.1 Vault issue:
+There is a bug in Ansible 2.0.1 that prevents saving changes to an Ansible vault file. A fix requires changing an Ansible file as follows.
+/usr/local/Cellar/ansible/2.0.1.0/libexec/lib/python2.7/site-packages/ansible/parsing/vault
+
+https://github.com/ansible/ansible/commit/2ba4428424a97716e107ae36d79ef332439c36d1
+
 # APTrust Ansible Config Files
 
 These files are used to configure and manage servers and services for the
@@ -178,7 +185,7 @@ error. Open ~/.ssh/known_hosts and delete the entry for host
 
 
 ## Ansible Vault
-In order to store sensitive information securely we use Ansible Vault. This feature of Ansible encrypts any file with AES-256bit encryption. This allows for storing encrypted files in a public repo (GitHub). 
+In order to store sensitive information securely we use Ansible Vault. This feature of Ansible encrypts any file with AES-256bit encryption. This allows for storing encrypted files in a public repo (GitHub).
 
 A best practice with Ansible Vault is to keep all variables in a single file (vault.yml) and reference them using an unencrypted file (vars.yml) in order to be able to grep for variables without decrypting the vault every time. Having a single vault file might prove impractical in the future, so we might revisit this later.
 
@@ -204,10 +211,10 @@ It is advisable to keep an Ansible config file in your home directory to make us
 
 > [defaults]
 > inventory = ~/aptrust/ansible-playbooks/hosts
-> 
+>
 > # Prompts for vault password with every run of a playbook
 > ask_vault_pass = True
-> 
+>
 > # The vault password can be stored in a flat-file to avoid the password prompt
 > # Be aware that it is not advisable to keep passwords in text files in clear #text.
 > vault_password_file=~/.ansible/vault_pass

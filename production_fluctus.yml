@@ -125,19 +125,18 @@
         ssl_certs_common_name: "{{ansible_fqdn}}"
 
     roles:
-#      - common
-#      - hostname
-#      - ssl
-      #  - jdauphant.ssl-certs
-#      - apache2
-#      - oracle-java7
-#      - go
-#      - zzet.rbenv
-#      - passenger
-#      - tomcat7
-#      - solr
+      - common
+      - hostname
+      - ssl
+      - apache2
+      - oracle-java7
+      - go
+      - zzet.rbenv
+      - passenger
+      - tomcat7
+      - solr
       - fedora
-      - { role: fluctus, force_update: yes}
+      - { role: fluctus, force_update: no}
 
 
     tasks:

@@ -15,4 +15,5 @@
       - logwatch
       - sshd
       - unattended-upgrades
+      - psdash
 

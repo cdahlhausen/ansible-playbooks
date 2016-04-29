@@ -4,3 +4,11 @@ tomcat_hostname: localhost
 tomcat_server_port: 8005
 tomcat_catalina_port: 8080
 tomcat_catalina_redirect_port: 8443
+
+# JAVA_OPTS for Tomcat: memory
+tomcat_xmx: "{{ (ansible_memtotal_mb*0.40)|int|abs }}"
+tomcat_permsize: '128M'
+
+# JAVA_OPTS for Tomcat: everything else
+tomcat_extra_opts: "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:G1HeapRegionSize=8m -XX:MaxGCPauseMillis=200 -XX:+UseLargePages -XX:+AggressiveOpts"
+# tomcat_extra_opts: ""

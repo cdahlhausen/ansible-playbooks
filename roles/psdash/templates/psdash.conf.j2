@@ -6,9 +6,10 @@
 ;; psdash monitoring listens on port 5000
 [program:psdash]
 {% if psdash_role == 'agent' %}
-command=/home/ubuntu/psdash/bin/psdash --agent
+command={{psdash_home}}/bin/psdash --agent
 {% else %}
-command=/home/ubuntu/psdash/bin/psdash
+command="{{psdash_home}}/bin/psdash"
 {% endif %}
-environment=PATH="/home/ubuntu/psdash/bin/:$PATH",PSDASH_CONFIG="/home/ubuntu/.psdash_config.py"
+environment=PATH="{{psdash_home}}/bin",PSDASH_CONFIG="{{psdash_home}}/.psdash_config.py"
 priority=100
+autostart=true

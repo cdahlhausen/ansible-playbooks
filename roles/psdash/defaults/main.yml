@@ -1,2 +1,8 @@
 var_psdash_user: "admin"
 var_psdash_pwd: "psdash"
+
+psdash_home: "/srv/psdash"
+
+psdash_role: 'agent'
+
+psdash_host_address: 'psdash.aptrust.org'

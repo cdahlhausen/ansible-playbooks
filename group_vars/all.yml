@@ -106,4 +106,5 @@ logwatch_email: "ops@aptrust.org"
 # PSDash
 var_psdash_usr: "{{vault_psdash_usr}}"
 var_psdash_pwd: "{{vault_psdash_pwd}}"
+psdash_host_address: "psdash.aptrust.org"
 

@@ -72,9 +72,12 @@
     mode: 0644
   notify: restart tomcat
 
+- name: Update Tomcat service config
+  template: src="tomcat7.conf.j2" dest="/etc/default/tomcat7" owner="root" group="root" mode="0644"
+  notify: restart tomcat
+
 - name: Ensure tomcat7 is running.
   service:
     name: tomcat7
     state: started
     enabled: yes
-  when: tomcat7_enabled

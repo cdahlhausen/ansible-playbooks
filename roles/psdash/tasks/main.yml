@@ -29,65 +29,68 @@
     become: yes
 
 # If the virtualenv has not been created, make it.
-  - stat: path=/srv/psdash
+  - stat: path="{{psdash_home}}"
     register: psdash_venv
 
   - name: create psdash virtualenv if necessary
     when: not psdash_venv.stat.exists
-    command: virtualenv psdash
+    command: virtualenv "{{psdash_home}}"
+    become: yes
     tags: virtualenv
 
 # Now install psdash into the virtual env
 # This takes a while because it has to compile
 # some native extensions.
   - name: install psdash if necessary
-    pip: name=psdash state=present virtualenv=/srv/psdash
+    pip: name="psdash" state="present" virtualenv="{{psdash_home}}"
+    become: yes
 
 # Copy the psdash config file for agents
   - name: copy psdash agent config
     when: psdash_role == 'agent'
     template:
-      src=agent_config.j2
-      dest=/srv/psdash/.psdash_config.py
+      src="agent_config.j2"
+      dest="{{psdash_home}}/.psdash_config.py"
+    register: agent_config
 
 # Copy the psdash config file for the server
-  - name: copy psdash agent config
+  - name: copy psdash server config
     when: psdash_role == 'server'
     template:
-      src=server_config.j2
-      dest=/srv/psdash/.psdash_config.py
+      src="server_config.j2"
+      dest="{{psdash_home}}/.psdash_config.py"
+    register: server_config
 
 # Create an ssl cert on the server, if it does not already have one.
 # This is a self-signed certificate, so you'll get a warning in your
 # browser.
-  - stat: path=/srv/psdash/certs
+  - stat: path="{{psdash_home}}/certs"
     register: certdir
 
   - name: make cert directory if necessary
-    command: mkdir /srv/psdash/certs
+    command: mkdir "{{psdash_home}}/certs"
     when: psdash_role == 'server' and not certdir.stat.exists
 
-  - stat: path=/srv/psdash/cert.pem
+  - stat: path="{{psdash_home}}/cert.pem"
     register: cert
 
   - name: create self-signed ssl cert if necessary
     command: openssl req -x509 -newkey rsa:2048 -sha256 -nodes -keyout key.pem -out cert.pem -days 1500 -subj '/CN=psdash.aptrust.org'
     when: psdash_role == 'server' and not cert.stat.exists
     args:
-      chdir: /srv/psdash/certs/
+      chdir: "{{psdash_home}}/certs/"
     environment:
       PATH: "/usr/bin"
 
-# Make sure supervisor config is set to run psdash.
-# This should only be set on the non-Go servers.
-# The Go servers that run ingest and restore have
-# their own supervisor config files.
   - name: copy supervisor config
-    when: psdash_supervisor_config == 'yes'
     become: yes
     template:
-      src=psdash.conf.j2
-      dest=/etc/supervisor/conf.d/psdash.conf
+      src="psdash.conf.j2"
+      dest="/etc/supervisor/conf.d/psdash.conf"
+    register: supervisorconfig
 
 # Make sure psdash is running
-  - supervisorctl: name=psdash state=restarted config=/etc/supervisor/conf.d/psdash.conf
+  - name: Ensure psdash is running
+    become: True
+    supervisorctl: name=psdash state=restarted config=/etc/supervisor/supervisord.conf
+    when: (supervisorconfig|changed or agent_config|changed or server_config|changed)

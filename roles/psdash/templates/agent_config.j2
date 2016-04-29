@@ -16,5 +16,5 @@ PSDASH_LOGS = ['/var/log/boot.log', '/var/log/cloud-init.log', '/var/log/dmesg.l
                '/var/log/apache2/*.log']
 
 # Need these settings so agent can register with server
-PSDASH_AUTH_USERNAME = "{{ lookup('env','PSDASH_USER') }}"
-PSDASH_AUTH_PASSWORD = "{{ lookup('env','PSDASH_PWD') }}"
+PSDASH_AUTH_USERNAME = "{{var_psdash_usr}}"
+PSDASH_AUTH_PASSWORD = "{{var_psdash_pwd}}"

@@ -1,8 +1,0 @@
----
-#
-# Run sudo apt-get upgrade on selected servers.
-#
-  - hosts: all
-    become: yes
-    roles:
-      - update

@@ -74,6 +74,8 @@ var_ssl_cert: "{{ vault_ssl_cert }}"
 var_ssl_key: "{{ vault_ssl_key }}"
 var_ssl_cert_path: "{{ vault_ssl_cert_path }}"
 var_ssl_key_path: "{{ vault_ssl_key_path }}"
+ssl_interm_cert_path: "{{vault_ssl_interm_cert_path}}"
+ssl_interm_cert: "{{vault_ssl_interm_cert}}"
 
 var_vagrant_ssl_cert: "{{ vault_vagrant_ssl_cert }}"
 var_vagrant_ssl_key: "{{ vault_vagrant_ssl_key }}"

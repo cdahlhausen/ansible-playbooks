@@ -8,6 +8,9 @@
 - name: Create Deploy group
   group: name=deploy state=present gid=1234
 
+- name: Adjust /srv permissions.
+  file: path=/srv owner=root group="{{system_deploy_group}}" mode=0775
+
 # TODO This should be revisited once all machines are ansible managed.
 # Currently this is skipped unless newdeploy is True. False by default.
 - name: Create /mnt/aptrust if not mounted already.
@@ -136,9 +139,9 @@
 # Workaround in lieu of monitoring application.
 #
 - name: Add diskcheck.py
-  become: yes
   tags: configuration
-  git: repo=https://github.com/cdahlhausen/ops_scripts.git
+  become_user: "{{system_default_user}}"
+  git: repo=https://github.com/aptrust/ops_scripts.git
        dest=/srv/ops_scripts
        accept_hostkey=yes
        force=yes

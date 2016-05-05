@@ -8,7 +8,6 @@
     recurse: yes
     state: directory
     owner: "tomcat7"
-    owner: "{{system_default_user}}"
     group: "tomcat7"
     mode: 0775
 

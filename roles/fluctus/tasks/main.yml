@@ -308,7 +308,7 @@
     tags: [rails, dbmigrate, populatedb]
 
   - name: Run postgres database migration
-    shell: chdir="{{fluctus_app_root}}" rake db:migrate
+    shell: chdir="{{fluctus_app_root}}" rbenv exec rake db:migrate
     become: yes
     vars:
       FLUCTUS_DB_USER: "{{fluctus_db_user}}"
@@ -320,6 +320,12 @@
     when: RAILS_ENV != "development"
     tags: [rails, dbmigrate, populatedb]
 
+  - name: Precompile assets
+    shell: chdir="{{fluctus_app_root}}" rbenv exec rake assets:precompile
+    become: yes
+    become_user: "{{system_default_user}}"
+    when: RAILS_ENV != "development"
+    tags: [rails, dbmigrate, populatedb]
 
   - name: Setup default admin user
     become_user: "{{ system_default_user }}"

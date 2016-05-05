@@ -44,6 +44,10 @@
     mode: 0644
   when: fedora_app_server == 'tomcat'
 
+- name: Check if fedora server is installed.
+  stat: path="{{fedora_home}}/server"
+  register: fedora_server_path
+
 # Run the installer with install.properties
 - name: Execute fedora installer
   shell:  echo yes | java -jar fcrepo-installer-{{fedora_version}}.jar {{fedora_home}}/install.properties
@@ -53,6 +57,7 @@
   environment:
     CATALINA_HOME: /var/lib/tomcat7
     FEDORA_HOME: "{{fedora_home}}"
+  when: fedora_server_path.stat.isdir is not defined or "{{newdeploy}}"
   register: fedora_installer
   tags: fedora_install
 
@@ -82,10 +87,11 @@
   postgresql_user: db="{{fedora_db}}"
                    name="{{fedora_db_user}}"
                    password="{{fedora_db_pwd}}"
-                   login_user="aptrust_fluctus"
+                   login_user="{{fedora_db_user}}"
                    login_password="{{fedora_db_pwd}}"
                    login_host="{{fedora_db_host}}"
                    no_password_changes=yes
+# login_user="aptrust_fluctus"
   when: fedora_db_server == 'postgresql'
   tags: fedoradb1
 

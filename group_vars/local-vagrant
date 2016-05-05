@@ -4,8 +4,8 @@
 system_default_user: vagrant
 newdeploy: True
 
-ssl_cert: "{{var_vagrant_ssl_cert}}"
-ssl_key: "{{var_vagrant_ssl_key}}"
-ssl_cert_path: "{{var_vagrant_ssl_cert_path}}"
-ssl_key_path: "{{var_vagrant_ssl_key_path}}"
+ssl_cert: "{{vault_vagrant_ssl_cert}}"
+ssl_key: "{{vault_vagrant_ssl_key}}"
+ssl_cert_path: "{{vault_vagrant_ssl_cert_path}}"
+ssl_key_path: "{{vault_vagrant_ssl_key_path}}"
 

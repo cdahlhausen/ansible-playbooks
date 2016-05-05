@@ -44,13 +44,6 @@
         RAILS_SECRET_KEY: "{{ RAILS_SECRET_KEY}}"
         DEVISE_SECRET_KEY: "{{ DEVISE_SECRET_KEY}}"
 
-        # SSL
-        # TODO: Conditional for aptrust.org/local.dev
-        ssl_cert: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_cert}}{% else %}{{var_ssl_cert}}{% endif %}"
-        ssl_key: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_key}}{% else %}{{var_ssl_key}}{% endif %}"
-        ssl_cert_path: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_cert_path}}{% else %}{{var_ssl_cert_path}}{% endif %}"
-        ssl_key_path: "{% if ansible_bios_version == 'VirtualBox' %}{{var_vagrant_ssl_key_path}}{% else %}{{var_ssl_key_path}}{% endif %}"
-
     # APACHE
         apache_vhosts:
           - servername: "{{ ansible_fqdn }}"
@@ -68,6 +61,7 @@
             serveradmin: "ops@aptrust.org"
             certificate_file: "{{ssl_cert_path}}"
             certificate_key_file: "{{ssl_key_path}}"
+            certificate_chain_file: "{{ssl_interm_cert_path}}"
             # TODO: Make this into a template? or rewrite apache role
             extra_directory_parameters: |
                     PassengerEnabled on

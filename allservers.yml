@@ -3,7 +3,6 @@
     user: "{{ system_default_user }}"
     become: yes
     vars_files:
-      - "group_vars/all.yml"
       - "group_vars/vault.yml"
     vars:
       playbook_name: allservers

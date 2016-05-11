@@ -4,6 +4,7 @@
 # Directory that will be used as the location for the downloads§
 download_dir: "{{ ansible_env.HOME }}/nagios"
 
+nagios_default_dir: "/usr/local/nagios"
 
 # Define the download url for the Nagios Core source files and the version you want to use.
 nagiosurl: https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.1.1.tar.gz

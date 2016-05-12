@@ -56,3 +56,59 @@
 
 - name: http service state
   service: name={{ apache_service }} state=started enabled=yes
+
+- name: Symlink Nagios etc to etc/nagios
+  file:
+    src: /usr/local/nagios/etc
+    dest: /etc/nagios
+    state: link
+
+- name: Create server config directory
+  file:
+    path: "{{nagios_default_dir}}/etc/servers"
+    state: directory
+    owner: nagios
+    group: nagios
+    mode: 0755
+  register: server_config_dir
+
+- debug: var=server_config_dir
+
+- name: Set to read all server configs
+  lineinfile:
+    dest: "{{nagios_default_dir}}/etc/nagios.cfg"
+    regexp: '^#?cfg_dir=/usr/local/nagios/etc/servers'
+    line: 'cfg_dir=/usr/local/nagios/etc/servers'
+  when: server_config_dir|success
+
+- name: Copy server host definitions.
+  template:
+    src: serverhost.cfg.j2
+    dest: "{{nagios_default_dir}}/etc/servers/{{item}}.cfg"
+    owner: nagios
+    group: nagios
+  vars:
+    hostname: "{{item}}"
+  with_inventory_hostnames: all:!localhost:!local-vagrant
+  register: serverhosts
+  notify: reload nagios
+  tags: serverhosts
+
+- name: Upate cgi.cfg to allow all nagios_users
+  template:
+    src: cgi.cfg.j2
+    dest: "{{nagios_default_dir}}/etc/cgi.cfg"
+    owner: nagios
+    group: nagios
+  notify: reload nagios
+  tags: nagiosconfig
+
+- name: Upate nagios.cfg
+  template:
+    src: nagios.cfg.j2
+    dest: "{{nagios_default_dir}}/etc/nagios.cfg"
+    owner: nagios
+    group: nagios
+  notify: reload nagios
+  tags: nagiosconfig
+

@@ -36,9 +36,9 @@
   # Don't show and log the password hash to everybody.
   # no_log: True
   with_items:
-    - { name: 'adiamond', passwd: "{{ var_adiamond_password }}" }
-    - { name: 'cd3ef', passwd: "{{ var_cd3ef_password }}" }
-    - { name: "{{ system_default_user}}", passwd: "{{ var_aptdeploy_password }}" }
+    - { name: 'adiamond', passwd: "{{ adiamond_password }}" }
+    - { name: 'cd3ef', passwd: "{{ cd3ef_password }}" }
+    - { name: "{{ system_default_user}}", passwd: "{{ aptdeploy_password }}" }
 
 - name: add common user public keys
   become: yes
@@ -48,9 +48,9 @@
 #    - { name: 'andrew.diamond', keyfile: '~/.ansible/external/files/public_keys/diamond_pub' }
 #    - { name: 'cd3ef', pubkeyfile: "{{ inventory_dir }}/group_vars/vault/users/cd3ef/cd3ef2.pub" }
 #    - { name: 'cd3ef', pubkeyfile: "{{ var_cd3ef_sshkey }}" }
-    - { name: "adiamond", pubkeyfile: "{{ var_adiamond_sshkey }}" }
+    - { name: "adiamond", pubkeyfile: "{{ adiamond_sshkey }}" }
     - { name: "cd3ef", pubkeyfile: "https://github.com/cdahlhausen.keys" }
-    - { name: "{{system_default_user}}", pubkeyfile: "{{var_aptdeploy_sshkey}}" }
+    - { name: "{{system_default_user}}", pubkeyfile: "{{aptdeploy_sshkey}}" }
     - { name: "{{system_default_user}}", pubkeyfile: "https://github.com/cdahlhausen.keys"  }
   tags: [common, pubkeys]
 
@@ -64,7 +64,7 @@
   become: yes
   become_user: "{{ system_default_user }}"
   copy: >
-    content="{{var_aptdeploy_sshkey_private}}"
+    content="{{aptdeploy_sshkey_private}}"
     dest=/home/{{system_default_user}}/.ssh/id_rsa
     mode=0600
     owner="{{system_default_user}}"

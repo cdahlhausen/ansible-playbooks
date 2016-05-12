@@ -1,6 +1,7 @@
 define host{
         use         linux-server
         host_name   {{hostname}}
+        hostgroups  linux-servers
         alias       {{hostname}}
         address     {{ hostvars[hostname].host_eip|default(hostvars[hostname].ansible_fqdn) }}
         }

@@ -48,22 +48,22 @@ postfix_relaytls: true
 
 # AWS IAM SES credentials (not access key):
 postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
-postfix_sasl_password: "{{ vault_postfix_sasl_password }}"
+postfix_sasl_pwd: "{{ vault_postfix_sasl_pwd }}"
 
 # Fluctus
 fluctus_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
-fluctus_aws_ses_password: "{{ vault_fluctus_aws_ses_password }}"
+fluctus_aws_ses_pwd: "{{ vault_fluctus_aws_ses_pwd }}"
 
 ##
 # User variables
 ##
-cd3ef_password: "{{ vault_cd3ef_password }}"
+cd3ef_pwd: "{{ vault_cd3ef_pwd }}"
 cd3ef_sshkey: "{{ vault_cd3ef_sshkey }}"
 
-adiamond_password: "{{ vault_adiamond_password }}"
+adiamond_pwd: "{{ vault_adiamond_pwd }}"
 adiamond_sshkey: "{{ vault_adiamond_sshkey }}"
 
-aptdeploy_password: "{{ vault_aptdeploy_password }}"
+aptdeploy_pwd: "{{ vault_aptdeploy_pwd }}"
 aptdeploy_sshkey: "{{ vault_aptdeploy_sshkey }}"
 aptdeploy_sshkey_private: "{{ vault_aptdeploy_sshkey_private }}"
 

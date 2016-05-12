@@ -28,7 +28,7 @@
 - name: add common users
   become: yes
   user: name="{{ item.name }}"
-        password='{{ item.passwd }}'
+        password='{{ item.pwd }}'
         state=present
         groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm,deploy,www-data' }}{% else %}{{'adm,deploy,www-data' }}{% endif %}
         shell='/bin/bash'
@@ -36,9 +36,9 @@
   # Don't show and log the password hash to everybody.
   # no_log: True
   with_items:
-    - { name: 'adiamond', passwd: "{{ adiamond_password }}" }
-    - { name: 'cd3ef', passwd: "{{ cd3ef_password }}" }
-    - { name: "{{ system_default_user}}", passwd: "{{ aptdeploy_password }}" }
+    - { name: 'adiamond', pwd: "{{ adiamond_pwd }}" }
+    - { name: 'cd3ef', pwd: "{{ cd3ef_pwd }}" }
+    - { name: "{{ system_default_user}}", pwd: "{{ aptdeploy_pwd }}" }
 
 - name: add common user public keys
   become: yes

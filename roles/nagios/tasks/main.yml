@@ -112,3 +112,21 @@
   notify: reload nagios
   tags: nagiosconfig
 
+- name: Update base-checks.cfg
+  template:
+    src: base_checks.cfg.j2
+    dest: "{{nagios_default_dir}}/etc/base_checks.cfg"
+    owner: nagios
+    group: nagios
+  notify: reload nagios
+  tags: nagiosconfig
+
+- name: Update contacts.cfg
+  template:
+    src: contacts.cfg.j2
+    dest: "{{nagios_default_dir}}/etc/contacts.cfg"
+    owner: nagios
+    group: nagios
+  notify: reload nagios
+  tags: nagiosconfig
+

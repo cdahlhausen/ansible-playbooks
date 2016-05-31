@@ -72,6 +72,21 @@
     mode: 0644
   notify: restart tomcat
 
+
+- name: Add script for access log compression and cleanup.
+  copy:
+    src: tomcat_logcompress.sh
+    dest: /etc/tomcat7/tomcat_logcompress.sh
+    owner: root
+    group: tomcat7
+    mode: 0754
+  register: logcompress_script
+  tags: logrotation
+
+- name: Add log compress to cron.daily
+  cron: name="Compress and cleanup access tomcat access logs" job="{{logcompress_script.dest}}" special_time=daily
+  tags: logrotation
+
 - name: Update Tomcat service config
   become: True
   template: src="tomcat7.conf.j2" dest="/etc/default/tomcat7" owner="root" group="root" mode="0644"

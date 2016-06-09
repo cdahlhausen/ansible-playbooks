@@ -27,16 +27,17 @@
           - name: 'www'
             alias: 'Web Servers'
             checks:
-              - {command: 'check_https', description: "Check https"}
-              - {command: 'check_ssl_cert', description: "Check SSL certificate"}
+              - {command: 'check_nrpe!check_https', description: "Check https"}
+              - {command: 'check_nrpe!check_users', description: "Check users"}
+              - {command: 'check_nrpe!check_ssl_cert', description: "Check SSL certificate"}
           - name: 'java_apps'
             alias: 'Tomcat/Java Servers'
 
         nagios_commands:
-            - {name: "check_https", command: 'check_nrpe!check_http -w 5 -c 10 --ssl -H $HOSTADDRESS' }
-            - {name: "check_ssl_cert", command: 'check_nrpe!check_http -H $HOSTADDRESS -C 30,14'}
+#            - {name: "check_nrpe", command: 'check_nrpe -c $ARG1$ -H $HOSTADDRESS' }
+            - {name: "check_https", command: 'check_http -w 5 -c 10 --ssl -H $HOSTADDRESS' }
+            - {name: "check_ssl_cert", command: 'check_http -H $HOSTADDRESS -C 30,14'}
             - {name: 'check_http_npmjs_org', command: '$USER1$/check_http -H npmjs.org -I $HOSTADDRESS$ $ARG1$'}
-            - {name: 'check_nrpe2', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$'}
 
      #APACHE
         apache_vhosts:

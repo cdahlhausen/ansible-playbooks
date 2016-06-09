@@ -1,0 +1,10 @@
+
+
+# This serves just as documentation for now until we have a deployment play for bagman.
+# Cron jobs to setup..
+# m h  dom mon dow   command
+# */10 * * * * . /home/ubuntu/.bash_profile ; cd /home/ubuntu/go/src/github.com/APTrust/bagman/bin ; ./cleanup_reader -config=production >> /mnt/apt/logs/cron.log
+# */10 * * * * . /home/ubuntu/.bash_profile ; cd /home/ubuntu/go/src/github.com/APTrust/bagman/bin ; ./request_reader -config=production >> /mnt/apt/logs/cron.log
+# * 5 * * * . /home/ubuntu/.bash_profile ; cd /home/ubuntu/go/src/github.com/APTrust/bagman/bin/fixity_reader -config=production >> /mnt/apt/logs/cron.log
+# */10 * * * * ls -l /mnt/apt/data > /mnt/apt/logs/data_list.log
+

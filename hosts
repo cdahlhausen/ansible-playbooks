@@ -2,8 +2,11 @@
 localhost ansible_connection=local
 
 [local-vagrant]
-fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.local.dev
-fedora ansible_port=2200 ansible_user=vagrant hostname_name=fedora hostname_fqdn=fedora.local.dev
+fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
+fedora ansible_port=2200 ansible_user=vagrant hostname_name=fedora hostname_fqdn=fedora.aptrust.local host_eip=192.168.33.11
+
+[monitoring_servers]
+fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
 
 [local-vagrant:vars]
 system_default_user=vagrant

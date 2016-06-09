@@ -1,0 +1,13 @@
+---
+  - hosts: fluctus
+    user: "{{ system_default_user }}"
+    become: yes
+    vars_files:
+      - "group_vars/vault.yml"
+
+    roles:
+        - icinga2
+#    tasks:
+
+#    - name: log inodes periodically
+#      cron: name="inodes check" minute="*/15" job="df -i /mnt/aptrust > /var/www/repository.aptrust.org/fluctus/log/inodes.log"

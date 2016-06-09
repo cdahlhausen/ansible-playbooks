@@ -130,3 +130,14 @@
   notify: reload nagios
   tags: nagiosconfig
 
+- name: Update webservers.cfg
+  template:
+    src: webservers.cfg.j2
+    dest: "{{nagios_default_dir}}/etc/webservers.cfg"
+    owner: nagios
+    group: nagios
+  with_items: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='ansible_fqdn')|list }}"
+  when: "hostvars[item]['webserver'] is defined"
+#  notify: reload nagios
+  tags: nagiosconfig2
+

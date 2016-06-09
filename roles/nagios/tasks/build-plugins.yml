@@ -3,14 +3,28 @@
 - name: Get Plugins
   get_url: url={{ pluginsurl }} dest={{ download_dir }}/{{ pluginssrc }}.tar.gz
 
+# - name: Get NRPE server source
+#  get_url: url={{ nrpeurl }} dest={{ download_dir }}/{{ nrpesrc }}.tar.gz
+
+# - name: Unpack NRPE source files
+#  shell: cd {{ download_dir }} && tar -xzvf {{ nrpesrc }}.tar.gz creates={{ download_dir }}/{{ nrpesrc }}
+
 - name: Unpack Plugin source files
   shell: cd {{ download_dir }} && tar -xzvf {{ pluginssrc }}.tar.gz creates={{ download_dir }}/{{ pluginssrc }}
 
 - name: Configure Plugins
   shell: cd {{ download_dir }}/{{ pluginssrc }} && ./configure --with-nagios-user={{ monitoring_user }} --with-nagios-group=nagios --with-openssl=/usr/bin/openssl creates={{ download_dir }}/{{ pluginssrc }}/Makefile
 
+# - name: Install NRPE prerequisite
+#  apt: name=libssl-dev state=latest
+
+# - name: Configure, Make and install NRPE plugin
+#   shell: cd {{ download_dir }}/{{ nrpesrc }} && ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu  && make all && make install-plugin
+
 - name: Make Plugins
   shell: cd {{ download_dir }}/{{ pluginssrc }} && make creates={{ download_dir }}/{{ pluginssrc }}/plugins/check_ping
 
 - name: Make Install Plugins
   shell: cd {{ download_dir }}/{{ pluginssrc }} && make install creates=/usr/local/nagios/libexec/check_ping
+
+

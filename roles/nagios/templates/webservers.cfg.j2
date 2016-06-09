@@ -1,0 +1,21 @@
+# webservers.cfg - Baseline checks for every monitored host #
+#
+# NOTE: This config file is intended to collect checks for webservices.
+#
+###############################################################################
+
+define hostgroup{
+    hostgroup_name  webservers
+    alias           Web servers
+#    members         {{ webservers }}
+    members         {{item }}
+    }
+
+define service{
+        use                             local-service         ; Name of service template to use
+        hostgroup_name                  webservers
+        service_description             HTTP
+	      check_command			check_http
+	      notifications_enabled		0
+        }
+

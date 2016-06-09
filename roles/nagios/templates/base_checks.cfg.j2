@@ -86,17 +86,3 @@ define service{
       	check_command			check_ssh
 	      notifications_enabled		0
         }
-
-
-
-# Define a service to check HTTP on the local machine.
-# Disable notifications for this service by default, as not all users may have HTTP enabled.
-
-define service{
-        use                             local-service         ; Name of service template to use
-        hostgroup_name                      linux-servers
-        service_description             HTTP
-	check_command			check_http
-	notifications_enabled		0
-        }
-

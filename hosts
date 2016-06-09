@@ -10,6 +10,7 @@ fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fq
 
 [local-vagrant:vars]
 system_default_user=vagrant
+system_default_email="{{ansible_user_id}}@aptrust.org"
 
 [test-servers:vars]
 system_default_user=ubuntu
@@ -18,24 +19,26 @@ system_default_user=ubuntu
 system_default_user=ubuntu
 
 [test-servers]
-apt-test-repository hostname_name=test hostname_fqdn=test.aptrust.org  # Fluctus Server
-apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  # Test Ingest+Restore+Utility
-apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
+apt-test-repo hostname_name=test hostname_fqdn=test.aptrust.org  host_eip='54.84.48.153' # Fluctus Server
+apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
+# apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
 
-#dpn-test
-[staging-servers]
-apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
+# [staging-servers]
+# apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org host_eip=52.4.156.18 # Fluctus Staging server
+
 
 [development-servers]
 
 [production-servers]
-apt-prod-repository hostname_name=repository hostname_fqdn=repository.aptrust.org
-apt-prod-repository2 hostname_name=repository hostname_fqdn=repository.aptrust.org
-apt-prod-ingest  hostname_name=apt-prod-ingest hostname_fqdn=apt-prod-ingest.aptrust.org
-apt-prod-restore hostname_name=apt-prod-restore hostname_fqdn=apt-prod-restore.aptrust.org
-apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org
-#
+apt-prod-repo hostname_name=repository hostname_fqdn=repository.aptrust.org host_eip=54.172.115.2
+apt-prod-inge  hostname_name=apt-prod-ingest hostname_fqdn=apt-prod-inge.aptrust.org host_eip=54.209.148.33
+apt-prod-rest hostname_name=apt-prod-restore hostname_fqdn=apt-prod-rest.aptrust.org host_eip=54.175.41.111
+apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96
 
 [us-west-servers]
 [us-east-servers]
+
+# [dpn-servers]
+# dpn-test hostname=dpn-prod host_eip=54.88.231.192
+dpn-prod hostname=dpn-prod hostname_fqdn=dpnlive.aptrust.org host_eip=54.86.37.226
 

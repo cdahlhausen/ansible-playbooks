@@ -109,3 +109,16 @@ psdash_host_address: "psdash.aptrust.org"
 
 # Nagios
 nagios_server: nagios.aptrust.org
+
+# Icinga2
+icinga_server: icinga.aptrust.org
+icinga2_db: "{{vault_icinga2_db}}"
+icinga2_db_user: "{{vault_icinga2_db_user}}"
+icinga2_db_pass: "{{vault_icinga2_db_pwd}}"
+
+icinga2_mysql_auth_user   : "{{vault_icinga2_mysql_auth_user}}"
+icinga2_mysql_auth_pass   : "{{vault_icinga2_mysql_auth_pass}}"
+
+icinga2_db_auth           : "{{vault_icinga2_db_auth}}"
+icinga2_db_auth_user      : "{{vault_icinga2_db_auth_user}}"
+icinga2_db_auth_pass      : "{{vault_icinga2_db_auth_pass}}"

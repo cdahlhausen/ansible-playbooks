@@ -1,0 +1,12 @@
+---
+  - hosts: all
+    user: "{{ system_default_user }}"
+    become: yes
+    vars_files:
+      - "group_vars/vault.yml"
+    vars:
+        fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='host_eip')|join (' ')}}"
+        fail2ban_config_destemail: cd3ef@aptrust.org
+
+    roles:
+        - fail2ban

@@ -1,0 +1,40 @@
+- hosts: apt-util
+  vars:
+   hostitem: apt-prod-rest
+  tasks:
+   - name: generate ticket on the icinga master and save it as a variable
+     shell: /usr/sbin/icinga2 pki ticket --cn {{ hostitem }}
+     register: ticket
+
+- hosts: apt-prod-rest
+# {{ hostitem }}"
+  vars:
+   hostitem: apt-prod-rest
+   master_hostname: apt-util.aptrust.org
+   master_ip: "{{ hostvars['apt-util'].host_eip }}"
+   master_port: 5665
+  tasks:
+    - name: create pki folder
+      file: path=/etc/icinga2/pki state=directory mode=0700 owner=nagios group=nagios
+
+    - name: create cert
+      shell: icinga2 pki new-cert --cn {{ hostitem }} --key /etc/icinga2/pki/{{ hostitem }}.key --cert /etc/icinga2/pki/{{ hostitem }}.crt
+
+    - name: save the masters cert as trustedcert
+      shell: icinga2 pki save-cert --key /etc/icinga2/pki/{{ hostitem }}.key --cert /etc/icinga2/pki/{{ hostitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --host {{ master_hostname }}
+
+    - name: request the certificate from the icinga server
+      shell: "icinga2 pki request --host {{icinga_server}} --port 5665 --ticket {{ hostvars['apt-util']['ticket']['stdout'] }} --key /etc/icinga2/pki/{{ hostitem }}.key --cert /etc/icinga2/pki/{{ hostitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key"
+
+    - name: node setup
+      shell: "icinga2 node setup --ticket {{ hostvars['apt-util']['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ hostitem }} --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ hostitem }}"
+
+- hosts: apt-util
+  vars:
+   hostitem: apt-prod-rest
+  tasks:
+   - name: add host
+     shell: icinga2 node add {{ hostitem }}
+
+   - name: set host ip
+     shell: icinga2 node set {{ hostitem }} --host {{ hostitem }} --port 5665

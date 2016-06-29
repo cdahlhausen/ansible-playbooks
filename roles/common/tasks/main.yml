@@ -28,11 +28,11 @@
 - name: add common users
   become: yes
   user: name="{{ item.name }}"
-        password='{{ item.pwd }}'
+        password="{{ item.pwd }}"
         state=present
-        groups={% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm,deploy,www-data' }}{% else %}{{'adm,deploy,www-data' }}{% endif %}
+        groups="{% if ansible_bios_version != 'VirtualBox' %}{{ 'admin,adm,deploy,www-data' }}{% else %}{{'adm,deploy,www-data' }}{% endif %}"
         shell='/bin/bash'
-  tags: common
+  tags: [createusers, common]
   # Don't show and log the password hash to everybody.
   # no_log: True
   with_items:

@@ -7,6 +7,7 @@ fedora ansible_port=2200 ansible_user=vagrant hostname_name=fedora hostname_fqdn
 
 [monitoring_servers]
 fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
+apt-util hostname_name=apt-util hostname_fqdn=icinga.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
 
 [local-vagrant:vars]
 system_default_user=vagrant
@@ -19,7 +20,7 @@ system_default_user=ubuntu
 system_default_user=ubuntu
 
 [test-servers]
-apt-test-repo hostname_name=test hostname_fqdn=test.aptrust.org  host_eip='54.84.48.153' # Fluctus Server
+apt-test-repo hostname_name=apt-test-repo hostname_fqdn=test.aptrust.org  host_eip='54.84.48.153' # Fluctus Server
 apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
 # apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
 

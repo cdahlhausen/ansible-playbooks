@@ -6,7 +6,11 @@
       - "group_vars/vault.yml"
     vars:
         fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='host_eip')|join (' ')}}"
-        fail2ban_config_destemail: cd3ef@aptrust.org
+
+        fail2ban_config_destemail: ops@aptrust.org
+        fail2ban_config_maxretry: 1
 
     roles:
         - fail2ban
+
+    tasks:

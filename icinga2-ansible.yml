@@ -1,7 +1,9 @@
 ---
-- hosts: monitoring_servers
+# This role installs icinga2 client for the monitoring nodes.
+#
+- hosts: all
   roles:
-   - role: icinga2-ansible/icinga2-ansible-no-ui
+   - role: icinga2/icinga2-ansible-no-ui
      icinga2_conf_global: |
        include "constants.conf"
        include "zones.conf"
@@ -14,3 +16,7 @@
           "-H", "$address$",
               "-c", "$remote_nrpe_command$",
      tags: icinga2-no-ui
+  tasks:
+    - name: Enable API feature
+      become: true
+      shell: icinga2 feature enable api

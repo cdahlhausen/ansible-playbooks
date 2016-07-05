@@ -11,5 +11,5 @@
   tags:
    - icinga2_configure
 
-- include: nagios_plugins.yml
-  tags: nagios-plugins
+- include: nagios_additional_plugins.yml
+  tags: nagios-additional-plugins

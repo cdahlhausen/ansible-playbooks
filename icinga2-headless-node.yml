@@ -1,0 +1,75 @@
+---
+# This role installs icinga2 client for the monitoring nodes.
+# To pass in hostitem and masteritem run:
+# ansible-playbook icinga2-headless-node.yml --extra-vars "masteritem=apt-util nodeitem=apt-test-repo"
+#
+- hosts: "{{ nodeitem | default('all')}}"
+  gather_facts: True
+  roles:
+   - role: icinga2/icinga2-ansible-no-ui
+     icinga2_conf_global: |
+       include "constants.conf"
+       include "zones.conf"
+       include <itl>
+       include <plugins>
+       include "features-enabled/*.conf"
+       include_recursive "conf.d"
+     check_commands:
+       check_nrpe: |
+          "-H", "$address$",
+              "-c", "$remote_nrpe_command$",
+     tags: icinga2-no-ui
+  tasks:
+    - name: Enable API feature
+      become: true
+      shell: icinga2 feature enable api
+
+# Generate ticket on master to use for client nodes
+- hosts: "{{ masteritem | default('monitoring_servers')}}"
+#  vars:
+#   hostitem: apt-prod-repo.aptrust.org
+  tasks:
+   - name: generate ticket on the icinga master and save it as a variable
+     # shell: /usr/sbin/icinga2 pki ticket --cn {{ masteritem }}
+     shell: /usr/sbin/icinga2 pki ticket --cn {{ nodeitem }}
+     register: ticket
+
+- hosts: "{{ nodeitem | default('all')}}"
+  vars:
+#   hostitem: apt-prod-repo.aptrust.org
+   master_hostname: icinga.aptrust.org
+   master_ip: "{{ hostvars['apt-util'].host_eip }}"
+   master_port: 5665
+  tasks:
+    - name: create pki folder
+      file: path=/etc/icinga2/pki state=directory mode=0700 owner=nagios group=nagios
+
+    - name: create cert
+      shell: icinga2 pki new-cert --cn {{ nodeitem }} --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt
+
+    - name: save the masters cert as trustedcert
+      shell: icinga2 pki save-cert --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --host {{ master_hostname }}
+
+    - name: request the certificate from the icinga server
+      shell: icinga2 pki request --host {{ master_hostname }} --port 5665 --ticket {{ hostvars[ masteritem ]['ticket']['stdout'] }} --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key
+
+    - name: node setup
+      shell: icinga2 node setup --ticket {{ hostvars[masteritem]['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ nodeitem }} --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ nodeitem }}
+
+    - name:  Allow remote commands and remote config.
+      lineinfile: >
+            dest="/etc/icinga2/features-available/api.conf"
+            regexp="accept_{{item}} = "
+            line="accept_{{item}}=true"
+            state=present
+      with_items:
+            - config
+            - commands
+
+- hosts: "{{ masteritem | default('monitoring_servers')}}"
+  tasks:
+   - name: add host
+     shell: icinga2 node add {{ nodeitem }}
+
+   - name: set host ip
+     shell: icinga2 node set {{ nodeitem }} --host {{ nodeitem }}.aptrust.org --port 5665

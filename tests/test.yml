@@ -2,4 +2,4 @@
 - name: Install InfluxDB
   hosts: all
   roles:
-  - { role: '../influxdb' }
+  - { role: 'influxdb' }

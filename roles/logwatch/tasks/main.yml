@@ -21,12 +21,12 @@
 - name: Logwatch | Create cache directory
   file: path=/var/cache/logwatch state=directory mode=0755
 
-- name: Logwatch | Remove logwatch's cronjob
+- name: Logwatch | Remove logwatchs cronjob
   file:
     path: /etc/cron.daily/00logwatch
     state: absent
 
-- name: Logwatch | Configure logwatch's cronjob
+- name: Logwatch | Configure logwatchs cronjob
   cron:
     name: logwatch
     job: /usr/sbin/logwatch

@@ -34,7 +34,13 @@ script:
   # Run playbook role to install on docker container
   - ansible-playbook -i tests/inventory tests/test.yml
 
+  # Wait a moment until the DB is fully started
+  - sleep 15
+
+  # Get IP address for the running docker container
   - CONTAINER_IP=$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' ansible-${distribution})
+
+  # Create a new database in InfluxDB
   - curl -POST http://${CONTAINER_IP}:8086/query --data-urlencode "q=CREATE DATABASE mydb"
 
 notifications:

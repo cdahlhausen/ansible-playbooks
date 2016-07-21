@@ -34,8 +34,8 @@ script:
   # Run playbook role to install on docker container
   - ansible-playbook -i tests/inventory tests/test.yml
 
-  - CONTAINER_IP=$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' ansible-$DISTRIBUTION)
-  - curl -POST http://$CONTAINER_IP:8086/query --data-urlencode "q=CREATE DATABASE mydb"
+  - CONTAINER_IP=$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' ansible-${distribution})
+  - curl -POST http://${CONTAINER_IP}:8086/query --data-urlencode "q=CREATE DATABASE mydb"
 
 notifications:
   # webhooks: https://galaxy.ansible.com/api/v1/notifications/

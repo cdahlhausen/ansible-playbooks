@@ -19,7 +19,7 @@ echo "Operating System: $(lsb_release -d | awk -F: '{ print $2 }' | tr -d '\t')"
 echo "Kernel: $(uname -a)"
 echo "################################"
 
-DISTRIBUTION=debian-7
+DISTRIBUTION=ubuntu-16.04
 
 echo "### Start docker hosts"
 echo "Distribution: $DISTRIBUTION"

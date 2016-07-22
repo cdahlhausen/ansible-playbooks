@@ -16,8 +16,6 @@ See also:
 Role Variables
 --------------
 
-TODO: add more information to the default configuration.
-
 If you need detailed information about the configuration for InfluxDB you should have a look at the official documentation:
 - [Sample configuration](https://github.com/influxdata/influxdb/blob/master/etc/config.sample.toml)
 - [Documentation](https://docs.influxdata.com/influxdb/v0.13/administration/config/)

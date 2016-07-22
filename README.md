@@ -1,14 +1,17 @@
-Role Name
-=========
-[![Build Status](https://travis-ci.org/pbonrad/ansible-influxdb.svg?branch=master)](https://travis-ci.org/pbonrad/ansible-influxdb)
+ansible-influxdb [![Build Status](https://travis-ci.org/pbonrad/ansible-influxdb.svg?branch=master)](https://travis-ci.org/pbonrad/ansible-influxdb)
+================
 
 InfluxDB is an open source database written in Go specifically to handle time series data with high availability and high performance requirements. InfluxDB installs in minutes without external dependencies, yet is flexible and scalable enough for complex deployments.
 
-More information can be found on the webpage: [https://influxdata.com/time-series-platform/influxdb/](https://influxdata.com/time-series-platform/influxdb/)
+More information about InfluxDB can be found here:
+- Official Webpage:  [https://influxdata.com/time-series-platform/influxdb/](https://influxdata.com/time-series-platform/influxdb/)
+- GitHub:  [https://github.com/influxdata/influxdb](https://github.com/influxdata/influxdb)
 
-The role works for Ubuntu and Debian and was tested with the help of docker containers. In comparison to other Ansible role tests where Ansible runs inside the container and is connecting to localhost, I decided to use the [Ansible docker connection](http://docs.ansible.com/ansible/intro_inventory.html#non-ssh-connection-types). The build which run at [Travis CI](https://travis-ci.org/pbonrad/ansible-influxdb) uses this functionality.
+The role will install the latest stable version of InfluxDB using the `apt-get` package manager. It works for Ubuntu and Debian and was tested with the help of docker containers. In comparison to other Ansible role tests where Ansible runs inside the container and is connecting to localhost, I decided to use the [Ansible docker connection](http://docs.ansible.com/ansible/intro_inventory.html#non-ssh-connection-types) (`ansible_connection=docker`). The build which run at [Travis CI](https://travis-ci.org/pbonrad/ansible-influxdb) uses this functionality.
 
-See also: [https://github.com/pbonrad/ansible-docker-base](https://github.com/pbonrad/ansible-docker-base)
+See also:
+- GitHub project with Dockerfiles:  [https://github.com/pbonrad/ansible-docker-base](https://github.com/pbonrad/ansible-docker-base)
+- Role on Ansible Galaxy:  [https://galaxy.ansible.com/pbonrad/influxdb/](https://galaxy.ansible.com/pbonrad/influxdb/)
 
 Role Variables
 --------------

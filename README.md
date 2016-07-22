@@ -1,31 +1,41 @@
 Role Name
 =========
+[![Build Status](https://travis-ci.org/pbonrad/ansible-influxdb.svg?branch=master)](https://travis-ci.org/pbonrad/ansible-influxdb)
 
-A brief description of the role goes here.
+InfluxDB is an open source database written in Go specifically to handle time series data with high availability and high performance requirements. InfluxDB installs in minutes without external dependencies, yet is flexible and scalable enough for complex deployments.
 
-Requirements
-------------
+More information can be found on the webpage: [https://influxdata.com/time-series-platform/influxdb/](https://influxdata.com/time-series-platform/influxdb/)
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The role works for Ubuntu and Debian and was tested with the help of docker containers. In comparison to other Ansible role tests where Ansible runs inside the container and is connecting to localhost, I decided to use the [Ansible docker connection](http://docs.ansible.com/ansible/intro_inventory.html#non-ssh-connection-types). The build which run at [Travis CI](https://travis-ci.org/pbonrad/ansible-influxdb) uses this functionality.
+
+See also: [https://github.com/pbonrad/ansible-docker-base](https://github.com/pbonrad/ansible-docker-base)
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+TODO: add more information to the default configuration.
+
+If you need detailed information about the configuration for InfluxDB you should have a look at the official documentation:
+- [Sample configuration](https://github.com/influxdata/influxdb/blob/master/etc/config.sample.toml)
+- [Documentation](https://docs.influxdata.com/influxdb/v0.13/administration/config/)
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+There are no dependencies to other roles. If you want to run the test, you need to install [Docker](https://www.docker.com/).
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+An example playbook is included in the `test.yml` file. You can use `run.sh` for running a test locally, which starts a docker container as the target.
 
-    - hosts: servers
+    - hosts: all
       roles:
-         - { role: username.rolename, x: 42 }
+         - role: ansible-influxdb
+
+Contributions and Feedback
+--------------------------
+Any contributions are welcome. For any bugs or feature requests, please open an issue through [Github](https://github.com/pbonrad/ansible-influxdb/issues).
 
 License
 -------
@@ -35,4 +45,4 @@ MIT
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Peter Bonrad - [pbonrad](https://github.com/pbonrad) - 2016

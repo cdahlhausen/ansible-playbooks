@@ -4,32 +4,38 @@
   apt:
     name: "apt-transport-https"
     state: present
+  become: true
 
 - name: Add InfluxDB apt key
   apt_key:
     url: https://repos.influxdata.com/influxdb.key
     id: 2582E0C5
     state: present
+  become: true
 
 - name: Add InfluxDB apt repository
   apt_repository:
     repo: "deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release | lower }} stable"
     update_cache: yes
     state: present
+  become: true
 
 - name: Install InfluxDB package
   apt:
     name: influxdb
     state: latest
+  become: true
 
 - name: Configure InfluxDB
   template:
     src: influxdb.conf.j2
     dest: /etc/influxdb/influxdb.conf
   notify: Restart InfluxDB
+  become: true
 
 - name: Start InfluxDB as service and enable to start on boot
   service:
     name: influxdb
     state: started
     enabled: yes
+  become: true

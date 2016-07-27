@@ -1,23 +1,20 @@
-[localhost]
-localhost ansible_connection=local
+# [localhost]
+# localhost ansible_connection=local host_eip=127.0.0.1
+
+[personal]
+rtfaws ansible_user=ubuntu hostname_name=rtf-aws system_default_user=ubuntu host_eip=192.168.33.10
 
 [local-vagrant]
 fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
 fedora ansible_port=2200 ansible_user=vagrant hostname_name=fedora hostname_fqdn=fedora.aptrust.local host_eip=192.168.33.11
 
 [monitoring_servers]
-fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
+# fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
 apt-util hostname_name=apt-util hostname_fqdn=icinga.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
 
 [local-vagrant:vars]
 system_default_user=vagrant
 system_default_email="{{ansible_user_id}}@aptrust.org"
-
-[test-servers:vars]
-system_default_user=ubuntu
-
-[production-servers:vars]
-system_default_user=ubuntu
 
 [test-servers]
 apt-test-repo hostname_name=apt-test-repo hostname_fqdn=test.aptrust.org  host_eip='54.84.48.153' # Fluctus Server
@@ -39,7 +36,7 @@ apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_ei
 [us-west-servers]
 [us-east-servers]
 
-# [dpn-servers]
-# dpn-test hostname=dpn-prod host_eip=54.88.231.192
-dpn-prod hostname=dpn-prod hostname_fqdn=dpnlive.aptrust.org host_eip=54.86.37.226
+[dpn-servers]
+dpn-test hostname=dpn-demo host_eip=54.88.231.192
+dpn-prod ansible_port=1984 hostname=dpn-prod hostname_fqdn=dpnlive.aptrust.org host_eip=54.86.37.226
 

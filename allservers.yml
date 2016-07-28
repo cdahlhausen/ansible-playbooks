@@ -6,13 +6,16 @@
       - "group_vars/vault.yml"
     vars:
       playbook_name: allservers
+      fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='host_eip')|join (' ')}}"
+      fail2ban_config_destemail: ops@aptrust.org
+      fail2ban_config_maxretry: 1
+
 
     roles:
       - hostname
       - common
       - postfix
       - logwatch
+      - fail2ban
       - sshd
       - unattended-upgrades
-      - psdash
-

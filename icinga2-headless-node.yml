@@ -1,6 +1,6 @@
 ---
 # This role installs icinga2 client for the monitoring nodes.
-# To pass in hostitem and masteritem run:
+# To pass in hostitem and masteritem (both just subdomain part) run:
 # ansible-playbook icinga2-headless-node.yml --extra-vars "masteritem=apt-util nodeitem=apt-test-repo"
 #
 - hosts: "{{ nodeitem | default('all')}}"
@@ -13,7 +13,8 @@
        include <itl>
        include <plugins>
        include "features-enabled/*.conf"
-       include_recursive "conf.d"
+#       Disabled since icinga2 master is setting config top-down.
+#       include_recursive "conf.d"
      check_commands:
        check_nrpe: |
           "-H", "$address$",
@@ -26,6 +27,7 @@
 
 # Generate ticket on master to use for client nodes
 - hosts: "{{ masteritem | default('monitoring_servers')}}"
+  tags: ['nodeaction']
 #  vars:
 #   hostitem: apt-prod-repo.aptrust.org
   tasks:
@@ -33,28 +35,35 @@
      # shell: /usr/sbin/icinga2 pki ticket --cn {{ masteritem }}
      shell: /usr/sbin/icinga2 pki ticket --cn {{ nodeitem }}
      register: ticket
+     tags: nodeaction
 
 - hosts: "{{ nodeitem | default('all')}}"
+  tags: ['nodeaction']
   vars:
 #   hostitem: apt-prod-repo.aptrust.org
-   master_hostname: icinga.aptrust.org
+   master_hostname: apt-util.aptrust.org
    master_ip: "{{ hostvars['apt-util'].host_eip }}"
    master_port: 5665
   tasks:
     - name: create pki folder
       file: path=/etc/icinga2/pki state=directory mode=0700 owner=nagios group=nagios
+      tags: ['nodeaction']
 
-    - name: create cert
+    - name: create cert on new node
       shell: icinga2 pki new-cert --cn {{ nodeitem }} --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt
+      tags: ['nodeaction']
 
     - name: save the masters cert as trustedcert
       shell: icinga2 pki save-cert --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --host {{ master_hostname }}
+      tags: ['nodeaction']
 
     - name: request the certificate from the icinga server
       shell: icinga2 pki request --host {{ master_hostname }} --port 5665 --ticket {{ hostvars[ masteritem ]['ticket']['stdout'] }} --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key
+      tags: ['nodeaction']
 
     - name: node setup
       shell: icinga2 node setup --ticket {{ hostvars[masteritem]['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ nodeitem }} --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ nodeitem }}
+      tags: ['nodeaction']
 
     - name:  Allow remote commands and remote config.
       lineinfile: >
@@ -65,11 +74,50 @@
       with_items:
             - config
             - commands
+      tags: ['nodeaction']
 
 - hosts: "{{ masteritem | default('monitoring_servers')}}"
+  tags: ['masteraction']
   tasks:
    - name: add host
      shell: icinga2 node add {{ nodeitem }}
 
    - name: set host ip
      shell: icinga2 node set {{ nodeitem }} --host {{ nodeitem }}.aptrust.org --port 5665
+
+   - name: update node config
+     shell: icinga2 node update-config
+
+   - name: insert/update zones.conf
+     blockinfile:
+         dest: /etc/icinga2/zones.conf
+         block: |
+            object Endpoint "{{nodeitem}}.aptrust.org" {
+                host = "{{nodeitem}}.aptrust.org"
+                port = "5665"
+            }
+            object Zone "{{nodeitem}}.aptrust.org" {
+                parent = "{{masteritem}}.aptrust.org"
+                endpoints = [ "{{nodeitem}}.aptrust.org" ]
+            }
+
+   - name: insert/update hosts.conf
+     blockinfile:
+         dest: "/etc/icinga2/zones.d/{{masteritem}}.aptrust.org"
+         block: |
+            object Host "{{nodeitem}}.aptrust.org" {
+                import "Icinga Agent"
+                display_name = "{{nodeitem}}"
+                address = "{{nodeitem}}.aptrust.org"
+
+                enable_notifications = true
+                vars.os = "Linux"
+                vars.disks["disk"] = {}
+                vars.notification["mail"] = {
+                  groups = [ "apt-ops-group" ]
+              }
+            }
+
+   - name: restart icinga2
+     service: name=icinga2 state=restarted
+

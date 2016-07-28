@@ -28,15 +28,15 @@ apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.
 [development-servers]
 
 [production-servers]
-apt-prod-repo hostname_name=repository hostname_fqdn=repository.aptrust.org host_eip=54.172.115.2
-apt-prod-inge  hostname_name=apt-prod-ingest hostname_fqdn=apt-prod-inge.aptrust.org host_eip=54.209.148.33
-apt-prod-rest hostname_name=apt-prod-restore hostname_fqdn=apt-prod-rest.aptrust.org host_eip=54.175.41.111
+apt-prod-repo hostname_name=apt-prod-repo hostname_fqdn=repository.aptrust.org host_eip=54.172.115.2
+apt-prod-inge  hostname_name=apt-prod-inge hostname_fqdn=apt-prod-inge.aptrust.org host_eip=54.209.148.33
+apt-prod-rest hostname_name=apt-prod-rest hostname_fqdn=apt-prod-rest.aptrust.org host_eip=54.175.41.111
 apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96
 
 [us-west-servers]
 [us-east-servers]
 
 [dpn-servers]
-dpn-test hostname=dpn-demo host_eip=54.88.231.192
-dpn-prod ansible_port=1984 hostname=dpn-prod hostname_fqdn=dpnlive.aptrust.org host_eip=54.86.37.226
+dpn-test hostname=dpn-demo hostname_fqdn=dpn-test.aptrust.org host_eip=54.88.231.192
+dpn-prod hostname=dpn-prod hostname_fqdn=dpn-prod.aptrust.org host_eip=54.86.37.226
 

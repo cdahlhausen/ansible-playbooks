@@ -12,7 +12,7 @@
 ##
 
 # This is defined in host vars (e.g. local-vagrant.yml)
-# system_default_user: ubuntu
+system_default_user: ubuntu
 
 include_vars: vault.yml
 # This variable is used as a conditional for new deploys, to not

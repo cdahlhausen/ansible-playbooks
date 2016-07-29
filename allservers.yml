@@ -10,6 +10,7 @@
       fail2ban_config_destemail: ops@aptrust.org
       fail2ban_config_maxretry: 1
 
+      sshd_port: 1984
 
     roles:
       - hostname

@@ -5,6 +5,7 @@
   ignore_errors: True
   tags: sendmail
   register: sendmail_installed
+  changed_when: False
 
 - name: Check if Service Exists
   stat: path=/etc/init.d/sendmail

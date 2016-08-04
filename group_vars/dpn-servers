@@ -1,1 +1,2 @@
 sshd_allow_users: ['*']
+sshd_port: 22

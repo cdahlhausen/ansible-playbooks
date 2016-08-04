@@ -26,3 +26,6 @@ rpm-build
 
 # Any distribution builds use this directory
 dist/
+
+# Ansible logfile
+# logfile

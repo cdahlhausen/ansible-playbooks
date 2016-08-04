@@ -62,3 +62,7 @@
     state: absent
   notify: restart apache
   when: apache_remove_default_vhost
+
+- name: Update logrotation.
+  template: src=logrotate_apache2.j2 dest=/etc/logrotate.d/apache2 owner=root group=root mode=0644
+

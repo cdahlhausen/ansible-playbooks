@@ -9,6 +9,15 @@
   when: ansible_os_family == 'RedHat'
   tags: package
 
+- name: Check if Apache is installed.
+  shell: apache2ctl status
+  ignore_errors: yes
+  register: apachestatus
+
+- name: Set fact
+  set_fact: apache_installed=True
+  when: apachestatus.rc == 0
+
 - name: configure fail2ban local jails
   template: src=jail.local.j2 dest=/etc/fail2ban/jail.local mode=0644
   notify: restart fail2ban

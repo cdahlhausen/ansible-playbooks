@@ -30,7 +30,7 @@ port     = ssh
 filter   = sshd-ddos
 logpath  = /var/log/auth.log
 
-
+{% if apache_installed %}
 [apache]
 enabled  = true
 port     = http,https
@@ -60,4 +60,5 @@ enabled = true
 port    = http,https
 filter  = php-url-fopen
 logpath = /var/log/apache*/*access.log
-
+{% else %}
+{% endif %}

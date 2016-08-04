@@ -17,3 +17,6 @@ fail2ban_config_destemail: root@localhost
 # Jails
 fail2ban_config_jail_ssh_enabled: yes
 fail2ban_config_jail_sshddos_enabled: yes
+
+# Set Apache fact to add Apache Jails if necessary
+apache_installed: False

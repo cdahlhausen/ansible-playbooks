@@ -121,6 +121,10 @@
     - unzip
     - tar
 
+- name: Install AWS CLI tools
+  become: yes
+  pip: name=awscli
+
 ##
 # Sendmail aliases workaround
 # This makes sure that root and ubuntu user emails

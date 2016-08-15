@@ -63,16 +63,28 @@
       shell: icinga2 node setup --ticket {{ hostvars[masteritem]['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ nodeitem }}.aptrust.org --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ nodeitem }}.aptrust.org --accept-config --accept-commands
       tags: ['nodeaction']
 
-    - name:  Allow remote commands and remote config.
+    - name: Update master zone
+      replace: >
+        dest="/etc/icinga2/zones.conf"
+        regexp='(.*)master(.*)'
+        replace="{{masteritem}}.aptrust.org"
+        backup=yes
+      register: masterzone
+      tags: ['nodeedit']
+
+    - name: Add global zone
+      tags: ['nodeedit']
       lineinfile: >
-            dest="/etc/icinga2/features-available/api.conf"
-            regexp="accept_{{item}} = "
-            line="accept_{{item}}=true"
-            state=present
-      with_items:
-            - config
-            - commands
-      tags: ['nodeaction']
+        dest="/etc/icinga2/zones.conf"
+        line="object Zone "global" { global = true }"
+        regexp="^object Zone "global" { global = true }"
+        state=present
+      register: globalzone
+
+    - name: Restart icinga2
+      tags: ['nodeedit']
+      when: masterzone|changed or globalzone|changed
+      service: name=icinga2 state=restarted
 
 - hosts: "{{ masteritem | default('monitoring_servers')}}"
   tags: ['masteraction']
@@ -87,8 +99,10 @@
      shell: icinga2 node update-config
 
    - name: insert/update zones.conf
+     tags: ['updatefiles']
      blockinfile:
          dest: /etc/icinga2/zones.conf
+         marker: "# {mark} ANSIBLE MANAGED BLOCK {{nodeitem}}"
          block: |
             object Endpoint "{{nodeitem}}.aptrust.org" {
                 host = "{{nodeitem}}.aptrust.org"
@@ -100,8 +114,10 @@
             }
 
    - name: insert/update hosts.conf
+     tags: ['updatefiles']
      blockinfile:
-         dest: "/etc/icinga2/zones.d/{{masteritem}}.aptrust.org"
+         dest: "/etc/icinga2/zones.d/{{masteritem}}.aptrust.org/hosts.conf"
+         marker: "# {mark} ANSIBLE MANAGED BLOCK {{nodeitem}}"
          block: |
             object Host "{{nodeitem}}.aptrust.org" {
                 import "Icinga Agent"
@@ -117,5 +133,6 @@
             }
 
    - name: restart icinga2
+     tags: ['updatefiles']
      service: name=icinga2 state=restarted
 

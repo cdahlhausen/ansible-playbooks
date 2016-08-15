@@ -34,7 +34,9 @@ apt-prod-rest hostname_name=apt-prod-rest hostname_fqdn=apt-prod-rest.aptrust.or
 apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96
 
 [us-west-servers]
+
 [us-east-servers]
+apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96
 
 [dpn-servers]
 dpn-test hostname=dpn-demo hostname_fqdn=dpn-test.aptrust.org host_eip=54.88.231.192

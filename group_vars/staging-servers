@@ -1,0 +1,9 @@
+---
+
+include_vars: vault.yml
+
+# Fedora
+fedora_db_user: "{{vault_fedora_user}}"
+fedora_db_pwd: "{{vault_fedora_dev_pwd}}"
+var_fedora_pid_namespace: 'aptrust'
+

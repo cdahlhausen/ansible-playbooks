@@ -13,8 +13,6 @@
        include <itl>
        include <plugins>
        include "features-enabled/*.conf"
-#       Disabled since icinga2 master is setting config top-down.
-#       include_recursive "conf.d"
      check_commands:
        check_nrpe: |
           "-H", "$address$",
@@ -33,7 +31,7 @@
   tasks:
    - name: generate ticket on the icinga master and save it as a variable
      # shell: /usr/sbin/icinga2 pki ticket --cn {{ masteritem }}
-     shell: /usr/sbin/icinga2 pki ticket --cn {{ nodeitem }}
+     shell: /usr/sbin/icinga2 pki ticket --cn {{ nodeitem }}.aptrust.org
      register: ticket
      tags: nodeaction
 
@@ -50,7 +48,7 @@
       tags: ['nodeaction']
 
     - name: create cert on new node
-      shell: icinga2 pki new-cert --cn {{ nodeitem }} --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt
+      shell: icinga2 pki new-cert --cn {{ nodeitem }}.aptrust.org --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt
       tags: ['nodeaction']
 
     - name: save the masters cert as trustedcert
@@ -62,7 +60,7 @@
       tags: ['nodeaction']
 
     - name: node setup
-      shell: icinga2 node setup --ticket {{ hostvars[masteritem]['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ nodeitem }} --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ nodeitem }}
+      shell: icinga2 node setup --ticket {{ hostvars[masteritem]['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ nodeitem }}.aptrust.org --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ nodeitem }}.aptrust.org --accept-config --accept-commands
       tags: ['nodeaction']
 
     - name:  Allow remote commands and remote config.
@@ -80,10 +78,10 @@
   tags: ['masteraction']
   tasks:
    - name: add host
-     shell: icinga2 node add {{ nodeitem }}
+     shell: icinga2 node add {{ nodeitem }}.aptrust.org
 
    - name: set host ip
-     shell: icinga2 node set {{ nodeitem }} --host {{ nodeitem }}.aptrust.org --port 5665
+     shell: icinga2 node set {{ nodeitem }}.aptrust.org --host {{ nodeitem }}.aptrust.org --port 5665
 
    - name: update node config
      shell: icinga2 node update-config

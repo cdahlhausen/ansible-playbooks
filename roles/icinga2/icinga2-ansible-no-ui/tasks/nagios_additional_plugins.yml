@@ -2,10 +2,14 @@
   - name: Clone additional plugins
     git: repo="https://github.com/harisekhon/nagios-plugins"
          dest="{{nagios_plugin_dir}}/nagios-plugins"
+         force=yes
+    register: gitpull
     tags: nagios-additional-plugins
 
   - name: Compile plugins and install requisites (takes a while)
-    shell: chdir="{{nagios_plugin_dir}}/nagios-plugins" make
+    shell: chdir="{{nagios_plugin_dir}}/nagios-plugins" make update
+    become: true
+    when: gitpull.changed
     tags: nagios-additional-plugins
 
   - name: Add custom plugins to constants.conf

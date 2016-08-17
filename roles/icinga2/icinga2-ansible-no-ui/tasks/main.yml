@@ -14,3 +14,7 @@
 - name: Install additional Nagios plugins
   include: nagios_additional_plugins.yml
   tags: nagios-additional-plugins
+
+- name: Install RDS plugin
+  copy: src=pmp-check-aws-rds.py dest="{{nagios_plugin_dir}}/check_aws_rds.py" owner=nagios group=nagios mode=0755
+  tags: ['rdsplugin']

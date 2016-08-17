@@ -1,15 +1,15 @@
 - hosts: apt-util
   vars:
-   hostitem: apt-prod-rest
+   hostitem: apt-prod-inge.aptrust.org
   tasks:
    - name: generate ticket on the icinga master and save it as a variable
      shell: /usr/sbin/icinga2 pki ticket --cn {{ hostitem }}
      register: ticket
 
-- hosts: apt-prod-rest
+- hosts: apt-prod-inge
 # {{ hostitem }}"
   vars:
-   hostitem: apt-prod-rest
+   hostitem: apt-prod-inge.aptrust.org
    master_hostname: apt-util.aptrust.org
    master_ip: "{{ hostvars['apt-util'].host_eip }}"
    master_port: 5665
@@ -29,12 +29,22 @@
     - name: node setup
       shell: "icinga2 node setup --ticket {{ hostvars['apt-util']['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ hostitem }} --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ hostitem }}"
 
+    - name:  Allow remote commands and remote config.
+      lineinfile: >
+            dest="/etc/icinga2/features-available/api.conf"
+            regexp="accept_{{item}} = "
+            line="accept_{{item}}=true"
+            state=present
+      with_items:
+            - config
+            - commands
+
 - hosts: apt-util
   vars:
-   hostitem: apt-prod-rest
+   hostitem: apt-prod-inge.aptrust.org
   tasks:
    - name: add host
      shell: icinga2 node add {{ hostitem }}
 
    - name: set host ip
-     shell: icinga2 node set {{ hostitem }} --host {{ hostitem }} --port 5665
+     shell: icinga2 node set {{ hostitem }} --host {{ hostitem }}.aptrust.org --port 5665

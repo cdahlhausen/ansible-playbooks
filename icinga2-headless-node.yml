@@ -5,6 +5,8 @@
 #
 - hosts: "{{ nodeitem | default('all')}}"
   gather_facts: True
+  vars_files:
+      - "group_vars/vault.yml"
   roles:
    - role: icinga2/icinga2-ansible-no-ui
      icinga2_conf_global: |
@@ -38,7 +40,6 @@
 - hosts: "{{ nodeitem | default('all')}}"
   tags: ['nodeaction']
   vars:
-#   hostitem: apt-prod-repo.aptrust.org
    master_hostname: apt-util.aptrust.org
    master_ip: "{{ hostvars['apt-util'].host_eip }}"
    master_port: 5665

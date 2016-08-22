@@ -7,6 +7,7 @@ rtfaws ansible_user=ubuntu hostname_name=rtf-aws system_default_user=ubuntu host
 [local-vagrant]
 fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
 fedora ansible_port=2200 ansible_user=vagrant hostname_name=fedora hostname_fqdn=fedora.aptrust.local host_eip=192.168.33.11
+pharos ansible_user=vagrant hostname_name=pharos hostname_fqdn=pharos.aptrust.local host_eip=192.168.33.12
 
 [monitoring_servers]
 # fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10

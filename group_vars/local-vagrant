@@ -2,7 +2,10 @@
 # group_vars/vagrant
 
 system_default_user: vagrant
+system_default_email: "test@aptrust.org"
 newdeploy: True
+
+sshd_port: 22
 
 ssl_cert: "{{vault_vagrant_ssl_cert}}"
 ssl_key: "{{vault_vagrant_ssl_key}}"

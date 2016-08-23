@@ -36,12 +36,12 @@ ruby_version: 2.1.5
 # Postfix variables
 ##
 postfix_aliases:
-    - { user: root, alias: ops@aptrust.org }
-    - { user: ubuntu, alias: ops@aptrust.org }
-    - { user: postmaster, alias: ops@aptrust.org }
+    - { user: root, alias: "{{system_default_email}}" }
+    - { user: ubuntu, alias: "{{system_default_email}}" }
+    - { user: postmaster, alias: "{{system_default_email}}" }
 postfix_AWS_aliases:
     - { user: "@{{ ansible_fqdn }}", alias: ops@aptrust.org }
-    - { user: "@{{ ansible_hostname }}", alias: ops@aptrust.org }
+    - { user: "@{{ ansible_hostname }}", alias: ops@aptrust.org  }
 
 postfix_relayhost: email-smtp.us-east-1.amazonaws.com
 postfix_relayhost_port: 25
@@ -51,7 +51,7 @@ postfix_relaytls: true
 postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
 postfix_sasl_pwd: "{{ vault_postfix_sasl_pwd }}"
 
-# AWS read-only user
+# AWS Read-only user
 aws_ro_user: "{{ vault_aws_ro_user }}"
 aws_ro_pwd: "{{ vault_aws_ro_pwd }}"
 
@@ -120,6 +120,7 @@ icinga_server: icinga.aptrust.org
 icinga2_db: "{{vault_icinga2_db}}"
 icinga2_db_user: "{{vault_icinga2_db_user}}"
 icinga2_db_pass: "{{vault_icinga2_db_pwd}}"
+
 
 icinga2_mysql_auth_user   : "{{vault_icinga2_mysql_auth_user}}"
 icinga2_mysql_auth_pass   : "{{vault_icinga2_mysql_auth_pass}}"

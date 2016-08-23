@@ -61,6 +61,7 @@
 - name: add deploy user private key
   become: yes
   become_user: "{{ system_default_user }}"
+  no_log: true
   copy: >
     content="{{aptdeploy_sshkey_private}}"
     dest=/home/{{system_default_user}}/.ssh/id_rsa
@@ -88,7 +89,7 @@
 
 
 # We might want to tighten this. Sudo pwd is helpful and more secure.
-# If ops/stage user ubuntu: could have restrictive settings.
+# For ops/stage user ubuntu: could have restrictive settings.
 - name: Modifiy admins so they need no sudo password
   become: yes
   tags: common

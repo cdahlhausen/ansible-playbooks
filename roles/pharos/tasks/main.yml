@@ -1,0 +1,20 @@
+---
+
+# This installs and deploys Pharos from github.com/APTrust/pharos
+#
+# Things to think about:
+# - distinguish new deploy vs update deploy
+# - distinguish local dev vs prod deploy
+# -- USE RAILS_ENV as distinguished var
+# - use bundler module
+#
+# - Use nginx vs Apache
+# - Use passenger as app server
+# - Check for EBS mounts existence
+# - Use AWS-CLI to mount correct EBS.
+# - Consider rollback option a la capistrano (symlink checked out version)
+# - Use deploy user for permissions
+# - check for db migration necessity
+# - cehck for asset compilation necessity
+# - make delpoyed files owned by deploy group
+

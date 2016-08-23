@@ -15,3 +15,5 @@ postfix_relaytls: false
 postfix_sasl_user: "postmaster@{{ ansible_domain }}"
 postfix_sasl_pwd: 'k8+haga4@#pR'
 postfix_inet_interfaces: all
+
+system_default_email: "root@{{ ansible_domain}}"

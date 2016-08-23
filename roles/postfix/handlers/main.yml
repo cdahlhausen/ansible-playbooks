@@ -12,7 +12,7 @@
 
 - name: test_email
   tags: test_email
-  shell: "echo 'This is a test message. Ignore me.'| mail -s 'System {{ ansible_hostname }} has been successfully provisioned with email.' ops@aptrust.org"
+  shell: "echo 'This is a test message. Ignore me.'| mail -s 'System {{ ansible_hostname }} has been sucessfully provisioned with mail services.' {{system_default_email}}"
 
 - name: restart postfix
   service:

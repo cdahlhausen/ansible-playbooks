@@ -115,7 +115,7 @@
         src: "solr.yml.j2"
         dest: "{{ fluctus_app_root }}/config/solr.yml"
         owner: "{{system_default_user}}"
-        group: "{{system_deploy_group}}"
+        group: "{{deploy_group}}"
         mode: 0644
     tags: fluctus
 
@@ -233,7 +233,7 @@
         src: "application.yml.j2"
         dest: "{{ fluctus_app_root }}/config/application.yml"
         owner: "{{system_default_user}}"
-        group: "{{system_deploy_group}}"
+        group: "{{deploy_group}}"
         mode: 0644
 
 # Set up Jetty/Solr

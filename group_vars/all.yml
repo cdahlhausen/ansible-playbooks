@@ -21,8 +21,8 @@ newdeploy: False
 
 system_default_email: "ops@aptrust.org"
 
-system_deploy_user: aptdeploy
-system_deploy_group: deploy
+deploy_user: aptdeploy
+deploy_group: deploy
 
 sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond]
 sshd_port: 1984

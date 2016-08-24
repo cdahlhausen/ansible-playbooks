@@ -9,7 +9,7 @@
   group: name=deploy state=present gid=1234
 
 - name: Adjust /srv permissions.
-  file: path=/srv owner="{{system_default_user}}" group="{{system_deploy_group}}" mode=0775
+  file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
 
 # TODO This should be revisited once all machines are ansible managed.
 # Currently this is skipped unless newdeploy is True. False by default.
@@ -17,7 +17,7 @@
   file:
     path: /mnt/aptrust
     owner: "{{system_default_user}}"
-    group: "{{system_deploy_group}}"
+    group: "{{deploy_group}}"
     mode: 0755
     state: directory
   when: (ansible_bios_version != 'Virtualbox' and newdeploy == True)

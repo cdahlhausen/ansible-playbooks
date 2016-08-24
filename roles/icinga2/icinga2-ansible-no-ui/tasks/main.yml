@@ -31,7 +31,7 @@
     dest: "/etc/boto.cfg"
     create: yes
     owner: "{{system_default_user}}"
-    group: "{{system_deploy_group}}"
+    group: "{{deploy_group}}"
     mode: 0660
     content: |
         [Credentials]

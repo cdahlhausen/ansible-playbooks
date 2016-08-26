@@ -1,3 +1,7 @@
 ---
 webserver: True
 hostname: test.aptrust.org
+
+# Setting explicit for passenger. New servers run ruby 2.3.1
+# This is just temporary until we replace fluctus and this server
+ruby_version: 2.1.5

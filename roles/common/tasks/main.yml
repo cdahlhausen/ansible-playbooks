@@ -6,14 +6,17 @@
   tags: common
 
 - name: Create Deploy group
+  become: yes
   group: name=deploy state=present gid=1234
 
 - name: Adjust /srv permissions.
+  become: yes
   file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
 
 # TODO This should be revisited once all machines are ansible managed.
 # Currently this is skipped unless newdeploy is True. False by default.
 - name: Create /mnt/aptrust if not mounted already.
+  become: yes
   file:
     path: /mnt/aptrust
     owner: "{{system_default_user}}"

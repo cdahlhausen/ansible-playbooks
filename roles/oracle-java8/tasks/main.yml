@@ -1,0 +1,43 @@
+---
+  - name: Setup oracle java deb repo
+    apt_repository: repo="ppa:webupd8team/java" update_cache=yes
+    become: true
+    when: ansible_distribution in [ 'Ubuntu' ]
+
+  - name: Add webupd8 repo apt-key
+    apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xC2518248EEA14886 state=present
+    become: true
+    when: ansible_distribution in [ 'Debian' ]
+
+  - name: Add webupd8 repository on Debian
+    become: true
+    apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu {{ ansible_distribution_release }} main' state=present
+    when: ansible_distribution in [ 'Debian' ]
+
+  - name: Add webupd8 repository (src) on Debian
+    become: true
+    apt_repository: repo='deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu {{ ansible_distribution_release }} main' state=present
+    when: ansible_distribution in [ 'Debian' ]
+
+  - name: Check if oracle-java is installed
+    command: dpkg-query -W 'oracle-java8-installer'
+    register: deb_check
+    ignore_errors: True
+    changed_when: False
+    failed_when: deb_check.rc == 1
+
+  - name: Accept Oracle license
+    become: true
+    debconf: name="{{oracle_installer_key}}" question='shared/{{oracle_license_key}}' value='true' vtype='select'
+    with_items: "{{ oracle_packages }}"
+    when: deb_check|failed
+
+    #  - name: Automatically select the Oracle License
+    # shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+    #  changed_when: false
+
+  - name: Install packages
+    become: true
+    apt: name={{item}} state=present update_cache=yes force=yes
+    with_items: "{{ oracle_packages }}"
+    when: deb_check|failed

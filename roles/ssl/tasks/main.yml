@@ -1,5 +1,6 @@
 # Setup SSL files
 - name: OpenSSL Installed
+  become: true
   apt: pkg=openssl state=present
   tags: ssl
 

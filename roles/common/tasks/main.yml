@@ -151,5 +151,5 @@
 
 - name: Add diskcheck cron job
   tags: common, cron
-  cron: name="Check disk space" minute="*/10" hour="*" job="/srv/ops_scripts/diskcheck.py" disabled=true
+  cron: name="Check disk space" minute="*/10" hour="*" job="/srv/ops_scripts/diskcheck.py" state=absent
 

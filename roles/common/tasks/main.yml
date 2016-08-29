@@ -123,6 +123,11 @@
     - unzip
     - tar
     - python-pip
+    - postgresql-client
+    - libpq-dev
+    - nodejs
+    - sqlite3
+    - libsqlite3-dev
 
 - name: Install AWS CLI tools
   become: yes

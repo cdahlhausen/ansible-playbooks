@@ -1,0 +1,58 @@
+---
+-   hosts: pharos
+    vars_files:
+        - "group_vars/vault.yml"
+
+    environment: "{{ruby_env}}"
+
+    vars:
+        playbook_name: pharos
+        # TODO: This should be determined by the git repo name at deploy time
+        ansistrano_deploy_to: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"
+        ansistrano_deploy_via: "git"
+        ansistrano_git_repo: "git@github.com:APTrust/pharos.git"
+        ansistrano_git_branch: "develop"
+        ansistrano_git_identity_key_path: "{{aptdeploy_sshkey_private}}"
+
+        # Used for solr role to symlink configurations
+#        fluctus_solrconfig: "{{fluctus_app_root}}/solr_conf/conf/solrconfig-4.7.xml"
+#       fluctus_solrschema: "{{fluctus_app_root}}/solr_conf/conf/schema.xml"
+        # TODO: Add a conditional to choose dev,prod based on environment (rails_env)
+#   THIS WILL AUTOMATICALLY imported per group_vars/development-servers
+#        fluctus_db_host: "{{var_fluctus_dev_db_host}}"
+#        fluctus_db_user: "{{var_fluctus_dev_db_user}}"
+#        fluctus_db_pwd: "{{var_fluctus_dev_db_pwd}}"
+
+
+## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user
+    # AWS CREDENTIALS
+    #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"
+    #AWS_SECRET_ACCESS_KEY: "{{ var_aws_secret_access_key }}"
+
+    #AWS_SES_USER: ""
+    #AWS_SES_PASSWORD: ""
+
+
+    roles:
+      - common
+      - hostname
+      - ssl
+#      Not sure why I use this instead of just the SSL role.
+#      Disabled for testing.
+#      - jdauphant.ssl-certs
+ #     - apache2
+      - {role: oracle-java8, tags: oracle-java8 }
+      - go
+      - zzet.rbenv
+      - cd3ef.nginx-passenger
+      - carlosbuenosvinos.ansistrano-deploy
+    #  - passenger
+    #  - tomcat7
+    #  - solr
+    #  - fedora
+#      - { role: pharos, force_update: yes}
+
+
+    tasks:
+    - name: Install required packages
+      debug: msg="Good day sir"

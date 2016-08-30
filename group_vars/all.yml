@@ -6,23 +6,27 @@
 # http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults
 ---
 
-
-##
-# System Default User
-##
-
-# This is defined in host vars (e.g. local-vagrant.yml)
-system_default_user: ubuntu
-
 include_vars: vault.yml
+
+# Global Environment
+ruby_env:
+    DEBIAN_FRONTEND: noninteractive
+    HOME: /home/{{ system_default_user }}
+    GOPATH: /home/{{ system_default_user }}/go
+    RBENV_ROOT: /home/{{system_default_user}}/.rbenv
+    PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# System default user varies. (e.g. local-vagrant.yml)
+# Therefore overwritten by group/host specific vars.
+system_default_user: 'ubuntu'
+system_default_email: "ops@aptrust.org"
+
 # This variable is used as a conditional for new deploys, to not
 # influence existing, non ansbile managed, machines adversely.
 newdeploy: False
 
-system_default_email: "ops@aptrust.org"
-
-deploy_user: aptdeploy
-deploy_group: deploy
+deploy_user: 'aptdeploy'
+deploy_group: 'deploy'
 
 sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond]
 sshd_port: 1984
@@ -31,6 +35,12 @@ sshd_port: 1984
 # Ruby Variables
 ##
 ruby_version: 2.1.5
+
+# RBenv
+rbenv_root: /home/{{system_default_user}}/.rbenv
+rbenv_owner: "{{system_default_user}}"
+rbenv_group: 'deploy'
+rbenv_users: ["{{system_default_user}}"]
 
 ##
 # Postfix variables
@@ -41,13 +51,14 @@ postfix_aliases:
     - { user: postmaster, alias: "{{system_default_email}}" }
 postfix_AWS_aliases:
     - { user: "@{{ ansible_fqdn }}", alias: ops@aptrust.org }
-    - { user: "@{{ ansible_hostname }}", alias: ops@aptrust.org  }
+    - { user: "@{{ ansible_hostname }}", alias: ops@aptrust.org }
 
 postfix_relayhost: email-smtp.us-east-1.amazonaws.com
 postfix_relayhost_port: 25
 postfix_relaytls: true
 
-# AWS IAM SES credentials (not access key):
+# AWS IAM SES sending-only credentials
+# (used for system emails)
 postfix_sasl_user: "{{ vault_postfix_sasl_user }}"
 postfix_sasl_pwd: "{{ vault_postfix_sasl_pwd }}"
 
@@ -55,7 +66,7 @@ postfix_sasl_pwd: "{{ vault_postfix_sasl_pwd }}"
 aws_ro_user: "{{ vault_aws_ro_user }}"
 aws_ro_pwd: "{{ vault_aws_ro_pwd }}"
 
-# Fluctus
+# Fluctus AWS SES sending-only
 fluctus_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
 fluctus_aws_ses_pwd: "{{ vault_fluctus_aws_ses_pwd }}"
 
@@ -81,6 +92,8 @@ ssl_cert_path: "{{ vault_ssl_cert_path }}"
 ssl_key_path: "{{ vault_ssl_key_path }}"
 ssl_interm_cert_path: "{{vault_ssl_interm_cert_path}}"
 ssl_interm_cert: "{{vault_ssl_interm_cert}}"
+# SSL role jdauphant.ss-certs
+ssl_certs_common_name: "{{ansible_fqdn}}"
 
 ##
 # AWS Credentials
@@ -128,3 +141,9 @@ icinga2_mysql_auth_pass   : "{{vault_icinga2_mysql_auth_pass}}"
 icinga2_db_auth           : "{{vault_icinga2_db_auth}}"
 icinga2_db_auth_user      : "{{vault_icinga2_db_auth_user}}"
 icinga2_db_auth_pass      : "{{vault_icinga2_db_auth_pass}}"
+
+# Fail2Ban settings
+fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='host_eip')|join (' ')}}"
+fail2ban_config_destemail: ops@aptrust.org
+fail2ban_config_maxretry: 1
+

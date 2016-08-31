@@ -75,14 +75,6 @@
 #    when: ansible_os_family == "Debian" and nginx_present|failed
 #    become: yes
 
-#  - name: Nginx | Uncomment server_names_hash_bucket_size
-#    lineinfile: dest=/etc/nginx/nginx.conf regexp="^(\s*)#\s*server_names_hash_bucket_size" line="\1server_names_hash_bucket_size 64;" backrefs=yes
-#    become: yes
-#    when: ansible_os_family == "Debian" and nginx_present|failed
-#    tags:
-#      - nginx
-#      - passenger
-
   - name: Nginx | Copy nginx.conf template
     become: yes
     template: src="nginx.conf.j2" dest="/etc/nginx/nginx.conf" owner=root group=root mode=0644
@@ -114,10 +106,4 @@
     shell: "/usr/bin/passenger-config validate-install"
     tags: verifypassenger
 
-#  - name: Nginx | Reload
-#    notify: nginx reload
-#    when: ansible_os_family == "Debian" and nginx_present|failed
-#    tags:
-#      - nginx
-#      - passenger
-#    become: yes
+  - include: vhost.yml

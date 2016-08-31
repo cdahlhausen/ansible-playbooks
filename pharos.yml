@@ -45,25 +45,23 @@
 
 
     roles:
-      - common
-      - hostname
-      - ssl
+      - {role: common, tags: common}
+      - {role: hostname, tags: common}
+      - {role: ssl, tags: ssl}
 #      Not sure why I use this instead of just the SSL role.
 #      Disabled for testing.
 #      - jdauphant.ssl-certs
  #     - apache2
       - {role: oracle-java8, tags: oracle-java8 }
-      - go
-      - zzet.rbenv
-      - cd3ef.nginx-passenger
-      - carlosbuenosvinos.ansistrano-deploy
+      - {role: go, tags: go}
+      - {role: zzet.rbenv, tags: rbenv}
+      - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
+      - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
     #  - passenger
     #  - tomcat7
     #  - solr
     #  - fedora
 #      - { role: pharos, force_update: yes}
-
-
     tasks:
     - name: Install required packages
       debug: msg="Good day sir"

@@ -1,10 +1,11 @@
 ---
 - name: ANSISTRANO | GIT | Ensure GIT deployment key is up to date
-  template:
-    src: "{{ ansistrano_git_identity_key_path }}"
+  copy:
+    content: "{{ ansistrano_git_private_key }}"
     dest: "{{ ansistrano_deploy_to }}/git_identity_key"
     mode: 0400
-  when: ansistrano_git_identity_key_path|trim != ""
+  no_log: true
+  when: ansistrano_git_private_key|trim != ""
 
 - name: ANSISTRANO | GIT | Update remote repository
   git:
@@ -15,7 +16,7 @@
     update: yes
     force: yes
   register: ansistrano_git_result
-  when: ansistrano_git_identity_key_path|trim == ''
+  when: ansistrano_git_private_key|trim == ''
 
 - name: ANSISTRANO | GIT | Update remote repository using SSH key
   git:
@@ -27,11 +28,11 @@
     force: yes
     key_file: "{{ ansistrano_deploy_to }}/git_identity_key"
   register: ansistrano_git_result
-  when: ansistrano_git_identity_key_path|trim != ""
+  when: ansistrano_git_private_key|trim != ""
 
 - name: ANSISTRANO | GIT | Shred GIT deployment key
   command: shred -f "{{ ansistrano_deploy_to }}/git_identity_key"
-  when: ansistrano_git_identity_key_path|trim != ""
+  when: ansistrano_git_private_key|trim != ""
 
 - name: ANSISTRANO | GIT | Set git_real_repo_tree
   set_fact:

@@ -14,16 +14,27 @@
         ansistrano_git_branch: "develop"
         ansistrano_git_identity_key_path: "{{aptdeploy_sshkey_private}}"
 
-        # Used for solr role to symlink configurations
-#        fluctus_solrconfig: "{{fluctus_app_root}}/solr_conf/conf/solrconfig-4.7.xml"
-#       fluctus_solrschema: "{{fluctus_app_root}}/solr_conf/conf/schema.xml"
-        # TODO: Add a conditional to choose dev,prod based on environment (rails_env)
-#   THIS WILL AUTOMATICALLY imported per group_vars/development-servers
-#        fluctus_db_host: "{{var_fluctus_dev_db_host}}"
-#        fluctus_db_user: "{{var_fluctus_dev_db_user}}"
-#        fluctus_db_pwd: "{{var_fluctus_dev_db_pwd}}"
+        nginx_vhosts:
+          - listen: "80 default_server"
+            server_name: "_"
+            extra_parameters: |
+              return 301 https://$host$request_uri;
+          - listen: "443 ssl"
+            server_name: "{{ansible_fqdn}}"
+            extra_parameters: |
+              root "{{ ansistrano_deploy_to }}"
+              PassengerEnabled on
+              PassengerBaseURI /
+              PassengerAppRoot "{{ ansistrano_deploy_to }}"
+              PassengerAppEnv "{{ RAILS_ENV }}"
+              PassengerFriendlyErrorPages off
+              PassengerAllowEncodedSlashes on
 
+              ssl    on;
+              ssl_certificate    "{{ ssl_cert_path }}";
+              ssl_certificate_key "{{ ssl_key_path }}";
 
+# THESE ARE SUPPLIED PER GROUP/HOST-VARS
 ## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"

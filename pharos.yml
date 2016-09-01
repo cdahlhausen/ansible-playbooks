@@ -22,13 +22,12 @@
           - listen: "443 ssl"
             server_name: "{{ansible_fqdn}}"
             extra_parameters: |
-              root "{{ ansistrano_deploy_to }}"
-              PassengerEnabled on
-              PassengerBaseURI /
-              PassengerAppRoot "{{ ansistrano_deploy_to }}"
-              PassengerAppEnv "{{ RAILS_ENV }}"
-              PassengerFriendlyErrorPages off
-              PassengerAllowEncodedSlashes on
+              root "{{ ansistrano_deploy_to }}";
+              passenger_enabled on;
+              passenger_base_uri /;
+              passenger_app_root "{{ ansistrano_deploy_to }}/current";
+              passenger_app_env "{{ RAILS_ENV }}";
+              passenger_friendly_error_pages off;
 
               ssl    on;
               ssl_certificate    "{{ ssl_cert_path }}";

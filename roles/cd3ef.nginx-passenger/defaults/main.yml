@@ -20,6 +20,7 @@ nginx_proxy_cache_path: ""
 
 nginx_remove_default_vhost: false
 
+nginx_vhost_filename: "{{ ansible_fqdn }}_{{playbook_name}}.conf"
 nginx_vhost_path: "/etc/nginx/sites-enabled"
 nginx_vhosts: []
 # Example vhost below, showing all available options:

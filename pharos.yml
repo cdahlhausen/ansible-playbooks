@@ -12,21 +12,22 @@
         ansistrano_deploy_via: "git"
         ansistrano_git_repo: "git@github.com:APTrust/pharos.git"
         ansistrano_git_branch: "develop"
-        ansistrano_git_identity_key_path: "{{aptdeploy_sshkey_private}}"
+        ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
 
+        # NGINX Webserver
         nginx_vhosts:
           - listen: "80 default_server"
-            server_name: "_"
+            server_name: "_;"
             extra_parameters: |
               return 301 https://$host$request_uri;
           - listen: "443 ssl"
-            server_name: "{{ansible_fqdn}}"
+            server_name: "{{ansible_fqdn}};"
             extra_parameters: |
               root "{{ ansistrano_deploy_to }}";
               passenger_enabled on;
               passenger_base_uri /;
-              passenger_app_root "{{ ansistrano_deploy_to }}/current";
-              passenger_app_env "{{ RAILS_ENV }}";
+              passenger_app_root "{{ ansistrano_deploy_to }}/current;"
+              passenger_app_env "{{ RAILS_ENV }};"
               passenger_friendly_error_pages off;
 
               ssl    on;

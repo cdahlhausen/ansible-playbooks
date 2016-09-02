@@ -1,2 +1,4 @@
 ---
+pharos_app_root: "/var/www/{{ansible_fqdn}}/pharos"
+
 

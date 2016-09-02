@@ -4,6 +4,8 @@
   file:
     state: directory
     path: "{{ ansistrano_deploy_to }}"
+    owner: "{{system_default_user}}"
+    group: "{{deploy_group}}"
 
 - name: ANSISTRANO | Set releases path
   command: echo "{{ ansistrano_deploy_to }}/{{ ansistrano_version_dir }}"
@@ -13,6 +15,8 @@
   file:
     state: directory
     path: "{{ ansistrano_releases_path.stdout }}"
+    owner: "{{system_default_user}}"
+    group: "{{deploy_group}}"
 
 - name: ANSISTRANO | Set shared path
   command: echo "{{ ansistrano_deploy_to }}/shared"
@@ -22,3 +26,6 @@
   file:
     state: directory
     path: "{{ ansistrano_shared_path.stdout }}"
+    owner: "{{system_default_user}}"
+    group: "{{deploy_group}}"
+

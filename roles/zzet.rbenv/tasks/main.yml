@@ -6,8 +6,8 @@
   when: ansible_pkg_mgr == 'apt'
 - include: yum_build_depends.yml
   when: ansible_pkg_mgr == 'yum'
-# - include: pacman_build_depends.yml # Arch Linux
-#   when: ansible_pkg_mgr == 'pacman'
+- include: pacman_build_depends.yml # Arch Linux
+  when: ansible_pkg_mgr == 'pacman'
 - include: homebrew_build_depends.yml
   when: ansible_os_family == 'Darwin'
 
@@ -16,7 +16,8 @@
 
 - name: checkout rbenv_repo for system
   become: yes
-  become_user: '{{ rbenv_owner }}'
+  become_user: root
+#  become_user: '{{ rbenv_owner }}'
   git: >
     repo={{ rbenv_repo }}
     dest={{ rbenv_root }}
@@ -29,7 +30,7 @@
 
 - name: create plugins directory for system
   become: yes
-  become_user: '{{ rbenv_owner }}'
+  become_user: root
   file: state=directory path={{ rbenv_root }}/plugins
   when: rbenv.env == "system"
   tags:
@@ -37,7 +38,9 @@
 
 - name: install plugins for system
   become: yes
-  become_user: '{{ rbenv_owner }}'
+#  This should be run by root,no?
+  become_user: root
+#  become_user: '{{ rbenv_owner }}'
   git: >
     repo={{ item.repo }}
     dest={{ rbenv_root }}/plugins/{{ item.name }}

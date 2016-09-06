@@ -1,2 +1,10 @@
 ---
 RAILS_ENV: development
+
+# Pharos
+pharos_db_host: "{{ vault_fluctus_dev_db_host}}"
+pharos_db_user: "{{ vault_fluctus_dev_db_user}}"
+pharos_db_pwd: "{{ vault_fluctus_dev_db_pwd}}"
+
+
+

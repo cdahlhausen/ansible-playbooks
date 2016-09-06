@@ -17,22 +17,22 @@
         # NGINX Webserver
         nginx_vhosts:
           - listen: "80 default_server"
-            server_name: "_;"
+            server_name: "_"
             extra_parameters: |
               return 301 https://$host$request_uri;
           - listen: "443 ssl"
-            server_name: "{{ansible_fqdn}};"
+            server_name: "{{ansible_fqdn}}"
+            root: "{{ ansistrano_deploy_to }}"
             extra_parameters: |
-              root "{{ ansistrano_deploy_to }}";
-              passenger_enabled on;
-              passenger_base_uri /;
-              passenger_app_root "{{ ansistrano_deploy_to }}/current;"
-              passenger_app_env "{{ RAILS_ENV }};"
-              passenger_friendly_error_pages off;
+                passenger_enabled on;
+                passenger_base_uri /;
+                passenger_app_root {{ ansistrano_deploy_to }}/current;
+                passenger_app_env {{ RAILS_ENV }};
+                passenger_friendly_error_pages off;
 
-              ssl    on;
-              ssl_certificate    "{{ ssl_cert_path }};"
-              ssl_certificate_key "{{ ssl_key_path }};"
+                ssl    on;
+                ssl_certificate    {{ ssl_cert_path }};
+                ssl_certificate_key {{ ssl_key_path }};
 
         # Pharos Role
         pharos_app_root: "{{ ansistrano_deploy_to }}/current"

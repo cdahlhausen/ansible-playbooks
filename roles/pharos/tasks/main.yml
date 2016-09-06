@@ -78,6 +78,41 @@
   - name: Install Pharos gems
     become: true
     become_user: "{{ system_default_user }}"
-# Check if user_install would need to be set. Vagrant doesn't run nginx or passenger, so not sure.
+# Check if user_install would need to be set. User Vagrant doesn't run nginx or passenger, so not sure.
     bundler: state=present chdir="{{pharos_app_root}}"
 
+# Create DB on RDS if it doesn't exist. AWS call to create. If Vagrant create DB locally.
+  - name: Create DB on RDS
+    rds:
+        command: create
+        instance_name: "pharos-{{RAILS_ENV}}"
+        instance_type: db.t2.small
+        size: 16
+        username: "{{pharos_db_user}}"
+        password: "{{pharos_db_pwd}}"
+        db_name: pharos
+        db_engine: postgres
+        region: us-east-1
+# TODO: dependent on environment. set default to demo
+# Note: security group name didn't work, just id. Security groups have to be configured via AWS web console at the moment.
+        vpc_security_groups: sg-65b4211f
+        aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+        aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+        tags:
+            Environment: "{{RAILS_ENV}}"
+    tags: createrds
+    register: new_database_facts
+# Note: Disabled during pharos deploy development.
+#    when: {{ansible_bios_version != 'VirtualBox'}}
+
+  - name: debug initial registrations
+    debug: var=new_database_facts
+    tags: createrds
+
+# TODO: db:create
+
+# TODO: rake db:migrate
+
+# TODO: rake pharos:setup
+
+# TOOD: rake assets:precompile

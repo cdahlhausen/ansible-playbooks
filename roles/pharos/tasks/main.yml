@@ -101,18 +101,26 @@
         tags:
             Environment: "{{RAILS_ENV}}"
     tags: createrds
-    register: new_database_facts
+    register: rds_database_facts
 # Note: Disabled during pharos deploy development.
 #    when: {{ansible_bios_version != 'VirtualBox'}}
 
   - name: debug initial registrations
-    debug: var=new_database_facts
+    debug: var=rds_database_facts
     tags: createrds
 
-# TODO: db:create
+  - name: get me an instance endpoint
+    debug: msg="{{rds_database_facts.instance.endpoint}}"
+    tags: createrds
+
+  - include: postgresql.yml
+    when: ansible_bios_version == 'VirtualBox' || postgres_local_db
+    tags: pgsql
 
 # TODO: rake db:migrate
 
 # TODO: rake pharos:setup
 
-# TOOD: rake assets:precompile
+# TODO: rake assets:precompile
+
+# TODO: copy passenger wrapper into place

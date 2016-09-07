@@ -1,4 +1,7 @@
 ---
 pharos_app_root: "/var/www/{{ansible_fqdn}}/pharos"
 
+# If true, postgresql is installed locally and used for pharos db
+pharos_local_db: False
+
 

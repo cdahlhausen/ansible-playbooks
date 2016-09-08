@@ -14,8 +14,10 @@ ssl_key_path: "{{vault_vagrant_ssl_key_path}}"
 
 
 # Pharos
-RAILS_ENV: 'demo'
-pharos_db_host: "{{ vault_pharos_demo_db_host}}"
-pharos_db_user: "{{ vault_pharos_demo_db_user}}"
-pharos_db_pwd: "{{ vault_pharos_demo_db_pwd}}"
+RAILS_ENV: 'development'
+pharos_db_user: "{{ vault_pharos_dev_db_user}}"
+pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"
+
+pharos_devise_key: "{{ vault_pharos_dev_devise_key}}"
+pharos_rails_key: "{{ vault_pharos_dev_rails_key}}"
 

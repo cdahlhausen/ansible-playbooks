@@ -2,9 +2,9 @@
 RAILS_ENV: development
 
 # Pharos
-pharos_db_host: "{{ vault_fluctus_dev_db_host}}"
-pharos_db_user: "{{ vault_fluctus_dev_db_user}}"
-pharos_db_pwd: "{{ vault_fluctus_dev_db_pwd}}"
+pharos_db_user: "{{ vault_pharos_dev_db_user}}"
+pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"
 
-
+pharos_devise_key: "{{ vault_pharos_dev_devise_key}}"
+pharos_rails_key: "{{ vault_pharos_dev_rails_key}}"
 

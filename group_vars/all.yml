@@ -66,6 +66,10 @@ postfix_sasl_pwd: "{{ vault_postfix_sasl_pwd }}"
 aws_ro_user: "{{ vault_aws_ro_user }}"
 aws_ro_pwd: "{{ vault_aws_ro_pwd }}"
 
+# AWS Read-only user
+aws_go_user: "{{ vault_aws_go_user }}"
+aws_go_pwd: "{{ vault_aws_go_pwd }}"
+
 # Fluctus AWS SES sending-only
 fluctus_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
 fluctus_aws_ses_pwd: "{{ vault_fluctus_aws_ses_pwd }}"

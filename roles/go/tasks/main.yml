@@ -75,14 +75,14 @@
     lineinfile: >
       dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
-      line="export AWS_ACCESS_KEY_ID={{ var_aws_access_key_id }}"
+      line="export AWS_ACCESS_KEY_ID={{ aws_go_user }}"
 
   - name: set aws secret key in .bash_profile
     no_log: true
     lineinfile:
       dest={% if ansible_distribution == "MacOSX" %}/home/{{system_default_user}}/.bash_profile{% else %}/home/{{system_default_user}}/.profile{% endif %}
       state=present
-      line="export AWS_SECRET_ACCESS_KEY={{ var_aws_secret_access_key }}"
+      line="export AWS_SECRET_ACCESS_KEY={{ aws_go_pwd }}"
 
   - name: set go path in .bash_profile
     lineinfile:

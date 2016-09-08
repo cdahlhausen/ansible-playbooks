@@ -1,0 +1,15 @@
+---
+# Creates local postgres database
+#
+
+- name: PHAROS | Create Postgres Pharos DB user
+  postgresql_user: name="{{pharos_db_user}}"
+                   password="{{pharos_db_pwd}}"
+
+- name: PHAROS | Create Postgres Pharos DB
+  postgresql_db: name="pharos-{{RAILS_ENV}}"
+                 encoding='UTF-8'
+                 owner="{{pharos_db_user}}"
+                 state=present
+
+

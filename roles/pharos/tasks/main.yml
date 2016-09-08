@@ -124,6 +124,10 @@
     tags: pgsql
 
 # TODO: rake db:migrate
+  - name: PHAROS | Migrate DB Schema
+    shell: chdir="{{pharos_app_root}}" bundle exec rake db:migrate
+    environment: "{{ pharos_environment }}"
+
 
 # TODO: rake pharos:setup
 

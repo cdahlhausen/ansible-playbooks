@@ -134,3 +134,9 @@
 # TODO: rake assets:precompile
 
 # TODO: copy passenger wrapper into place
+# TODO: set application.yml env configuration.
+  - name: Define application environment configuration
+    template:
+        src: application.yml.j2
+        dest: {{pharos_app_root}}/config/application.yml
+

@@ -18,7 +18,7 @@
     login_user: "{{postgresql_admin_user}}"
   become: yes
   become_user: "{{postgresql_admin_user}}"
-  with_items: postgresql_databases
+  with_items: "{{postgresql_databases}}"
   when: postgresql_databases|length > 0
 
 - name: PostgreSQL | Add extensions to the databases

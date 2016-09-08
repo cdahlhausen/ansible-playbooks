@@ -1,8 +1,9 @@
 ---
-  - name: Nginx | Check if is present
+  - name: Nginx | Check if nginx present
     command: test -x /usr/sbin/nginx
     when: ansible_os_family == "Debian"
     ignore_errors: yes
+    changed_when: False
     register: nginx_present
     tags: nginx
 
@@ -10,6 +11,7 @@
     command: test -x /usr/sbin/apache2
     when: ansible_os_family == "Debian"
     ignore_errors: yes
+    changed_when: False
     register: apache2_present
     tags: nginx
 
@@ -104,6 +106,8 @@
   - name: Verify Passenger install
     become: true
     shell: "/usr/bin/passenger-config validate-install"
+    register: passenger_verification
+    changed_when: "passenger_verification.rc == 1"
     tags: verifypassenger
 
   - include: vhost.yml

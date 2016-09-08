@@ -114,7 +114,7 @@
     tags: createrds
 
   - include: postgresql.yml
-    when: ansible_bios_version == 'VirtualBox' || postgres_local_db
+    when: ansible_bios_version == "VirtualBox" or postgres_local_db == true
     tags: pgsql
 
 # TODO: rake db:migrate

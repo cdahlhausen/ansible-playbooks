@@ -12,9 +12,8 @@ ssl_key: "{{vault_vagrant_ssl_key}}"
 ssl_cert_path: "{{vault_vagrant_ssl_cert_path}}"
 ssl_key_path: "{{vault_vagrant_ssl_key_path}}"
 
-
 # Pharos
-RAILS_ENV: 'development'
+RAILS_ENV: 'staging'
 pharos_db_user: "{{ vault_pharos_dev_db_user}}"
 pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"
 

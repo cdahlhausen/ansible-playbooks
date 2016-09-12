@@ -7,7 +7,7 @@
                    password="{{pharos_db_pwd}}"
 
 - name: PHAROS | Create Postgres Pharos DB
-  postgresql_db: name="pharos-{{RAILS_ENV}}"
+  postgresql_db: name="pharos_{{RAILS_ENV}}"
                  encoding='UTF-8'
                  owner="{{pharos_db_user}}"
                  state=present

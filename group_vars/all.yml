@@ -15,6 +15,7 @@ ruby_env:
     GOPATH: /home/{{ system_default_user }}/go
     RBENV_ROOT: /home/{{system_default_user}}/.rbenv
     PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    RAILS_ENV: "{{RAILS_ENV}}"
 
 # System default user varies. (e.g. local-vagrant.yml)
 # Therefore overwritten by group/host specific vars.
@@ -73,6 +74,9 @@ aws_go_pwd: "{{ vault_aws_go_pwd }}"
 # Fluctus AWS SES sending-only
 fluctus_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
 fluctus_aws_ses_pwd: "{{ vault_fluctus_aws_ses_pwd }}"
+
+pharos_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
+pharos_aws_ses_pwd: "{{ vault_fluctus_aws_ses_pwd }}"
 
 ##
 # User variables

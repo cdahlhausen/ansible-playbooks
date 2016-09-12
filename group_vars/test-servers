@@ -1,8 +1,8 @@
 ---
-RAILS_ENV: 'demo'
+RAILS_ENV: 'staging'
 
 # Pharos
-pharos_db_host: "{{ vault_pharos_demo_db_host}}"
+# pharos_db_host: "{{ vault_pharos_demo_db_host}}"
 pharos_db_user: "{{ vault_pharos_demo_db_user}}"
 pharos_db_pwd: "{{ vault_pharos_demo_db_pwd}}"
 

@@ -86,16 +86,18 @@
     rds:
         command: create
         instance_name: "pharos-{{RAILS_ENV}}"
-        instance_type: "{{ pharos_rds_instance_type | default(db.t2.small) }}"
+        instance_type: "{{ pharos_rds_instance_type | default('db.t2.small') }}"
         size: 16
         username: "{{pharos_db_user}}"
         password: "{{pharos_db_pwd}}"
-        db_name: pharos
+        db_name: "pharos_{{RAILS_ENV}}"
         db_engine: postgres
-        region: "{{pharos_rds_region | default(us-east-1)}}"
+        region: "{{pharos_rds_region | default('us-east-1')}}"
 # TODO: dependent on environment. set default to demo
 # Note: security group name didn't work, just id. Security groups have to be configured via AWS web console at the moment.
         vpc_security_groups: sg-65b4211f
+        wait_timeout: 600
+        wait: yes
         aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
         aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
         tags:

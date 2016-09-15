@@ -155,3 +155,5 @@ fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribu
 fail2ban_config_destemail: ops@aptrust.org
 fail2ban_config_maxretry: 1
 
+# Slack
+slack_token: "{{vault_slack_token}}"

@@ -4,7 +4,6 @@ dependencies:
     - { role: ssl }
     - { role: postfix }
     - { role: logwatch }
-    - { role: logwatch }
     - { role: fail2ban }
     - { role: sshd }
     - { role: unattended-upgrades }

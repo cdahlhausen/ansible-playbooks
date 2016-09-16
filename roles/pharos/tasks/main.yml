@@ -114,7 +114,7 @@
 # git log --pretty=format:'%h' -n 1
 # Note: This creates a dependency on ansistrano-deploy
   - name: Get Timestamp Fact
-    shell: cat "{{pharos_app_root}}/REVISION"
+    shell: tail -n1 "{{pharos_app_root}}/REVISION" | cut -c1-5
     register: pharos_timestamp
 
   - name: Set Release fact

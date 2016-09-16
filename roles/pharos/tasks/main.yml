@@ -130,13 +130,13 @@
         mode: 0644
 
   - name: Migrate DB Schema
-    command: chdir="{{pharos_app_root}}" RAILS_ENV="{{RAILS_ENV}}" bundle exec rake db:migrate
+    command: chdir="{{pharos_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
     tags: dbmigrate
 
   - name: Initial Pharos setup
-    shell: chdir="{{pharos_app_root}}" RAILS_ENV="{{RAILS_ENV}}" bundle exec rake pharos:setup
+    shell: chdir="{{pharos_app_root}}" bundle exec rake pharos:setup
     become: true
     become_user: "{{ system_default_user }}"
 
@@ -156,7 +156,3 @@
  #   become_user: "{{ system_default_user }}"
  #   when: "{{RAILS_ENV}} != production"
  #   tags: populatedb
-
-
-# TODO: copy passenger wrapper into place
-

@@ -17,17 +17,20 @@
 #        ansistrano_shared_paths: ["{{ansistrano_deploy_to}}/config"]
         ansistrano_keep_releases: 3
 
+        # Pharos Role
+        pharos_app_root: "{{ ansistrano_deploy_to }}/current"
         pharos_environment: "{{ruby_env}}"
 
         # NGINX Webserver
         nginx_vhosts:
           - listen: "80 default_server"
             server_name: "_"
-            extra_parameters: |
-              return 301 https://$host$request_uri;
+            return: 301 https://$host$request_uri
           - listen: "443 ssl"
             server_name: "{{ansible_fqdn}}"
-            root: "{{ ansistrano_deploy_to }}"
+            root: "{{ ansistrano_deploy_to }}/current/public"
+            access_log: "{{ansible_fqdn}}_access.log"
+            error_log: "{{ansible_fqdn}}_error.log"
             extra_parameters: |
                 passenger_enabled on;
                 passenger_base_uri /;
@@ -39,8 +42,6 @@
                 ssl_certificate    {{ ssl_cert_path }};
                 ssl_certificate_key {{ ssl_key_path }};
 
-        # Pharos Role
-        pharos_app_root: "{{ ansistrano_deploy_to }}/current"
 
         # RBenv
 #        rbenv:

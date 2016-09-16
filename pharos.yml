@@ -68,5 +68,11 @@
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: pharos, tags: pharos}
     tasks:
-    - name: Install required packages
-      debug: msg="Good day sir"
+
+    - name: Slack to all
+      slack:
+        token: "{{slack_token}}"
+        msg: "{{playbook}} deployment on {{ inventory_hostname }} completed"
+        icon_emoji: ":dog:"
+        channel: 'ops'
+      tags: [pharos,slack]

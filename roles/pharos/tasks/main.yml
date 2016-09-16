@@ -95,32 +95,18 @@
             Environment: "{{RAILS_ENV}}"
     tags: createrds
     register: rds_facts
-# Note: Disabled during pharos deploy development.
-#    when: {{ansible_bios_version != 'VirtualBox'}}
+    when: pharos_local_db == False
 
   - name: Set RDS db_host fact
     set_fact: pharos_db_host="{{rds_facts.instance.endpoint}}"
-    when: postgres_local_db == False
-    tags: createrds
+    when: pharos_local_db == False
 
   - name: Set local db_host fact
     set_fact: pharos_db_host="localhost"
-    when: postgres_local_db == true
-    tags: createrds
-
-  - name: get me an instance endpoint
-    debug: msg="{{rds_facts.instance.endpoint}}"
-    tags: createrds
+    when: pharos_local_db == true
 
   - include: postgresql.yml
-    when: ansible_bios_version == "VirtualBox" or postgres_local_db == true
-    tags: pgsql
-
-# TODO: rake db:migrate
-  - name: PHAROS | Migrate DB Schema
-    shell: chdir="{{pharos_app_root}}" bundle exec rake db:migrate
-    environment: "{{ pharos_environment }}"
-
+    when: ansible_bios_version == "VirtualBox" or pharos_local_db == true
 
 # TODO: rake pharos:setup
 

@@ -30,6 +30,10 @@
   register: ansistrano_git_result
   when: ansistrano_git_private_key|trim != ""
 
+- name: Set git hash fact
+  set_fact: app_git_hash="{{ansistrano_git_result.after}}"
+  when: ansistrano_git_result|changed
+
 - name: ANSISTRANO | GIT | Shred GIT deployment key
   command: shred -f "{{ ansistrano_deploy_to }}/git_identity_key"
   when: ansistrano_git_private_key|trim != ""

@@ -61,12 +61,6 @@
 
     roles:
       - {role: common, tags: common}
-      - {role: hostname, tags: common}
-      - {role: ssl, tags: ssl}
-#      Not sure why I use this instead of just the SSL role.
-#      Disabled for testing.
-#      - jdauphant.ssl-certs
- #     - apache2
       - {role: oracle-java8, tags: oracle-java8 }
       - {role: go, tags: go}
       - {role: zzet.rbenv, tags: rbenv}

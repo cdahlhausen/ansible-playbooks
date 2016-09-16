@@ -129,9 +129,12 @@
     - sqlite3
     - libsqlite3-dev
 
-- name: Install AWS CLI tools
+- name: Install AWS CLI tools and Boto
   become: yes
-  pip: name=awscli
+  pip: name={{item}}
+  with_items:
+    - awscli
+    - boto
 
 ##
 # Sendmail aliases workaround

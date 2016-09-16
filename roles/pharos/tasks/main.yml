@@ -45,20 +45,12 @@
         - packages
         - rails dependencies
 
-# Main playbook
-# - name: Setup nginx virtual host
-#
-# gem install bundler
-# bundle install
-# pharos:precompile_assets
-# pharos:
-#
 #   NOT SURE IF NECESSARY.
 #   - name: Change group ownership of fluctus to www-data
 #    file: path="{{ fluctus_app_root }}" state=directory recurse=yes group=www-data
 
 # Set the right ruby interpreter
-  - name: set ruby interpreters ruby_version
+  - name: Set Ruby interpreters ruby_version
     shell: rbenv local "{{ruby_version}}"
     args:
       chdir: "{{pharos_app_root}}"
@@ -71,7 +63,6 @@
   - name: Install Bundler
     become: true
     become_user: "{{ system_default_user }}"
-#  command: bash -lc "gem install bundler"
     gem:  name=bundler state=latest user_install=yes
 
 # Install Gems from Gemfile

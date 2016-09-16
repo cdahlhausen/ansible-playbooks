@@ -44,10 +44,10 @@
 
 
         # RBenv
-#        rbenv:
-#          env: user
-#          version: v1.0.0
-#          ruby_version: 2.3.1
+        rbenv:
+          env: user
+          version: v1.0.0
+          ruby_version: 2.3.1
 
 # THESE ARE SUPPLIED PER GROUP/HOST-VARS
 ## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user
@@ -72,7 +72,7 @@
     - name: Slack to all
       slack:
         token: "{{slack_token}}"
-        msg: "{{playbook}} deployment on {{ inventory_hostname }} completed"
+        msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
         icon_emoji: ":dog:"
         channel: 'ops'
       tags: [pharos,slack]

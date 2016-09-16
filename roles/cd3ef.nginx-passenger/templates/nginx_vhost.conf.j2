@@ -32,5 +32,9 @@ server {
 {% if vhost.extra_parameters is defined %}
     {{ vhost.extra_parameters }}
     {% endif %}
+
+{% if vhost.location is defined %}
+    location {{ vhost.location }}
+    {% endif %}
 }
 {% endfor %}

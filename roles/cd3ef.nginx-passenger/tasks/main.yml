@@ -69,13 +69,14 @@
 #    when: ansible_os_family == "Debian" and nginx_present|failed
 #    become: yes
 
-#  - name: Nginx | Disable default site
-#    file: path=/etc/nginx/sites-enabled/default state=absent
-#    tags:
-#      - nginx
-#      - passenger
+  - name: Nginx | Disable default site
+    file: path=/etc/nginx/sites-enabled/default state=absent
+    tags:
+      - nginx
+      - passenger
+# Note: nginx_present failed does not make sense as condition.
 #    when: ansible_os_family == "Debian" and nginx_present|failed
-#    become: yes
+    become: yes
 
   - name: Nginx | Copy nginx.conf template
     become: yes

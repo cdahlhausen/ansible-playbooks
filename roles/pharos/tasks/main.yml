@@ -108,11 +108,17 @@
   - include: postgresql.yml
     when: ansible_bios_version == "VirtualBox" or pharos_local_db == true
 
-# TODO: rake pharos:setup
+# Note: Temporary workaround for a revision. Should probably use the
+# git ref hash to have something more intelligble
+# git log --pretty=format:'%h' -n 1
+# Note: This creates a dependency on ansistrano-deploy
+  - name: Get Timestamp Fact
+    shell: cat "{{pharos_app_root}}/REVISION"
+    register: pharos_timestamp
 
-# TODO: rake assets:precompile
+  - name: Set Release fact
+    set_fact: PHAROS_RELEASE="{{pharos_timestamp.stdout}}"
 
-# TODO: copy passenger wrapper into place
 # TODO: set application.yml env configuration.
   - name: Define application environment configuration
     template:

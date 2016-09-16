@@ -55,9 +55,10 @@
     args:
       chdir: "{{pharos_app_root}}"
       creates: "{{pharos_app_root}}/.ruby-version"
+    environment: "{{ruby_env}}"
     become: yes
     become_user: "{{ system_default_user }}"
-    tags: rbenv
+    tags: rbenv_pharos
 
 # Install Bundler
   - name: Install Bundler

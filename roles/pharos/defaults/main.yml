@@ -7,4 +7,4 @@ pharos_db: "pharos_{{RAILS_ENV}}"
 # If true, postgresql is installed locally and used for pharos db
 pharos_local_db: False
 
-
+PHAROS_RELEASE: "Unknown"

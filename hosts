@@ -18,8 +18,8 @@ apt-test-repo hostname_name=apt-test-repo hostname_fqdn=test.aptrust.org  host_e
 apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
 # apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org # Fluctus Staging server
 
-# [staging-servers]
-# apt-staging hostname_name=staging hostname_fqdn=staging.aptrust.org host_eip=52.4.156.18 # Fluctus Staging server
+[staging-servers]
+apt-stag-repo hostname_name=apt-stag-repo hostname_fqdn=staging.aptrust.org host_eip=52.4.156.18 # Fluctus Staging server
 
 
 [development-servers]

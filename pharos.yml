@@ -31,8 +31,8 @@
           - listen: "443 ssl"
             server_name: "{{ansible_fqdn}}"
             root: "{{ ansistrano_deploy_to }}/current/public"
-            access_log: "{{ansible_fqdn}}_access.log"
-            error_log: "{{ansible_fqdn}}_error.log"
+            access_log: "/var/log/nginx/{{ansible_fqdn}}_access.log"
+            error_log: "/var/log/nginx/{{ansible_fqdn}}_error.log"
             extra_parameters: |
                 passenger_enabled on;
                 passenger_base_uri /;

@@ -50,24 +50,24 @@
      - passenger
     tags: passenger
 
-#  - name: Nginx | Create sites available/enabled directories
-#    file: path={{item}} state=directory mode=0755
-#    with_items:
-#      - /etc/nginx/sites-available
-#      - /etc/nginx/sites-enabled
-#    when: ansible_os_family == "Debian" and nginx_present|failed
-#    tags:
-#      - nginx
-#      - passenger
-#    become: yes
+  - name: Nginx | Create sites available/enabled directories
+    file: path={{item}} state=directory mode=0755
+    with_items:
+      - /etc/nginx/sites-available
+      - /etc/nginx/sites-enabled
+    when: ansible_os_family == "Debian" and nginx_present|failed
+    tags:
+      - nginx
+      - passenger
+    become: yes
 
-#  - name: Nginx | Configure include sites-enabled
-#    lineinfile: dest=/etc/nginx/nginx.conf regexp=".*sites-enabled.*" line="    include /etc/nginx/sites-enabled/*;" insertbefore="}" state=present
-#    tags:
-#      - nginx
-#      - passenger
-#    when: ansible_os_family == "Debian" and nginx_present|failed
-#    become: yes
+  - name: Nginx | Configure include sites-enabled
+    lineinfile: dest=/etc/nginx/nginx.conf regexp=".*sites-enabled.*" line="    include /etc/nginx/sites-enabled/*;" insertbefore="}" state=present
+    tags:
+      - nginx
+      - passenger
+    when: ansible_os_family == "Debian" and nginx_present|failed
+    become: yes
 
   - name: Nginx | Disable default site
     file: path=/etc/nginx/sites-enabled/default state=absent

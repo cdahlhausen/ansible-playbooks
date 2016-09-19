@@ -150,9 +150,9 @@
     service: name=nginx state=restarted
 
 # Note: This wipes the database first. But provides fixtures that pharos:setup does not.
-#  - name: PHAROS | Populate DB with fixtures
- #   shell: chdir="{{pharos_app_root}}" rake pharos:populate_db
- #   become: true
- #   become_user: "{{ system_default_user }}"
- #   when: "{{RAILS_ENV}} != production"
- #   tags: populatedb
+  - name: PHAROS | Populate DB with fixtures
+    shell: chdir="{{pharos_app_root}}" rake pharos:populate_db
+    become: true
+    become_user: "{{ system_default_user }}"
+    when: {{RAILS_ENV}} == 'development'
+    tags: populatedb

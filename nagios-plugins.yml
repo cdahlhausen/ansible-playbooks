@@ -1,0 +1,21 @@
+---
+  - hosts: apt-util
+    user: "{{ system_default_user }}"
+    become: yes
+    vars_files:
+      - "group_vars/vault.yml"
+    vars:
+        plugin_dir: "/usr/lib/nagios/plugins/nagios-plugins"
+    tasks:
+        - name: Clone additional plugins
+          git: repo="https://github.com/harisekhon/nagios-plugins"
+               dest="{{plugin_dir}}"
+
+        - name: make me
+          shell: chdir="{{plugin_dir}}" make
+
+        - name: Move check plugins in main plugin_dir
+          shell: chdir="{{plugin_dir}}" make
+
+
+

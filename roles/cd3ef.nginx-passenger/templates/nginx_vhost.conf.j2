@@ -8,6 +8,10 @@ server {
     server_name {{ vhost.server_name }};
     {% endif %}
 
+    location ~ \.(php|html)$ {
+            deny  all;
+    }
+
 {% if vhost.root is defined %}
     root {{ vhost.root }};
     {% endif %}

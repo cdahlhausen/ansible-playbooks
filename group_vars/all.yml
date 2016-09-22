@@ -100,6 +100,9 @@ ssl_cert_path: "{{ vault_ssl_cert_path }}"
 ssl_key_path: "{{ vault_ssl_key_path }}"
 ssl_interm_cert_path: "{{vault_ssl_interm_cert_path}}"
 ssl_interm_cert: "{{vault_ssl_interm_cert}}"
+ssl_chain: "{{vault_ssl_chain}}"
+ssl_chain_path: "{{vault_ssl_chain_path}}"
+
 # SSL role jdauphant.ss-certs
 ssl_certs_common_name: "{{ansible_fqdn}}"
 

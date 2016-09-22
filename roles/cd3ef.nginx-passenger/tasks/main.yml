@@ -41,6 +41,16 @@
     when: ansible_os_family == "Debian" and nginx_present|failed
     tags: passenger
 
+  - name: Generate 2048bit DHE param
+    shell: nohup openssl dhparam -out dhparam.pem 2048 &
+    args:
+        chdir: "/etc/ssl/certs"
+        creates: "/etc/ssl/certs/dhparam.pem"
+    async: 120
+    poll: 0
+    become: yes
+    tags: dheparam
+
   - name: Ruby | Install Nginx extra and Phusion Passenger
     become: yes
     apt: state=present update_cache=yes pkg="{{item}}"

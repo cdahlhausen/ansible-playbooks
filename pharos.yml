@@ -1,5 +1,5 @@
 ---
--   hosts: pharos
+-   hosts: apt-stag-repo
     vars_files:
         - "group_vars/vault.yml"
 
@@ -41,9 +41,9 @@
                 passenger_friendly_error_pages off;
 
                 ssl    on;
-                ssl_certificate    {{ ssl_cert_path }};
+                # SSL Chain if Nginx, SSL cert if Apache2
+                ssl_certificate    {{ssl_chain_path}};
                 ssl_certificate_key {{ ssl_key_path }};
-
 
         # RBenv
         rbenv:

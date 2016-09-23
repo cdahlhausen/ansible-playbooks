@@ -3,6 +3,9 @@
 # To pass in hostitem and masteritem (both just subdomain part) run:
 # ansible-playbook icinga2-headless-node.yml --extra-vars "masteritem=apt-util nodeitem=apt-test-repo"
 #
+# Initial ansible run fails because icinga2 restart fails due to missing pki certs
+# Run this playbook twice to have everything set up correctly.
+
 - hosts: "{{ nodeitem | default('all')}}"
   gather_facts: True
   vars_files:
@@ -67,11 +70,11 @@
     - name: Update master zone
       replace: >
         dest="/etc/icinga2/zones.conf"
-        regexp='(.*)master(.*)'
-        replace="{{masteritem}}.aptrust.org"
+        regexp='(.*)(master)(.*)'
+        replace='\1{{masteritem}}.aptrust.org\3'
         backup=yes
       register: masterzone
-      tags: ['nodeedit']
+      tags: ['nodeedit','nodemasteredit']
 
     - name: Add global zone
       tags: ['nodeedit']

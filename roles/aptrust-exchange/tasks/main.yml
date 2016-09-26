@@ -1,0 +1,19 @@
+---
+
+# Install required packages
+# go 
+#
+- name: Exchange | Install required packages
+  become: yes
+  apt: pkg={{item}} state=present update_cache=yes
+  with_items:
+      - python-pip
+  environment:
+     DEBIAN_FRONTEND: noninteractive
+
+
+
+
+# Checkout Exchange repo
+# This may be done using ansistrano. Alternatively we can just update the current version and restart supervisor services first. Is rollback necessary? Probably.
+

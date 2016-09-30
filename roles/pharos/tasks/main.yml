@@ -8,22 +8,13 @@
 # -- USE RAILS_ENV as distinguished var
 # - use bundler module
 #
-# X Use nginx vs Apache
-#   - nginx
-# X Use passenger as app server
-#   - nginx-passenger installed.
-# - Setup nginx vhost
 # ## EBS only necessary for old architecture with fedora and solr.
 # - Check for EBS mounts existence
 #   -- add conditional to avoid when running virtualbox
 # - Use AWS-CLI to mount correct EBS.
 #   -- add conditional to avoid when running virtualbox
 # - Consider rollback option a la capistrano (symlink checked out version)
-# - Use deploy user for permissions
-# - check for db migration necessity
-# - cehck for asset compilation necessity
-# - make delpoyed files owned by deploy group
-#   -- should be achieved by using deploy user to check out app.
+# - check for asset compilation necessity
 
   - name: install required packages
     become: yes
@@ -44,10 +35,6 @@
     tags:
         - packages
         - rails dependencies
-
-#   NOT SURE IF NECESSARY.
-#   - name: Change group ownership of fluctus to www-data
-#    file: path="{{ fluctus_app_root }}" state=directory recurse=yes group=www-data
 
 # Set the right ruby interpreter
   - name: Set Ruby interpreters ruby_version
@@ -109,18 +96,14 @@
   - include: postgresql.yml
     when: ansible_bios_version == "VirtualBox" or pharos_local_db == true
 
-# Note: Temporary workaround for a revision. Should probably use the
-# git ref hash to have something more intelligble
-# git log --pretty=format:'%h' -n 1
 # Note: This creates a dependency on ansistrano-deploy
-  - name: Get Timestamp Fact
+  - name: Get Git Hash Fact
     shell: tail -n1 "{{pharos_app_root}}/REVISION" | cut -c1-5
     register: pharos_timestamp
 
   - name: Set Release fact
     set_fact: PHAROS_RELEASE="{{pharos_timestamp.stdout}}"
 
-# TODO: set application.yml env configuration.
   - name: Define application environment configuration
     template:
         src: application.yml.j2
@@ -144,10 +127,10 @@
     shell: chdir="{{pharos_app_root}}" bundle exec rake assets:precompile
     become: true
     become_user: "{{ system_default_user }}"
+    notify: reload nginx
 
-# TODO: Create a handler instead and test for webserver type (apache vs nginx)
-  - name: Restart Webserver
-    service: name=nginx state=restarted
+#  - name: Restart Webserver
+ #   service: name=nginx state=restarted
 
 # Note: This wipes the database first. But provides fixtures that pharos:setup does not.
   - name: PHAROS | Populate DB with fixtures

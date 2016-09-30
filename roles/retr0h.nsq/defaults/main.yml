@@ -21,7 +21,6 @@ nsq_data_path: /var/spool/nsq
 
 nsq_nsqadmin_server: false
 nsq_nsqadmin_user: nsqadmin
-nsq_nsqadmin_user: nsqadmin
 nsq_nsqadmin_cmd: "{{ nsq_dir }}/nsqadmin"
 nsq_nsqadmin_http_port: 4171
 nsq_nsqadmin_interface: lo

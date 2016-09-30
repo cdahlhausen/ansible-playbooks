@@ -13,4 +13,4 @@ ansistrano_remove_rolled_back: yes
 
 # Sends anonymous stats to the www.ansistrano.com servers
 # You can disallow it by just setting this parameter to "no" in your playbook
-ansistrano_allow_anonymous_stats: yes
+ansistrano_allow_anonymous_stats: no

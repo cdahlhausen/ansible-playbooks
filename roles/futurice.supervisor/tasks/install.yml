@@ -1,4 +1,8 @@
 ---
+
+- name: Install pip
+  apt: name=python-pip state=latest
+
 - pip: name=supervisor
 
 - group: name={{supervisor_user_group}} state=present

@@ -1,0 +1,47 @@
+---
+-   hosts: pharos
+    vars_files:
+        - "group_vars/vault.yml"
+
+    environment: "{{ruby_env}}"
+
+    vars:
+        playbook_name: exchange
+        ansistrano_deploy_to: "/srv/{{playbook_name}}"
+        ansistrano_deploy_via: "git"
+        ansistrano_git_repo: "git@github.com:APTrust/exchange.git"
+        ansistrano_git_branch: "master"
+        ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
+#        ansistrano_shared_paths: ["config"]
+        ansistrano_keep_releases: 3
+
+        # RBenv
+        rbenv:
+          env: user
+          version: v1.0.0
+          ruby_version: 2.3.1
+
+        # Golang
+        golang_workspace_user: "{{system_default_user}}"
+
+    roles:
+      - {role: common, tags: common}
+      - {role: oracle-java8, tags: oracle-java8 }
+      - {role: futurice.supervisor, tags: supervisor}
+      - {role: sansible.golang, tags: golang}
+      - {role: retr0h.nsq, tags: nsq}
+#      - {role: go, tags: go}
+#       - {role: zzet.rbenv, tags: rbenv}
+#      - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
+#      - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
+#     - {role: pharos, tags: pharos}
+#      - {role: aptrust_exchange, tags: exchange }
+    tasks:
+
+    - name: Slack to all
+      slack:
+        token: "{{slack_token}}"
+        msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
+        icon_emoji: ":dog:"
+        channel: 'ops'
+      tags: [pharos,slack]

@@ -14,7 +14,7 @@
         ansistrano_git_branch: "develop"
         ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
 # TODO: Test shared paths and see if any more tasks have to be set for this to work.
-        ansistrano_shared_paths: ["config"]
+        ansistrano_shared_paths: ["log"]
         ansistrano_keep_releases: 3
         ansistrano_before_symlink_shared_tasks_file: "roles/pharos/tasks/before-symlink.yml"
 

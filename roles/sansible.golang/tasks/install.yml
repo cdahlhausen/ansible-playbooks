@@ -43,3 +43,9 @@
     - "export PATH=$GOPATH/bin:$PATH"
     - "export PATH=$PATH:/usr/local/go/bin"
   when: golang_workspace_user is defined
+
+- name: Add glide repo
+  apt_repository: repo='ppa:masterminds/glide' state=present
+
+- name: Install glide dependency manager
+  apt: name=glide state=present update_cache=yes cache_valid_time=3600

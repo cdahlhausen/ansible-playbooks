@@ -1,11 +1,12 @@
 ---
 
+# Check if GO is installed, if not fail. Alternatively include go role in meta.
+
 # Install required packages
-# go 
-#
-- name: Exchange | Install required packages
+# Needed for supervisor?
+- name: Install required packages
   become: yes
-  apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg="{{item}}" state=present update_cache=yes
   with_items:
       - python-pip
       - libmagic-dev

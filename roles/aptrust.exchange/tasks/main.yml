@@ -34,3 +34,31 @@
 # Checkout Exchange repo
 # This may be done using ansistrano. Alternatively we can just update the current version and restart supervisor services first. Is rollback necessary? Probably.
 
+- name: Checkout exchange repo
+  become_user: "{{system_default_user}}"
+  shell: "cd $GOPATH && go get -d github.com/APTrust/exchange/..."
+  environment: "{{go_env}}"
+  register: checkout
+
+- name: debug checkout
+  debug: var=checkout
+
+# go install exchange binaries.
+- name: Install go binaries
+  # shell: "go install ./apps/..."
+  shell: "cd $GOPATH/src/github.com/APTrust/exchange && go install $(glide novendor)"
+  environment: "{{go_env}}"
+
+# Old bagman had a build script.
+# Possible just run a go build ./... to build all binaries.
+
+
+# TODO: Copy new binaries
+
+# TODO: Copy supervisorctl templates in etc, if already exist skip.
+
+# TODO: Restart supervisor group gracefully
+
+# Tell Andrew not to use bash_profile but .profile or bashrc.
+# Ask Andrew if we want to use supervisor instead of bash scripts? Prod env it would be useful. Dev env might not be as useful. Do we want to keep scripts like in bagman?
+#

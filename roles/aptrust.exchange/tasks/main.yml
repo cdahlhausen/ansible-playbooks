@@ -54,14 +54,30 @@
   failed_when: "'no buildable Go source files' not in build_result.stderr"
   tags: buildgo
 
-# Old bagman had a build script.
-# Possible just run a go build ./... to build all binaries.
+- name: debug build install
+  debug: var=build_result
 
+# Get list of compiled go binaries
+- name: Get list of compiled go binaries
+  command: "ls $GOPATH/bin"
+  register: dir_out
+  tags: listfiles
 
-# TODO: Copy new binaries
+- name: Create the Supervisor config file for Exchange
+  template: src=supervisor.conf.j2
+            dest=/etc/supervisor/conf.d/{{ item }}.conf
+  with_items: "{{dir_out.stdout_lines}}"
+  tags: listfiles
 
 # TODO: Copy supervisorctl templates in etc, if already exist skip.
 
+# TODO: Create a supervisor template.
+
+#- name: Re-read the Supervisor config files
+#  command: supervisorctl reread
+
+#- name: Update Supervisor to add the app in the process group
+#  command: supervisorctl update
 # TODO: Restart supervisor group gracefully
 
 # Tell Andrew not to use bash_profile but .profile or bashrc.

@@ -17,8 +17,6 @@
     src: "/usr/local/src/{{ golang_tarball }}"
 
 - name: Create Golang code folders for workspace user
-  become : yes
-  become_user: "{{ golang_workspace_user }}"
   file:
     dest: "{{ item }}"
     recurse: yes

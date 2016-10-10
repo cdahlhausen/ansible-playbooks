@@ -39,15 +39,20 @@
   shell: "cd $GOPATH && go get -d github.com/APTrust/exchange/..."
   environment: "{{go_env}}"
   register: checkout
+  tags: buildgo
 
 - name: debug checkout
   debug: var=checkout
 
 # go install exchange binaries.
-- name: Install go binaries
+- name: Build and install go binaries
   # shell: "go install ./apps/..."
   shell: "cd $GOPATH/src/github.com/APTrust/exchange && go install $(glide novendor)"
   environment: "{{go_env}}"
+  when: checkout.changed
+  register: build_result
+  failed_when: "'no buildable Go source files' not in build_result.stderr"
+  tags: buildgo
 
 # Old bagman had a build script.
 # Possible just run a go build ./... to build all binaries.

@@ -16,6 +16,7 @@ ruby_env:
     RBENV_ROOT: /home/{{system_default_user}}/.rbenv
     PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     RAILS_ENV: "{{RAILS_ENV}}"
+    GO_ENV: "{{GO_ENV}}"
 
 go_env: "{{ruby_env}}"
 

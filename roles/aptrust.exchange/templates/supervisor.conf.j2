@@ -1,0 +1,16 @@
+[program:{{ goapp_name }}]
+command={{ goapp_bin_path }}/{{ item }} -config={% if goapp_name == "nsq_service" %}{{ goapp_cfg_path }}/nsq/{{GO_ENV}}.json{% else %}{{ goapp_cfg_path }}/{{GO_ENV}}.json{% endif %}
+
+
+autostart=true
+autorestart=true
+startretries=10
+startsecs=5
+directory={{ goapp_bin_path }}
+
+
+user={{ system_default_user }}
+;; redirect_stderr=true
+stdout_logfile={{ goapp_name }}.log
+stdout_logfile_maxbytes=50MB
+stdout_logfile_backups=10

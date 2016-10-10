@@ -17,9 +17,12 @@ ruby_env:
     PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     RAILS_ENV: "{{RAILS_ENV}}"
 
+go_env: "{{ruby_env}}"
+
 # System default user varies. (e.g. local-vagrant.yml)
 # Therefore overwritten by group/host specific vars.
 system_default_user: 'ubuntu'
+system_default_group: 'deploy'
 system_default_email: "ops@aptrust.org"
 
 # This variable is used as a conditional for new deploys, to not

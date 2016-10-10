@@ -166,4 +166,5 @@
 
 # https://github.com/ansible/ansible-modules-core/issues/4064
 - name: Ansible bug workaround
-  file: path=/etc/apt/sources.list.d recurse=yes mode=0644
+  file: path=/etc/apt/sources.list.d recurse=yes mode=0755
+  tags: bugg

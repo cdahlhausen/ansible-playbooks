@@ -3,7 +3,7 @@
     vars_files:
         - "group_vars/vault.yml"
 
-    environment: "{{ruby_env}}"
+    environment: "{{go_env}}"
 
     vars:
         playbook_name: exchange

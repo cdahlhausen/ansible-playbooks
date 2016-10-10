@@ -1,1 +1,5 @@
 ---
+goapp_name: exchange
+goapp_bin_path: $GOPATH/bin
+goapp_cfg_path: $GOPATH/src/github.com/APTrust/{{goapp_name}}/config
+

@@ -23,6 +23,8 @@
     dest: "{{ item }}"
     recurse: yes
     state: directory
+    owner: "{{system_default_user}}"
+    group: "{{system_default_group}}"
   with_items:
     - "/home/{{ golang_workspace_user }}/go/src/github.com"
     - "/home/{{ golang_workspace_user }}/go/pkg"

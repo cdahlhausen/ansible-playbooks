@@ -5,8 +5,10 @@
 
     environment: "{{go_env}}"
 
+
     vars:
         playbook_name: exchange
+#        newdeploy: true
 #        ansistrano_deploy_to: "/srv/{{playbook_name}}"
 #        ansistrano_deploy_via: "git"
 #        ansistrano_git_repo: "git@github.com:APTrust/exchange.git"
@@ -25,10 +27,8 @@
       - {role: oracle-java8, tags: oracle-java8 }
       - {role: futurice.supervisor, tags: supervisor}
       - {role: sansible.golang, tags: golang}
+      - {role: retr0h.nsq, tags: nsq}
       - {role: aptrust.exchange, tags: exchange}
-#       - {role: retr0h.nsq, tags: nsq}
-#      - {role: go, tags: go}
-#       - {role: zzet.rbenv, tags: rbenv}
 #      - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
 #      - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
 #     - {role: pharos, tags: pharos}

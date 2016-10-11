@@ -67,19 +67,30 @@
   template: src=supervisor.conf.j2
             dest=/etc/supervisor/conf.d/{{ item }}.conf
   with_items: "{{dir_out.stdout_lines}}"
+  register: supervisor_config_files
   tags: listfiles
 
 # TODO: Copy supervisorctl templates in etc, if already exist skip.
 
-# TODO: Create a supervisor template.
+# When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist
+ - name: Reread/Add supervisor app config files
+  supervisorctl: name="{{item}}" state=present
+  with_items: "{{dir_out.stdout_lines}}"
+  register: supervisor_config_update
+  when: supervisor_config_files.changed
+
+# When state = restarted, the module will call supervisorctl update then call supervisorctl restart.
+- name: Update and restart supervisor processes
+  supervisorctl: name="{{item}}" state=restarted
+  when: supervisor_config_files.changed
+  with_items: "{{dir_out.stdout_lines}}"
 
 #- name: Re-read the Supervisor config files
 #  command: supervisorctl reread
+#  register: supervisor_config_update
+#  when: supervisor_config_files.changed
 
-#- name: Update Supervisor to add the app in the process group
+# - name: Update Supervisor to add the app in the process group
+#  become: true
 #  command: supervisorctl update
-# TODO: Restart supervisor group gracefully
-
-# Tell Andrew not to use bash_profile but .profile or bashrc.
-# Ask Andrew if we want to use supervisor instead of bash scripts? Prod env it would be useful. Dev env might not be as useful. Do we want to keep scripts like in bagman?
-#
+#  when: supervisor_config_update.changed

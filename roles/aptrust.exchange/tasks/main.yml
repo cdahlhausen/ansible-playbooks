@@ -56,12 +56,10 @@
   changed_when: "'no buildable Go source files' not in build_result.stderr"
   tags: buildgo
 
-- name: debug build install
-  debug: var=build_result
-
+# Note: This seems like a weak reference. Refactor this.
 # Get list of compiled go binaries
 - name: Get list of compiled go binaries
-  command: "ls $GOPATH/bin"
+  shell: "ls $GOPATH/bin | grep -v apt_bucket_reader"
   register: dir_out
   tags: listfiles
 

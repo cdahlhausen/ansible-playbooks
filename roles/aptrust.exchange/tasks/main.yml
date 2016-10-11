@@ -46,12 +46,14 @@
 
 # go install exchange binaries.
 - name: Build and install go binaries
-  # shell: "go install ./apps/..."
-  shell: "cd $GOPATH/src/github.com/APTrust/exchange && go install $(glide novendor)"
+  shell: "go install $(glide novendor)"
+  args:
+    chdir: "{{goapp_src_path}}"
   environment: "{{go_env}}"
   when: checkout.changed
   register: build_result
   failed_when: "'no buildable Go source files' not in build_result.stderr"
+  changed_when: "'no buildable Go source files' not in build_result.stderr"
   tags: buildgo
 
 - name: debug build install

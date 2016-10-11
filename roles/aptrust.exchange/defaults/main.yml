@@ -1,5 +1,5 @@
 ---
 goapp_name: exchange
-goapp_bin_path: $GOPATH/bin
-goapp_cfg_path: $GOPATH/src/github.com/APTrust/{{goapp_name}}/config
-
+goapp_bin_path: "{{ go_env.GOPATH }}/bin"
+goapp_src_path: "{{ go_env.GOPATH }}/src/github.com/APTrust/{{goapp_name}}"
+goapp_cfg_path: "{{ goapp_src_path }}/config"

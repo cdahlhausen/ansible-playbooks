@@ -31,18 +31,18 @@
     - "export AWS_ACCESS_KEY_ID={{aws_go_user}}"
     - "export AWS_SECRET_ACCESS_KEY={{aws_go_pwd}}"
 
+# TODO: Mount EBS volumes or create directories if VirtualBox.
+
+
 # Checkout Exchange repo
 # This may be done using ansistrano. Alternatively we can just update the current version and restart supervisor services first. Is rollback necessary? Probably.
 
 - name: Checkout exchange repo
   become_user: "{{system_default_user}}"
-  shell: "cd $GOPATH && go get -d github.com/APTrust/exchange/..."
+  shell: "go get -d github.com/APTrust/exchange/..."
   environment: "{{go_env}}"
   register: checkout
   tags: buildgo
-
-- name: debug checkout
-  debug: var=checkout
 
 # go install exchange binaries.
 - name: Build and install go binaries

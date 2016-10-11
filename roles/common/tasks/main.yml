@@ -18,12 +18,18 @@
 - name: Create /mnt/aptrust if not mounted already.
   become: yes
   file:
-    path: /mnt/aptrust
+    path: "{{item}}"
     owner: "{{system_default_user}}"
     group: "{{deploy_group}}"
     mode: 0755
     state: directory
+  with_items:
+    - /mnt/aptrust
+    - /mnt/apt
+    - /mnt/dpn/staging
+    - /mnt/dpn/logs
   when: (ansible_bios_version != 'Virtualbox' and newdeploy == True)
+  tags: aptmount
 
 ##
 # Adding common users to the system.

@@ -12,6 +12,6 @@ directory={{ goapp_bin_path }}
 
 user={{ system_default_user }}
 redirect_stderr=true
-stdout_logfile={{ item  }}.log
+stdout_logfile={{goapp_log_path}}/{{ item }}.log
 stdout_logfile_maxbytes=50MB
 stdout_logfile_backups=10

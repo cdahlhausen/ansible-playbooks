@@ -1,6 +1,6 @@
 ---
 # nsq_version: 0.2.30
-nsq-0.3.8.darwin-amd64.go1.6.2.tar.gz
+# nsq-0.3.8.darwin-amd64.go1.6.2.tar.gz
 nsq_version: 0.3.8
 # nsq_go_version: go1.3
 nsq_go_version: go1.6.2
@@ -72,7 +72,7 @@ nsq_nsqd_broadcast_address: "{{ nsq_nsqd_addr }}"
 nsq_nsqd_e2e_processing_latency_percentile: 1.0,0.99,0.95
 nsq_nsqd_e2e_processing_latency_window_time: 10m0s
 
-nsq_nsqlookupd_server: false
+nsq_nsqlookupd_server: true
 nsq_nsqlookupd_user: nsqlookupd
 nsq_nsqlookupd_role: nsqlookupd
 nsq_nsqlookupd_cmd: "{{ nsq_dir }}/nsqlookupd"

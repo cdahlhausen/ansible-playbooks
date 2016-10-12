@@ -5,6 +5,6 @@
 # Run Rails migration
 #
 
-. ~/.bash_profile
+. ~/.profile
 cd ~/aptrust/fluctus
 bundle exec rake db:migrate

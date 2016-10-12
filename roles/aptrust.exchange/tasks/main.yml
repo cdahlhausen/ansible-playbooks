@@ -99,6 +99,10 @@
   when: supervisor_config_files.changed
   with_items: "{{dir_out.stdout_lines}}"
 
+- name: Ensure Exchange services are running
+  supervisorctl: name="{{item}}" state=started
+  with_items: "{{dir_out.stdout_lines}}"
+
 #- name: Re-read the Supervisor config files
 #  command: supervisorctl reread
 #  register: supervisor_config_update

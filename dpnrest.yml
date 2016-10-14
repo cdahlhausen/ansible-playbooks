@@ -19,5 +19,5 @@
       - https
       - rsync
       - dpn
-      - go
+      - aptrust.bagman
       - psdash

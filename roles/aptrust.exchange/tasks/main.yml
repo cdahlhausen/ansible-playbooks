@@ -32,7 +32,26 @@
     - "export AWS_SECRET_ACCESS_KEY={{aws_go_pwd}}"
 
 # TODO: Mount EBS volumes or create directories if VirtualBox.
-
+- name: Create EBS volume directories
+  become: yes
+  file:
+    path: "{{item}}"
+    owner: "{{system_default_user}}"
+    group: "{{deploy_group}}"
+    mode: 0755
+    state: directory
+  with_items:
+    - /mnt/apt
+    - /mnt/apt/data
+    - /mnt/apt/logs
+    - /mnt/apt/restore
+    - /mnt/apt/replication
+    - /mnt/dpn
+    - /mnt/dpn/data
+    - /mnt/dpn/logs
+    - /mnt/dpn/restore
+    - /mnt/dpn/replication
+  # when: (ansible_bios_version != 'Virtualbox' and newdeploy == True)
 
 # Checkout Exchange repo
 # This may be done using ansistrano. Alternatively we can just update the current version and restart supervisor services first. Is rollback necessary? Probably.
@@ -89,7 +108,7 @@
   service: name="{{item}}" state=stopped enabled=no
   ignore_errors: true
   with_items:
-    - nsqd
+#    - nsqd
     - nsqadmin
     - nsqlookupd
 

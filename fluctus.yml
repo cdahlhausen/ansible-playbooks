@@ -115,7 +115,6 @@
       - jdauphant.ssl-certs
       - apache2
       - oracle-java7
-      - go
       - zzet.rbenv
       - passenger
       - tomcat7

@@ -26,11 +26,9 @@
   with_items:
     - /mnt/aptrust
     - /mnt/apt
-    - /mnt/dpn/staging
-    - /mnt/dpn/logs
+    - /mnt/dpn
   when: (ansible_bios_version != 'Virtualbox' and newdeploy == True)
   tags: aptmount
-
 ##
 # Adding common users to the system.
 #

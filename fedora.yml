@@ -114,7 +114,6 @@
       - ssl
       - jdauphant.ssl-certs
       - oracle-java7
-      - go
       - tomcat7
       - solr
       - fedora

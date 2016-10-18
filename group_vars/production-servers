@@ -7,3 +7,13 @@ pharos_db_pwd: "{{ vault_pharos_prod_db_pwd}}"
 
 pharos_devise_key: "{{ vault_pharos_prod_devise_key}}"
 pharos_rails_key: "{{ vault_pharos_prod_rails_key}}"
+
+# AWS RDS
+pharos_rds_instance_type: "db.m4.large"
+pharos_vpc_sec_group: "sg-65b4211f"
+pharos_db_size: '100'
+#pharos_rds_subnet: "subnet-59e8dc1f"
+pharos_rds_subnet: "default"
+
+# GO
+GO_ENV: 'production'

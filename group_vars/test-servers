@@ -1,5 +1,5 @@
 ---
-RAILS_ENV: 'staging'
+RAILS_ENV: 'demo'
 
 # Pharos
 # pharos_db_host: "{{ vault_pharos_demo_db_host}}"

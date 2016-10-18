@@ -112,8 +112,17 @@
         group: "{{deploy_group}}"
         mode: 0644
 
+  - name: Load DB Schema at first deploy
+    shell: "bundle exec rake db:schema:load RAILS_ENV={{RAILS_ENV}} && touch log/.schema_loaded"
+    args:
+        chdir: "{{pharos_app_root}}"
+        creates: "{{pharos_app_root}}/log/.schema_loaded"
+    become: true
+    become_user: "{{ system_default_user }}"
+    tags: dbmigrate
+
   - name: Migrate DB Schema
-    command: chdir="{{pharos_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
+    shell: chdir="{{pharos_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
     tags: dbmigrate

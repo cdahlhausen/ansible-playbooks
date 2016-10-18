@@ -117,12 +117,12 @@
 
 # Creates institutions, roles and users
   - name: Initial Pharos setup
-    shell: chdir="{{pharos_app_root}}" bundle exec rake pharos:setup
+    shell: chdir="{{pharos_app_root}}" bundle exec rake pharos:setup RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
 
   - name: Assets precompile
-    shell: chdir="{{pharos_app_root}}" bundle exec rake assets:precompile
+    shell: chdir="{{pharos_app_root}}" bundle exec rake assets:precompile RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
     notify: reload nginx

@@ -1,20 +1,6 @@
 ---
 
 # This installs and deploys Pharos from github.com/APTrust/pharos
-#
-# Things to think about:
-# - distinguish new deploy vs update deploy
-# - distinguish local dev vs prod deploy
-# -- USE RAILS_ENV as distinguished var
-# - use bundler module
-#
-# ## EBS only necessary for old architecture with fedora and solr.
-# - Check for EBS mounts existence
-#   -- add conditional to avoid when running virtualbox
-# - Use AWS-CLI to mount correct EBS.
-#   -- add conditional to avoid when running virtualbox
-# - Consider rollback option a la capistrano (symlink checked out version)
-# - check for asset compilation necessity
 
   - name: install required packages
     become: yes
@@ -112,6 +98,7 @@
         group: "{{deploy_group}}"
         mode: 0644
 
+# Only loads DB schema at first deploy. Skipped when .schema_loaded exists
   - name: Load DB Schema at first deploy
     shell: "bundle exec rake db:schema:load RAILS_ENV={{RAILS_ENV}} && touch log/.schema_loaded"
     args:
@@ -127,6 +114,7 @@
     become_user: "{{ system_default_user }}"
     tags: dbmigrate
 
+# Creates institutions, roles and users
   - name: Initial Pharos setup
     shell: chdir="{{pharos_app_root}}" bundle exec rake pharos:setup
     become: true
@@ -137,9 +125,6 @@
     become: true
     become_user: "{{ system_default_user }}"
     notify: reload nginx
-
-#  - name: Restart Webserver
- #   service: name=nginx state=restarted
 
 # Note: This wipes the database first. But provides fixtures that pharos:setup does not.
   - name: PHAROS | Populate DB with fixtures

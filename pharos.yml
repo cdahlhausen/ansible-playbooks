@@ -1,5 +1,5 @@
 ---
--   hosts: apt-stag-repo
+-   hosts: apt-demo-repo
     vars_files:
         - "group_vars/vault.yml"
 

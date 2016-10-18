@@ -14,6 +14,7 @@ pharos_vpc_sec_group: "sg-65b4211f"
 pharos_db_size: '100'
 #pharos_rds_subnet: "subnet-59e8dc1f"
 pharos_rds_subnet: "default"
+pharos_rds_multi_az: 'yes'
 
 # GO
 GO_ENV: 'production'

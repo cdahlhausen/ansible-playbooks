@@ -13,10 +13,12 @@ pharos ansible_user=vagrant hostname_name=pharos hostname_fqdn=pharos.aptrust.lo
 # fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
 apt-util hostname_name=apt-util hostname_fqdn=icinga.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
 
+# APTrust 1.0 world
 [test-servers]
 apt-test-repo hostname_name=apt-test-repo hostname_fqdn=test.aptrust.org  host_eip='54.84.48.153' # Fluctus Server
 apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
 
+# APTrust 2.0 world
 [demo-servers]
 #apt-stag-repo hostname_name=apt-stag-repo hostname_fqdn=staging.aptrust.org host_eip=54.208.113.138
 apt-demo-repo hostname_name=apt-demo-repo hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218

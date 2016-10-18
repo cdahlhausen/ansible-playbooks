@@ -1,0 +1,27 @@
+---
+
+include_vars: vault.yml
+
+# Fedora
+fedora_db_user: "{{vault_fedora_user}}"
+fedora_db_pwd: "{{vault_fedora_dev_pwd}}"
+var_fedora_pid_namespace: 'aptrust'
+
+ruby_version: 2.3.1
+
+# Pharos
+RAILS_ENV: 'demo'
+pharos_db_user: "{{ vault_pharos_dev_db_user}}"
+pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"
+
+pharos_devise_key: "{{ vault_pharos_dev_devise_key}}"
+pharos_rails_key: "{{ vault_pharos_dev_rails_key}}"
+
+# AWS RDS
+pharos_rds_instance_type: "db.t2.medium"
+pharos_db_size: '16'
+pharos_vpc_sec_group: "sg-18a4ac62"
+pharos_rds_subnet: "demo"
+
+# GO
+GO_ENV: 'demo'

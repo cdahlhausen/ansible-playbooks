@@ -1,6 +1,10 @@
 ---
 RAILS_ENV: 'production'
 
+# External Filesystems (EBS, EFS)
+efs_mount: false
+ebs_mount: false
+
 # Pharos
 pharos_db_user: "{{ vault_pharos_prod_db_user}}"
 pharos_db_pwd: "{{ vault_pharos_prod_db_pwd}}"
@@ -15,6 +19,8 @@ pharos_db_size: '100'
 #pharos_rds_subnet: "subnet-59e8dc1f"
 pharos_rds_subnet: "default"
 pharos_rds_multi_az: 'yes'
+# us-east-1d
+#
 
 # GO
 GO_ENV: 'production'

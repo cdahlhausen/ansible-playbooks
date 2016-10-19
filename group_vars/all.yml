@@ -26,6 +26,7 @@ system_default_user: 'ubuntu'
 system_default_group: 'deploy'
 system_default_email: "ops@aptrust.org"
 
+# TODO: Revisit this to see if it's still a necessary conditional.
 # This variable is used as a conditional for new deploys, to not
 # influence existing, non ansbile managed, machines adversely.
 newdeploy: False
@@ -35,6 +36,10 @@ deploy_group: 'deploy'
 
 sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond]
 sshd_port: 1984
+
+# External Filesystems (EBS, EFS)
+efs_mount: False
+ebs_mount: False
 
 ##
 # Ruby Variables

@@ -1,3 +1,42 @@
+##
+# Install base packages
+#
+- name: install base packages
+  become: yes
+  tags: packages
+  apt: pkg={{ item }} state=latest update_cache=true
+  with_items:
+    - sudo
+    - curl
+    - mailutils
+    - wget
+    - build-essential
+    - software-properties-common
+    - git-core
+    - tig
+    - tmux
+    - htop
+    - iotop
+    - bmon
+    - vim-tiny
+    - emacs23-nox
+    - unzip
+    - tar
+    - python-pip
+    - postgresql-client
+    - libpq-dev
+    - nodejs
+    - sqlite3
+    - libsqlite3-dev
+    - nfs-common
+
+- name: Install AWS CLI tools and Boto
+  become: yes
+  pip: name={{item}}
+  with_items:
+    - awscli
+    - boto
+
 # Message of the day explaining server is under control of Ansible.
 #
 - name: MOTD
@@ -12,10 +51,10 @@
 - name: Adjust /srv permissions.
   become: yes
   file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
-
+#
 # TODO This should be revisited once all machines are ansible managed.
 # Currently this is skipped unless newdeploy is True. False by default.
-- name: Create /mnt/aptrust if not mounted already.
+- name: Create /mnt/apt if not mounted already.
   become: yes
   file:
     path: "{{item}}"
@@ -27,8 +66,27 @@
     - /mnt/aptrust
     - /mnt/apt
     - /mnt/dpn
-  when: (ansible_bios_version != 'Virtualbox' and newdeploy == True)
+  when: (ansible_bios_version != 'Virtualbox' and (efs_mount == True or ebs_mount == True))
   tags: aptmount
+
+- name: Identify my availabiltiy zone
+  shell: "curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone"
+  register: my_aws_az
+  when: (ansible_bios_version != 'Virtualbox')
+
+# TODO Setup EBS mounting
+
+# Mount EFS volume.
+- name: Mount EFS volume
+  mount:
+    src: "{{my_aws_az}}.fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
+    name: "/mnt/apt"
+    fstype: nfs
+    opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
+    state: mounted
+  when: (ansible_bios_version != 'Virtualbox' and efs_mount == True)
+  tags: nfsmount
+
 ##
 # Adding common users to the system.
 #
@@ -101,44 +159,6 @@
   become: yes
   tags: common
   lineinfile: dest=/etc/sudoers state=present regexp='^%admin ALL\=' line='%admin ALL=(ALL) NOPASSWD:ALL' validate='visudo -cf %s'
-
-##
-# Install base packages
-#
-- name: install base packages
-  become: yes
-  tags: packages
-  apt: pkg={{ item }} state=latest update_cache=true
-  with_items:
-    - sudo
-    - curl
-    - mailutils
-    - wget
-    - build-essential
-    - software-properties-common
-    - git-core
-    - tig
-    - tmux
-    - htop
-    - iotop
-    - bmon
-    - vim-tiny
-    - emacs23-nox
-    - unzip
-    - tar
-    - python-pip
-    - postgresql-client
-    - libpq-dev
-    - nodejs
-    - sqlite3
-    - libsqlite3-dev
-
-- name: Install AWS CLI tools and Boto
-  become: yes
-  pip: name={{item}}
-  with_items:
-    - awscli
-    - boto
 
 ##
 # Sendmail aliases workaround

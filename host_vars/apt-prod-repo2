@@ -1,0 +1,6 @@
+---
+
+# External Filesystems (EBS, EFS)
+efs_mount: true
+ebs_mount: false
+

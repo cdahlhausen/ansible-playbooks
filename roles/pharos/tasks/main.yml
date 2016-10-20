@@ -57,7 +57,7 @@
         password: "{{pharos_db_pwd}}"
         db_name: "pharos_{{RAILS_ENV}}"
         db_engine: postgres
-        multi_zone: "{{pharos_rds_multi_az | default(no)}}"
+        multi_zone: "{{pharos_rds_multi_az | default('no')}}"
         region: "{{pharos_rds_region | default('us-east-1')}}"
 # TODO: dependent on environment. set default to demo
 # Note: security group name didn't work, only id. Security groups have to be configured manually via AWS web console at the moment.

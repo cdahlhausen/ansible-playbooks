@@ -21,7 +21,7 @@ apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.
 # APTrust 2.0 world
 [demo-servers]
 #apt-stag-repo hostname_name=apt-stag-repo hostname_fqdn=staging.aptrust.org host_eip=54.208.113.138
-apt-demo-repo hostname_name=apt-demo-repo hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218
+apt-demo-repo hostname_name=apt-demo-repo hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo
 # apt-stag-inre hostname_name=apt-stag-inre hostname_fqdn=inre.aptrust.org host_eip=52.55.165.75
 
 
@@ -32,6 +32,8 @@ apt-prod-repo hostname_name=apt-prod-repo hostname_fqdn=repository.aptrust.org h
 apt-prod-inge  hostname_name=apt-prod-inge hostname_fqdn=apt-prod-inge.aptrust.org host_eip=54.209.148.33
 apt-prod-rest hostname_name=apt-prod-rest hostname_fqdn=apt-prod-rest.aptrust.org host_eip=54.175.41.111
 apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96
+apt-prod-repo21 hostname_name=apt-prod-repo hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
+
 
 [us-west-servers]
 

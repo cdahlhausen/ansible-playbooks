@@ -1,9 +1,6 @@
 ---
 RAILS_ENV: 'production'
 
-# External Filesystems (EBS, EFS)
-efs_mount: false
-ebs_mount: false
 
 # Pharos
 pharos_db_user: "{{ vault_pharos_prod_db_user}}"
@@ -20,8 +17,14 @@ pharos_db_size: '100'
 pharos_rds_subnet: "prod-private"
 pharos_rds_multi_az: 'yes'
 pharos_rds_region: 'us-east-1a'
-# us-east-1d
-#
+
+# AWS EFS/DBS
+# External Filesystems
+efs_mount: false
+ebs_mount: false
+# EFS PROD
+efs_mount_uri: ".fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
+
 
 # GO
 GO_ENV: 'production'

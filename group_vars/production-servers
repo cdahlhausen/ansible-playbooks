@@ -1,6 +1,6 @@
 ---
 RAILS_ENV: 'production'
-
+ruby_version: '2.3.1'
 
 # Pharos
 pharos_db_user: "{{ vault_pharos_prod_db_user}}"
@@ -11,12 +11,12 @@ pharos_rails_key: "{{ vault_pharos_prod_rails_key}}"
 
 # AWS RDS
 pharos_rds_instance_type: "db.m4.large"
-pharos_vpc_sec_group: "sg-2d293957"
+pharos_vpc_sec_group: "sg-27544d5d"
 pharos_db_size: '100'
 # Private Subnets for DB and Backend services
 pharos_rds_subnet: "prod-private"
 pharos_rds_multi_az: 'yes'
-pharos_rds_region: 'us-east-1a'
+pharos_rds_region: 'us-east-1'
 
 # AWS EFS/DBS
 # External Filesystems

@@ -16,8 +16,7 @@
 
 - name: checkout rbenv_repo for system
   become: yes
-  become_user: root
-#  become_user: '{{ rbenv_owner }}'
+  become_user: '{{ rbenv_owner }}'
   git: >
     repo={{ rbenv_repo }}
     dest={{ rbenv_root }}
@@ -38,9 +37,7 @@
 
 - name: install plugins for system
   become: yes
-#  This should be run by root,no?
-  become_user: root
-#  become_user: '{{ rbenv_owner }}'
+  become_user: '{{ rbenv_owner }}'
   git: >
     repo={{ item.repo }}
     dest={{ rbenv_root }}/plugins/{{ item.name }}

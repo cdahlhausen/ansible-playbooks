@@ -13,6 +13,7 @@ ruby_env:
     DEBIAN_FRONTEND: noninteractive
     HOME: /home/{{ system_default_user }}
     GOPATH: /home/{{ system_default_user }}/go
+    RBENV_SHELL: bash
     RBENV_ROOT: /home/{{system_default_user}}/.rbenv
     PATH:   /usr/local/go/bin:/home/{{system_default_user}}/.rbenv/shims:/home/{{system_default_user}}/.rbenv/plugins/ruby-build/bin:/home/{{system_default_user}}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     RAILS_ENV: "{{RAILS_ENV}}"
@@ -47,10 +48,16 @@ ebs_mount: False
 ruby_version: 2.1.5
 
 # RBenv
-rbenv_root: /home/{{system_default_user}}/.rbenv
+# This is set as a fact in the role.
+#rbenv_root: /home/{{system_default_user}}/.rbenv
+rbenv:
+    env: user
+    version: v1.0.0
+    ruby_version: 2.1.5
 rbenv_owner: "{{system_default_user}}"
 rbenv_group: 'deploy'
 rbenv_users: ["{{system_default_user}}"]
+
 
 ##
 # Postfix variables

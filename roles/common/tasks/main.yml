@@ -112,9 +112,9 @@
 #    - { name: 'cd3ef', pubkeyfile: "{{ inventory_dir }}/group_vars/vault/users/cd3ef/cd3ef2.pub" }
 #    - { name: 'cd3ef', pubkeyfile: "{{ var_cd3ef_sshkey }}" }
     - { name: "adiamond", pubkeyfile: "{{ adiamond_sshkey }}" }
-    - { name: "cd3ef", pubkeyfile: "https://github.com/cdahlhausen.keys" }
+    - { name: "cd3ef", pubkeyfile: "{{ cd3ef_sshkey }}" }
     - { name: "{{system_default_user}}", pubkeyfile: "{{aptdeploy_sshkey}}" }
-    - { name: "{{system_default_user}}", pubkeyfile: "https://github.com/cdahlhausen.keys"  }
+    - { name: "{{system_default_user}}", pubkeyfile: "{{ cd3ef_sshkey }}"  }
   tags: [common, pubkeys]
 
 - name: add common user home settings

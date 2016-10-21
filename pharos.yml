@@ -1,5 +1,5 @@
 ---
--   hosts: apt-demo-repo
+-   hosts: apt-prod-repo21
     vars_files:
         - "group_vars/vault.yml"
 
@@ -50,6 +50,7 @@
           env: user
           version: v1.0.0
           ruby_version: 2.3.1
+        rbenv_users: "{{system_default_user}}"
 
 # THESE ARE SUPPLIED PER GROUP/HOST-VARS
 ## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user

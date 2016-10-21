@@ -18,6 +18,26 @@
   set_fact: apache_installed=True
   when: apachestatus.rc == 0
 
+- name: Check if Nginx is installed.
+  shell: nginx -v
+  ignore_errors: yes
+  register: nginxstatus
+
+- name: Set fact
+  set_fact: nginx_installed=True
+  when: nginxstatus.rc == 0
+
+- name: Add nginx jails if nginx exist
+  template: src="{{item}}" dest="/etc/fail2ban/filter.d/{{item}}" mode=0644
+  with_items:
+    - nginx-badbots.conf
+    - nginx-http-auth.conf
+    - nginx-nohome.conf
+    - nginx-noproxy.conf
+    - nginx-noscript.conf
+  notify: restart fail2ban
+  when: nginxstatus.rc == 0
+
 - name: configure fail2ban local jails
   template: src=jail.local.j2 dest=/etc/fail2ban/jail.local mode=0644
   notify: restart fail2ban

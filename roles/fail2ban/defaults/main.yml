@@ -20,3 +20,6 @@ fail2ban_config_jail_sshddos_enabled: yes
 
 # Set Apache fact to add Apache Jails if necessary
 apache_installed: False
+
+# Set nginx fact to add Nginx Jails if necessary
+nginx_installed: False

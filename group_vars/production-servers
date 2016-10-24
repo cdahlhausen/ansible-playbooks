@@ -17,6 +17,7 @@ pharos_db_size: '100'
 pharos_rds_subnet: "prod-private"
 pharos_rds_multi_az: 'yes'
 pharos_rds_region: 'us-east-1'
+pharos_rds_backup_retention: '10'
 
 # AWS EFS/DBS
 # External Filesystems

@@ -22,9 +22,13 @@
         - packages
         - rails dependencies
 
+  - name: debug
+    debug: msg={{ruby_env}}
+    tags: rbenv_pharos
+
 # Set the right ruby interpreter
   - name: Set Ruby interpreters ruby_version
-    shell: rbenv local "{{ruby_version}}"
+    shell: bash -lc "rbenv local {{ruby_version}}"
     args:
       chdir: "{{pharos_app_root}}"
       creates: "{{pharos_app_root}}/.ruby-version"
@@ -67,6 +71,9 @@
         wait: yes
         aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
         aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+        backup_retention: "{{pharos_rds_backup_retention | default('1')}}"
+        backup_window: '10:00-10:30'
+        maint_window: 'Tue:10:30-Tue:11:00'
         tags:
             Environment: "{{RAILS_ENV}}"
     tags: createrds

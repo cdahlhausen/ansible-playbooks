@@ -51,6 +51,7 @@
     bundler: state=present chdir="{{pharos_app_root}}"
 
 # Create DB on RDS if it doesn't exist. AWS call to create. If Vagrant create DB locally.
+# If command is changed to modify, comment db_name, subnet, tags out.
   - name: Create DB on RDS
     rds:
         command: create

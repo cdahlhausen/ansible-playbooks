@@ -5,3 +5,33 @@ goapp_src_path: "{{ go_env.GOPATH }}/src/github.com/APTrust/{{goapp_name}}"
 goapp_cfg_path: "{{ goapp_src_path }}/config"
 
 goapp_log_path: "/mnt/apt/logs"
+
+ex_tardirectory: "~/tmp/data"
+ex_restoredirectory: "~/tmp/apt/restore"
+ex_logdirectory: "~/tmp/apt/logs"
+ex_replicationdirectory: "~/tmp/apt/replicate"
+ex_maxfilesize: "100000000"
+
+ex_pharosurl: "localhost:3000"
+ex_pharosapiversion: "v2"
+ex_nsqdhttpaddress: "http://localhost:4151"
+ex_nsqlookupd: "localhost:4161"
+
+ex_aptrusts3region: "us-east-1"
+ex_aptrustglacierregion: "us-west-2"
+
+ex_preservationbucket: "aptrust.test.preservation"
+ex_replicationbucket: "aptrust.test.preservation.oregon"
+ex_dpnpreservationbucket: "aptrust.dpn.test"
+ex_restoretotestbuckets: "true"
+ex_remotenodehomedirectory: "/home"
+
+ex_localserviceurl: "https://dpn-demo.aptrust.org/"
+
+#>     "PreservationBucket": "aptrust.preservation.storage",
+#>     "ReplicationBucket": "aptrust.preservation.oregon",
+#>     "DPNPreservationBucket": "aptrust.dpn.preservation",
+#>     "RestoreToTestBuckets": false,
+
+# >         "RemoteNodeHomeDirectory": "/mnt/dpn",
+# >             "LocalServiceURL": "https://dpn.aptrust.org",

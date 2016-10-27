@@ -72,22 +72,24 @@
   when: checkout.changed
   register: build_result
   failed_when: "'no buildable Go source files' not in build_result.stderr"
+  # Note: even if status is sucessful this will be a changed task.?
   changed_when: "'no buildable Go source files' not in build_result.stderr"
   tags: buildgo
 
-# Note: This seems like a weak reference. Refactor this.
+# Note: apt_bucket_reader is not run by supervisor but cron
 # Get list of compiled go binaries
 - name: Get list of compiled go binaries
   shell: "ls $GOPATH/bin | grep -v apt_bucket_reader"
   register: dir_out
   tags: listfiles
 
-- name: Create the Supervisor config file for Exchange
+
+- name: Create the Supervisor config file for Exchange Services
   template: src=supervisor.conf.j2
-            dest=/etc/supervisor/conf.d/{{ item }}.conf
-  with_items: "{{dir_out.stdout_lines}}"
+            dest=/etc/supervisor/conf.d/exchange.conf
   register: supervisor_config_files
   tags: listfiles
+
 
 - name: Add Cronjob for apt_bucket_reader
   cron: name='apt_bucket_reader'

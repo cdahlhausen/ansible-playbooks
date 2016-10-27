@@ -1,3 +1,7 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+#{{ ansible_managed }}
+
+{% for item in dir_out.stdout_lines %}
 [program:{{ item }}]
 command={{ goapp_bin_path }}/{{ item }} -config={% if item  == "nsq_service" %}{{ goapp_cfg_path }}/nsq/{{GO_ENV}}.config{% else %}{{ goapp_cfg_path }}/{{GO_ENV}}.json{% endif %}
 
@@ -8,10 +12,14 @@ autorestart=true
 startretries=10
 startsecs=5
 directory={{ goapp_bin_path }}
-
-
 user={{ system_default_user }}
 redirect_stderr=true
 stdout_logfile={{goapp_log_path}}/{{ item }}.log
 stdout_logfile_maxbytes=50MB
 stdout_logfile_backups=10
+
+{% endfor %}
+
+[group:exchange]
+programs={% for item in dir_out.stdout_lines %}{{item}},{% endfor %}
+

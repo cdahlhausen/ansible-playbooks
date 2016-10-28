@@ -20,16 +20,19 @@
 
 # Set AWS Credentials as ENV
 # TODO: Consider using separate creds for staging and prod S3 access.
-- name: Set AWS ACCESS Credentials
+- name: Set AWS Credentials, GoPath, ExchangeHome
   no_log: true
   lineinfile: >
     dest="/home/{{system_default_user}}/.profile"
     state=present
-    line="{{item}}"
-    insertafter=EOF
+    regexp="{{item.name}}=.*"
+    line="export {{item.name}}={{item.value}}"
   with_items:
-    - "export AWS_ACCESS_KEY_ID={{aws_go_user}}"
-    - "export AWS_SECRET_ACCESS_KEY={{aws_go_pwd}}"
+    - { name: "AWS_ACCESS_KEY_ID", value: "{{aws_go_user}}"}
+    - { name: "AWS_SECRET_ACCESS_KEY", value: "{{aws_go_pwd}}"}
+    - { name: "GOPATH", value: "{{go_env.GOPATH}}"}
+    - { name: "EXCHANGE_HOME", value: "{{goapp_src_path}}"}
+  tags: envvars
 
 # Note: Commmon role creates and mounts external filesystems like EFS/EBS.
 #       If deploy is on virtualbox, directories will be created locally.

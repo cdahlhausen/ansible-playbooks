@@ -1,4 +1,7 @@
 ---
+# GO
+GO_ENV: 'production'
+# Rails
 RAILS_ENV: 'production'
 ruby_version: '2.3.1'
 
@@ -8,6 +11,8 @@ pharos_db_pwd: "{{ vault_pharos_prod_db_pwd}}"
 
 pharos_devise_key: "{{ vault_pharos_prod_devise_key}}"
 pharos_rails_key: "{{ vault_pharos_prod_rails_key}}"
+
+pharos_url: "https://repo.aptrust.org"
 
 # AWS RDS
 pharos_rds_instance_type: "db.m4.large"
@@ -27,5 +32,25 @@ ebs_mount: false
 efs_mount_uri: ".fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
 
 
-# GO
-GO_ENV: 'production'
+# Exchange Go Services
+ex_tardirectory: "/mnt/apt/data"
+ex_restoredirectory: "/mnt/apt/restore"
+ex_logdirectory: "/mnt/apt/logs"
+ex_replicationdirectory: "/mnt/apt/replicate"
+ex_maxfilesize: "0"
+
+ex_pharosurl: "{{pharos_url}}"
+ex_pharosapiversion: "v2"
+ex_nsqdhttpaddress: "http://{{ hostvars['apt-prod-rest2'].host_eip }}:4151"
+ex_nsqlookupd: "apt-demo-inre:4161"
+
+ex_aptrusts3region: "us-east-1"
+ex_aptrustglacierregion: "us-west-2"
+
+ex_preservationbucket: "aptrust.test.preservation"
+ex_replicationbucket: "aptrust.test.preservation.oregon"
+ex_dpnpreservationbucket: "aptrust.dpn.test"
+ex_restoretotestbuckets: "true"
+ex_remotenodehomedirectory: "/home"
+
+ex_localserviceurl: "https://dpn-demo.aptrust.org/"

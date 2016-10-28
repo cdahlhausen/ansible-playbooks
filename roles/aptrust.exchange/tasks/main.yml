@@ -101,12 +101,11 @@
   register: supervisor_config_files
   tags: listfiles
 
-
 - name: Add Cronjob for apt_bucket_reader
   cron: name='apt_bucket_reader'
         user="{{system_default_user}}"
         minute='*/1'
-        job=". $HOME/.profile; {{goapp_bin_path}}/apt_bucket_reader -config={{GO_ENV}} > {{goapp_log_path}}/cron_apt_bucket_reader.log 2>&1"
+        job=". $HOME/.profile; {{goapp_bin_path}}/apt_bucket_reader -config={{goapp_cfg_path}}/{{GO_ENV}}.json > {{goapp_log_path}}/cron_apt_bucket_reader.log 2>&1"
   tags: cronjobber
 
 # When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist

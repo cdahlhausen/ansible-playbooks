@@ -22,12 +22,12 @@
     "NsqLookupd": "{{ex_nsqlookupd}}",
 
     "APTrustS3Region": "{{ex_aptrusts3region}}",
-    "APTrustGlacierRegion": "us-west-2",
-    "PreservationBucket": "aptrust.test.preservation",
-    "ReplicationBucket": "aptrust.test.preservation.oregon",
-    "DPNPreservationBucket": "aptrust.dpn.test",
+    "APTrustGlacierRegion": "{{ex_aptrustglacierregion}}",
+    "PreservationBucket": "{{ex_preservationbucket}}",
+    "ReplicationBucket": "{{ex_replicationbucket}}",
+    "DPNPreservationBucket": "{{ex_dpnpreservationbucket}}",
     "CustomRestoreBucket": "",
-    "RestoreToTestBuckets": true,
+    "RestoreToTestBuckets": "{{ex_restoretotestbuckets}}",
     "MaxDaysSinceFixityCheck": 90,
 
     "FetchWorker": {
@@ -185,7 +185,7 @@
         "LocalNode": "aptrust",
         "LogDirectory": "/mnt/dpn/logs",
         "StagingDirectory": "/mnt/dpn/staging",
-        "RemoteNodeHomeDirectory": "/home",
+        "RemoteNodeHomeDirectory": "{{ex_remotenodehomedirectory}}",
         "LogLevel": 4,
         "LogToStderr": false,
         "ReplicateToNumNodes": 2,
@@ -196,7 +196,7 @@
         "BagValidationConfigFile": "config/dpn_bag_validation_config.json",
         "RestClient": {
             "Comment": "Settings for our local DPN REST API server. Load LocalAuthToken from environment!",
-            "LocalServiceURL": "https://dpn-demo.aptrust.org/",
+            "LocalServiceURL": "{{ex_localserviceurl}}",
             "LocalAPIRoot": "api-v2",
             "LocalAuthToken": ""
         },

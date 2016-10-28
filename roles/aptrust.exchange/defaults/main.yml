@@ -27,11 +27,3 @@ ex_restoretotestbuckets: "true"
 ex_remotenodehomedirectory: "/home"
 
 ex_localserviceurl: "https://dpn-demo.aptrust.org/"
-
-#>     "PreservationBucket": "aptrust.preservation.storage",
-#>     "ReplicationBucket": "aptrust.preservation.oregon",
-#>     "DPNPreservationBucket": "aptrust.dpn.preservation",
-#>     "RestoreToTestBuckets": false,
-
-# >         "RemoteNodeHomeDirectory": "/mnt/dpn",
-# >             "LocalServiceURL": "https://dpn.aptrust.org",

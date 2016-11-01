@@ -86,12 +86,18 @@
   changed_when: "'no buildable Go source files' not in build_result.stderr"
   tags: buildgo
 
-# Note: apt_bucket_reader is not run by supervisor but cron
-# Get list of compiled go binaries
-- name: Get list of compiled go binaries
-  shell: "ls $GOPATH/bin | grep -v apt_bucket_reader"
-  register: dir_out
-  tags: listfiles
+- name: Set services to deploy
+  set_fact: exchangeservices="{{ goapp_services.ingest + goapp_services.restore}}"
+  when: ex_services == 'all'
+
+- name: Set Services to deploy - Ingest only
+  set_fact: exchangeservices="{{goapp_services.ingest}}"
+  when: ex_services == 'ingest'
+
+- name: Set Services to deploy - Restore only
+  set_fact: exchangeservices="{{goapp_services.restore}}"
+  when: ex_services == 'restore'
+  tags: exdebug
 
 - name: Update Exchange config file
   template: src=exchange.json.j2
@@ -117,8 +123,8 @@
 
 # When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist
 - name: Reread/Add supervisor app config files
-  supervisorctl: name="{{item}}" state=present
-  with_items: "{{dir_out.stdout_lines}}"
+  supervisorctl: name="exchange:{{item}}" state=present
+  with_items: "{{exchangeservices}}"
   register: supervisor_config_update
   when: supervisor_config_files.changed
 
@@ -133,21 +139,11 @@
 
 # When state = restarted, the module will call supervisorctl update then call supervisorctl restart.
 - name: Update and restart supervisor processes
-  supervisorctl: name="{{item}}" state=restarted
+  supervisorctl: name="exchange:{{item}}" state=restarted
   when: supervisor_config_files.changed
-  with_items: "{{dir_out.stdout_lines}}"
+  with_items: "{{exchangeservices}}"
 
 # Note: exchange is the program group used in supervisor config.
 - name: Ensure Exchange services are running
   supervisorctl: name="exchange:{{item}}" state=started
-  with_items: "{{dir_out.stdout_lines}}"
-
-#- name: Re-read the Supervisor config files
-#  command: supervisorctl reread
-#  register: supervisor_config_update
-#  when: supervisor_config_files.changed
-
-# - name: Update Supervisor to add the app in the process group
-#  become: true
-#  command: supervisorctl update
-#  when: supervisor_config_update.changed
+  with_items: "{{exchangeservices}}"

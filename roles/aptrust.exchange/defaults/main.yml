@@ -17,6 +17,7 @@ goapp_services:
     - apt_store
     - apt_volume_service
     - dpn_sync
+#    - dpn_copy
     - nsq_service
     restore: []
 

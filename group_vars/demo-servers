@@ -27,6 +27,7 @@ pharos_rds_subnet: "demo"
 GO_ENV: 'demo'
 
 # Exchange Go Services
+ex_services: all
 ex_tardirectory: "/mnt/apt/data"
 ex_restoredirectory: "/mnt/apt/restore"
 ex_logdirectory: "/mnt/apt/logs"

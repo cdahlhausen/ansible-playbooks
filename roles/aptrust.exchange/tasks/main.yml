@@ -56,12 +56,19 @@
     - /mnt/dpn/restore
     - /mnt/dpn/replication
 
+# This checks if the code on github was updated and runs a git reset since the config for the environment has been changed in the source directory which prevents a go -u -f -d later.
+- name: Check if code was updated and reset local repo
+  script: gitcheck.sh {{goapp_src_path}}
+  args:
+    chdir: "{{goapp_src_path}}"
+  register: gitresult
+  changed_when: gitresult != 'up to date'
+  tags: bashcheck
+
 # Checkout Exchange repo
-# This may be done using ansistrano. Alternatively we can just update the
-# current version and restart supervisor services first. Is rollback necessary? Probably.
 - name: Checkout exchange repo
   become_user: "{{system_default_user}}"
-  shell: "go get -d github.com/APTrust/exchange/..."
+  shell: "go get -u -f -d github.com/APTrust/exchange/..."
   environment: "{{go_env}}"
   register: checkout
   tags: buildgo

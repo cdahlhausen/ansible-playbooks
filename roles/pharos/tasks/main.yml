@@ -22,10 +22,6 @@
         - packages
         - rails dependencies
 
-  - name: debug
-    debug: msg={{ruby_env}}
-    tags: rbenv_pharos
-
 # Set the right ruby interpreter
   - name: Set Ruby interpreters ruby_version
     shell: bash -lc "rbenv local {{ruby_version}}"
@@ -107,6 +103,8 @@
         owner: "{{system_default_user}}"
         group: "{{deploy_group}}"
         mode: 0644
+    vars:
+        PHAROS_RELEASE: "{{PHAROS_RELEASE}}"
 
 # Only loads DB schema at first deploy. Skipped when .schema_loaded exists
   - name: Load DB Schema at first deploy

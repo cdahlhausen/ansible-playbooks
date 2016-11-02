@@ -20,5 +20,7 @@ pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"
 pharos_devise_key: "{{ vault_pharos_dev_devise_key}}"
 pharos_rails_key: "{{ vault_pharos_dev_rails_key}}"
 
+# Exchange
+GO_ENV: 'demo'
 
 ruby_version: 2.3.1

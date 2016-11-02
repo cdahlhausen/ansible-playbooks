@@ -6,6 +6,7 @@ RAILS_ENV: 'production'
 ruby_version: '2.3.1'
 
 # Pharos
+pharos_local_db: False
 pharos_db_user: "{{ vault_pharos_prod_db_user}}"
 pharos_db_pwd: "{{ vault_pharos_prod_db_pwd}}"
 

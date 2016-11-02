@@ -38,7 +38,6 @@
     - boto
 
 # Message of the day explaining server is under control of Ansible.
-#
 - name: MOTD
   become: yes
   template: src=motd.j2 dest=/etc/motd owner=root mode=0644
@@ -51,7 +50,7 @@
 - name: Adjust /srv permissions.
   become: yes
   file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
-#
+
 # TODO This should be revisited once all machines are ansible managed.
 # Currently this is skipped unless newdeploy is True. False by default.
 - name: Create /mnt/apt if not mounted already.
@@ -73,13 +72,14 @@
   shell: "curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone"
   register: my_aws_az
   when: (ansible_bios_version != 'VirtualBox')
+  tags: awsaz
 
 # TODO Setup EBS mounting
 
 # Mount EFS volume.
 - name: Mount EFS volume
   mount:
-    src: "{{my_aws_az}}{{efs_mount_uri}}"
+    src: "{{my_aws_az.stdout}}{{efs_mount_uri}}"
     name: "/mnt/apt"
     fstype: nfs
     opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
@@ -87,9 +87,7 @@
   when: (ansible_bios_version != 'VirtualBox' and efs_mount == True)
   tags: nfsmount
 
-##
 # Adding common users to the system.
-#
 - name: add common users
   become: yes
   user: name="{{ item.name }}"

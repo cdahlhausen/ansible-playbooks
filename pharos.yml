@@ -1,5 +1,5 @@
 ---
--   hosts: apt-prod-repo21
+-   hosts: pharos-servers
     vars_files:
         - "group_vars/vault.yml"
 
@@ -21,7 +21,7 @@
         # Pharos Role
         pharos_app_root: "{{ ansistrano_deploy_to }}/current"
         pharos_environment: "{{ruby_env}}"
-        pharos_local_db: false
+#        pharos_local_db: false
 
         # NGINX Webserver
         nginx_vhosts:

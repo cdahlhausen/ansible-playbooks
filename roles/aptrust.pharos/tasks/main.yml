@@ -1,6 +1,7 @@
 ---
-
-# This installs and deploys Pharos from github.com/APTrust/pharos
+# This installs Pharos from github.com/APTrust/pharos
+# Deployment is handled by Ansistrano. https://github.com/ansistrano/deploy
+# Variable defaults are generelly set for a development/demo environment.
 
   - name: install required packages
     become: yes
@@ -22,7 +23,7 @@
         - packages
         - rails dependencies
 
-# Set the right ruby interpreter
+# Set ruby interpreter version for pharos
   - name: Set Ruby interpreters ruby_version
     shell: bash -lc "rbenv local {{ruby_version}}"
     args:
@@ -43,11 +44,12 @@
   - name: Install Pharos gems
     become: true
     become_user: "{{ system_default_user }}"
-# Check if user_install would need to be set. User Vagrant doesn't run nginx or passenger, so not sure.
+# TODO: Check if user_install would need to be set. User Vagrant doesn't run
+# nginx or passenger, so not sure if it is needed.
     bundler: state=present chdir="{{pharos_app_root}}"
 
-# Create DB on RDS if it doesn't exist. AWS call to create. If Vagrant create DB locally.
-# If command is changed to modify, comment db_name, subnet, tags out.
+# Create DB on RDS if it doesn't exist.
+# Note: When command is changed to modify, comment [db_name, subnet, tags] out.
   - name: Create DB on RDS
     rds:
         command: create
@@ -61,9 +63,11 @@
         multi_zone: "{{pharos_rds_multi_az | default('no')}}"
         region: "{{pharos_rds_region | default('us-east-1')}}"
 # TODO: dependent on environment. set default to demo
-# Note: security group name didn't work, only id. Security groups have to be configured manually via AWS web console at the moment.
+# Note: security group name doesn't work, only id. Security groups have to be
+#       configured manually via AWS web console.
         vpc_security_groups: "{{  pharos_vpc_sec_group | default('sg-65b4211f') }}"
         subnet: "{{ pharos_rds_subnet | default('demo') }}"
+# Note: Timeout is set high since inital RDS creation may take a while.
         wait_timeout: 600
         wait: yes
         aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
@@ -85,6 +89,8 @@
     set_fact: pharos_db_host="localhost"
     when: pharos_local_db == true
 
+# TODO: May want to add a task if a non-RDS db instance already exists.
+#       In which case we will need an db address to connect to.
   - include: postgresql.yml
     when: ansible_bios_version == "VirtualBox" or pharos_local_db == true
 
@@ -107,6 +113,8 @@
         PHAROS_RELEASE: "{{PHAROS_RELEASE}}"
 
 # Only loads DB schema at first deploy. Skipped when .schema_loaded exists
+# Note: Careful! This assumes pharos has been deployed with this role before.
+#       Otherwise the DB might be wiped!
   - name: Load DB Schema at first deploy
     shell: "bundle exec rake db:schema:load RAILS_ENV={{RAILS_ENV}} && touch log/.schema_loaded"
     args:

@@ -1,5 +1,45 @@
----
--   hosts: pharos-servers
+DPN-SERVER
+===
+
+A Rails implementation of the DPN RESTful communication layer.
+
+This role installs required system packages and creates the dpn-server
+database. It supports creating an AWS RDS instance or a local Postgresql DB.
+Previously existing non-RDS instances are currently not supported. Large parts
+of the deployment (and updates) are handled by a separate
+role `ansistrano-deploy`.
+
+Some of the configuration has to be kept in Ansible as many variables create
+dependencies to other services.
+
+
+Requirements
+------------
+This role is designed to be deployed on a Ubuntu Linux system.
+It requires rbenv and a webserver like Nginx or Apache. If you choose to not
+run it's database on AWS RDS Postgresql needs to be installed first.
+
+Role Variables
+--------------
+
+See defaults/main.yml
+
+All variables default to local development values. For deployment on demo
+or production systems these will have to be overwritten using group_vars
+or host_vars.
+
+Dependencies
+------------
+
+Role dependencies:
+- common
+- zzet.rbenv
+- cd3ef.nginx-passenger
+- carlosbuenosvinos.ansistrano-deploy
+
+Example Playbook
+----------------
+-   hosts: pharos-server
     vars_files:
         - "group_vars/vault.yml"
 
@@ -7,12 +47,12 @@
 
     vars:
         playbook_name: pharos
+        # TODO: This should be determined by the git repo name at deploy time
         ansistrano_deploy_to: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"
         ansistrano_deploy_via: "git"
         ansistrano_git_repo: "git@github.com:APTrust/pharos.git"
         ansistrano_git_branch: "develop"
         ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
-# TODO: Test shared paths and see if any more tasks have to be set for this to work.
         ansistrano_shared_paths: ["log"]
         ansistrano_keep_releases: 3
         ansistrano_before_symlink_shared_tasks_file: "roles/aptrust.pharos/tasks/before-symlink.yml"
@@ -20,7 +60,7 @@
         # Pharos Role
         pharos_app_root: "{{ ansistrano_deploy_to }}/current"
         pharos_environment: "{{ruby_env}}"
-#        pharos_local_db: false
+        pharos_local_db: false
 
         # NGINX Webserver
         nginx_vhosts:
@@ -41,7 +81,7 @@
 
                 ssl    on;
                 # SSL Chain if Nginx, SSL cert if Apache2
-                ssl_certificate    {{ssl_cert_path}};
+                ssl_certificate    {{ssl_chain_path}};
                 ssl_certificate_key {{ ssl_key_path }};
 
         # RBenv
@@ -51,15 +91,12 @@
           ruby_version: 2.3.1
         rbenv_users: "{{system_default_user}}"
 
-# THESE ARE SUPPLIED PER GROUP/HOST-VARS
-## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"
     #AWS_SECRET_ACCESS_KEY: "{{ var_aws_secret_access_key }}"
 
     #AWS_SES_USER: ""
     #AWS_SES_PASSWORD: ""
-
 
     roles:
       - {role: common, tags: common}
@@ -68,12 +105,8 @@
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: aptrust.pharos, tags: pharos}
-    tasks:
 
-    - name: Slack to all
-      slack:
-        token: "{{slack_token}}"
-        msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
-        icon_emoji: ":dog:"
-        channel: 'ops'
-      tags: [pharos,slack]
+License
+-------
+
+MIT

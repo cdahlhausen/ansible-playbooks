@@ -1,0 +1,14 @@
+---
+# Creates local postgres database
+#
+- name: DPN-SERVER | Create Postgres DPN DB user
+  postgresql_user: name="{{dpn_db_user}}"
+                   password="{{dpn_db_pwd}}"
+
+- name: DPN-SERVER | Create Postgres DPN DB
+  postgresql_db: name="dpn_{{RAILS_ENV}}"
+                 encoding='UTF-8'
+                 owner="{{dpn_db_user}}"
+                 state=present
+
+

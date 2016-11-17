@@ -9,7 +9,9 @@ sshd_port: 22
 
 ssl_cert: "{{vault_vagrant_ssl_cert}}"
 ssl_key: "{{vault_vagrant_ssl_key}}"
+ssl_chain: "{{ssl_cert}}"
 ssl_cert_path: "{{vault_vagrant_ssl_cert_path}}"
+ssl_chain_path: "{{vault_vagrant_ssl_cert_path}}"
 ssl_key_path: "{{vault_vagrant_ssl_key_path}}"
 
 # Pharos

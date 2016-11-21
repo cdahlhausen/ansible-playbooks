@@ -35,7 +35,7 @@ newdeploy: False
 deploy_user: 'aptdeploy'
 deploy_group: 'deploy'
 
-sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond]
+sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond,kec6en]
 sshd_port: 1984
 
 # External Filesystems (EBS, EFS)
@@ -102,6 +102,9 @@ cd3ef_sshkey: "{{ vault_cd3ef_sshkey }}"
 
 adiamond_pwd: "{{ vault_adiamond_pwd }}"
 adiamond_sshkey: "{{ vault_adiamond_sshkey }}"
+
+kec6en_pwd: "{{ vault_kec6en_pwd }}"
+kec6en_sshkey: "{{ vault_kec6en_sshkey }}"
 
 aptdeploy_pwd: "{{ vault_aptdeploy_pwd }}"
 aptdeploy_sshkey: "{{ vault_aptdeploy_sshkey }}"

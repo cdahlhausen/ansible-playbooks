@@ -18,6 +18,6 @@
       - ssl
       - https
       - rsync
-      - dpn
+      - dpn-common
       - aptrust.bagman
       - psdash

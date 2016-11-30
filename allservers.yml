@@ -11,10 +11,4 @@
       fail2ban_config_maxretry: 1
 
     roles:
-      - hostname
-      - common
-      - postfix
-      - logwatch
-      - fail2ban
-      - sshd
-      - unattended-upgrades
+      - {role: common, tags: common}

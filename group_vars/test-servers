@@ -1,10 +1,15 @@
 ---
 RAILS_ENV: 'demo'
 
+# SSH
+
+sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond,kec6en]
+
 # Pharos
 # pharos_db_host: "{{ vault_pharos_demo_db_host}}"
 pharos_db_user: "{{ vault_pharos_demo_db_user}}"
 pharos_db_pwd: "{{ vault_pharos_demo_db_pwd}}"
+
 
 
 

@@ -35,7 +35,7 @@ newdeploy: False
 deploy_user: 'aptdeploy'
 deploy_group: 'deploy'
 
-sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond,kec6en]
+sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond]
 sshd_port: 1984
 
 # External Filesystems (EBS, EFS)

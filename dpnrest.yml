@@ -3,12 +3,6 @@
     become: yes
     vars:
       playbook_name: dpnrest
-      ssl_cert: ~/.ansible/external/files/ssl/aptrust_org.pem
-      ssl_key: ~/.ansible/external/files/ssl/aptrust_org.key
-      ssl_chain: ~/.ansible/external/files/ssl/__aptrust_org_interm.cer
-      ssl_cert_path: /etc/ssl/certs/aptrust_org.pem
-      ssl_key_path: /etc/ssl/private/aptrust_org.key
-      ssl_chain_path: /etc/ssl/private/__aptrust_org_interm.cer
 
     roles:
       - common

@@ -1,7 +1,7 @@
 ---
 # This installs DPN-SERVER from https://github.com/dpn-admin/dpn-server
 # Deployment is handled by Ansistrano. https://github.com/ansistrano/deploy
-# Variable defaults are generelly set for a development/demo environment.
+# Variable defaults are set for a development/demo environment.
 
   - name: install required packages
     become: yes
@@ -9,7 +9,6 @@
     with_items:
         - sqlite3
         - libssl-dev
-        - bundler
         - postgresql-client
         - libpq5
         - libpqxx-dev
@@ -102,6 +101,7 @@
   - name: Set Release fact
     set_fact: dpn_RELEASE="{{dpn_timestamp.stdout}}"
 
+# TODO: This is only if figaro is used.
   - name: Define application environment configuration
     template:
         src: application.yml.j2

@@ -18,7 +18,7 @@
         ansistrano_before_symlink_shared_tasks_file: "roles/aptrust.pharos/tasks/before-symlink.yml"
 
         # DPN-Server Role
-        dpn-server_app_root: "{{ ansistrano_deploy_to }}/{{ansistrano_current_dir}}"
+        dpn-server_app_root: "{{ ansistrano_deploy_to }}/current"
         dpn-server_environment: "{{ruby_env}}"
 
         # NGINX Webserver
@@ -56,5 +56,6 @@
       - {role: dpn-common, tags: dpn-common}
       - {role: rsync, tags: rsync}
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
+      - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: dpn.dpn-server, tags: dpn-server}
 

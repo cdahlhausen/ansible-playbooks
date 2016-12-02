@@ -1,3 +1,0 @@
-# Variables for DPN-SERVER https://github.com/dpn-admin/dpn-server
-
-dpn_app_root: "/var/www/{{ansible_fqdn}}/dpn-server"

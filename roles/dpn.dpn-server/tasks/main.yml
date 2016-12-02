@@ -26,8 +26,8 @@
   - name: Set Ruby interpreters ruby_version
     shell: bash -lc "rbenv local {{ruby_version}}"
     args:
-      chdir: "{{dpn_app_root}}"
-      creates: "{{dpn_app_root}}/.ruby-version"
+      chdir: "{{dpn_server_app_root}}"
+      creates: "{{dpn_server_app_root}}/.ruby-version"
     environment: "{{ruby_env}}"
     become: yes
     become_user: "{{ system_default_user }}"

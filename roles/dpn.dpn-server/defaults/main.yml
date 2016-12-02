@@ -1,5 +1,5 @@
 ---
-dpn_app_root: "/var/www/{{ansible_fqdn}}/pharos"
+dpn_app_root: "/var/www/{{ansible_fqdn}}/dpn-server"
 RAILS_ENV: 'development'
 
 dpn_db: "dpnserver_{{RAILS_ENV}}"

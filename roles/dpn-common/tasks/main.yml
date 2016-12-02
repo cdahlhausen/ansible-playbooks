@@ -4,7 +4,7 @@
 #
 - name: add common users
   user: name="{{ item }}" state=present shell='/usr/bin/rssh'
-  tags: common
+  tags: dpn-common
   with_items:
     - dpn.hathi
     - dpn.chron
@@ -12,10 +12,10 @@
     - dpn.tdr
 
 - name: add common user public keys
-  authorized_key: user={{ item.name }} key="{{ lookup('file', item.keyfile) }}" state=present
-  tags: common
+  authorized_key: user={{ item.name }} key="{{ item.keyfile }}" state=present
+  tags: dpn-common
   with_items:
-    - { name: 'dpn.hathi', keyfile: 'dpn/dpn_hathi.pub' }
-    - { name: 'dpn.chron', keyfile: 'dpn/dpn_chron.pub' }
-    - { name: 'dpn.sdr', keyfile: 'dpn/dpn_sdr.pub' }
-    - { name: 'dpn.tdr', keyfile: 'dpn/dpn_tdr.pub' }
+    - { name: 'dpn.hathi', keyfile: '{{dpn_hathi_sshkey}}' }
+    - { name: 'dpn.chron', keyfile: '{{dpn_chron_sshkey}}' }
+    - { name: 'dpn.sdr', keyfile: '{{dpn_sdr_sshkey}}' }
+    - { name: 'dpn.tdr', keyfile: '{{dpn_tdr_sshkey}}' }

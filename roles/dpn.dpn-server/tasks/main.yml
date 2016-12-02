@@ -1,7 +1,5 @@
 ---
 # This installs DPN-SERVER from https://github.com/dpn-admin/dpn-server
-# Deployment is handled by Ansistrano. https://github.com/ansistrano/deploy
-# Variable defaults are set for a development/demo environment.
 
   - name: install required packages
     become: yes
@@ -39,13 +37,14 @@
     become_user: "{{ system_default_user }}"
     gem:  name=bundler state=latest user_install=yes
 
+
 # Install Gems from Gemfile
   - name: Install dpn gems
     become: true
     become_user: "{{ system_default_user }}"
 # TODO: Check if user_install would need to be set. User Vagrant doesn't run
 # nginx or passenger, so not sure if it is needed.
-    bundler: state=present chdir="{{dpn_app_root}}"
+    bundler: state=present chdir="{{dpn_server_app_root}}"
 
 # Create DB on RDS if it doesn't exist.
 # Note: When command is changed to modify, comment [db_name, subnet, tags] out.
@@ -95,7 +94,7 @@
 
 # Note: This creates a dependency on ansistrano-deploy
   - name: Get Git Hash Fact
-    shell: tail -n1 "{{dpn_app_root}}/REVISION" | cut -c1-5
+    shell: tail -n1 "{{dpn_server_app_root}}/REVISION" | cut -c1-5
     register: dpn_timestamp
 
   - name: Set Release fact
@@ -105,7 +104,7 @@
   - name: Define application environment configuration
     template:
         src: application.yml.j2
-        dest: "{{dpn_app_root}}/config/application.yml"
+        dest: "{{dpn_server_app_root}}/config/application.yml"
         owner: "{{system_default_user}}"
         group: "{{deploy_group}}"
         mode: 0644
@@ -118,33 +117,33 @@
   - name: Load DB Schema at first deploy
     shell: "bundle exec rake db:schema:load RAILS_ENV={{RAILS_ENV}} && touch log/.schema_loaded"
     args:
-        chdir: "{{dpn_app_root}}"
-        creates: "{{dpn_app_root}}/log/.schema_loaded"
+        chdir: "{{dpn_server_app_root}}"
+        creates: "{{dpn_server_app_root}}/log/.schema_loaded"
     become: true
     become_user: "{{ system_default_user }}"
     tags: dbmigrate
 
   - name: Migrate DB Schema
-    shell: chdir="{{dpn_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
+    shell: chdir="{{dpn_server_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
     tags: dbmigrate
 
 # Creates institutions, roles and users
   - name: Initial dpn setup
-    shell: chdir="{{dpn_app_root}}" bundle exec rake dpn:setup RAILS_ENV="{{RAILS_ENV}}"
+    shell: chdir="{{dpn_server_app_root}}" bundle exec rake dpn:setup RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
 
   - name: Assets precompile
-    shell: chdir="{{dpn_app_root}}" bundle exec rake assets:precompile RAILS_ENV="{{RAILS_ENV}}"
+    shell: chdir="{{dpn_server_app_root}}" bundle exec rake assets:precompile RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
     notify: reload nginx
 
 # Note: This wipes the database first. But provides fixtures that dpn:setup does not.
   - name: dpn | Populate DB with fixtures
-    shell: chdir="{{dpn_app_root}}" rake dpn:populate_db
+    shell: chdir="{{dpn_server_app_root}}" rake dpn:populate_db
     become: true
     become_user: "{{ system_default_user }}"
     when: RAILS_ENV == 'development'

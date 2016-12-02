@@ -19,3 +19,10 @@
     - { name: 'dpn.chron', keyfile: '{{dpn_chron_sshkey}}' }
     - { name: 'dpn.sdr', keyfile: '{{dpn_sdr_sshkey}}' }
     - { name: 'dpn.tdr', keyfile: '{{dpn_tdr_sshkey}}' }
+#
+# Message of the day explaining server is under control of Ansible.
+- name: MOTD
+  become: yes
+  template: src=motd.j2 dest=/etc/motd owner=root mode=0644
+  tags: common
+

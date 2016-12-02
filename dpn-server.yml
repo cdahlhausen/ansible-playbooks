@@ -1,7 +1,10 @@
 ---
 # DPN Server 2.0
-  - hosts: dpn-servers
-    become: yes
+  - hosts: dpn-local-demo #dpn-servers once 2.0 is status quo
+    vars_files:
+        - "group_vars/vault.yml"
+
+    environment: "{{ruby_env}}"
     vars:
         playbook_name: dpn-server
         ansistrano_deploy_to: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"

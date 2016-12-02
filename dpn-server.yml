@@ -15,11 +15,11 @@
 # TODO: Test shared paths and see if any more tasks have to be set for this to work.
         ansistrano_shared_paths: ["log"]
         ansistrano_keep_releases: 3
-        ansistrano_before_symlink_shared_tasks_file: "roles/aptrust.pharos/tasks/before-symlink.yml"
+        ansistrano_before_symlink_shared_tasks_file: "roles/dpn.dpn-server/tasks/before-symlink.yml"
 
         # DPN-Server Role
-        dpn-server_app_root: "{{ ansistrano_deploy_to }}/current"
-        dpn-server_environment: "{{ruby_env}}"
+        dpn_server_app_root: "{{ ansistrano_deploy_to }}/current"
+        dpn_server_environment: "{{ruby_env}}"
 
         # NGINX Webserver
         nginx_vhosts:

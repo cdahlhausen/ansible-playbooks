@@ -21,11 +21,12 @@
         - rails dependencies
 
 # Set ruby interpreter version for dpn
+# Note: This deviates from dpn-server standard setup which uses rvm
   - name: Set Ruby interpreters ruby_version
     shell: bash -lc "rbenv local {{ruby_version}}"
     args:
-      chdir: "{{dpn_server_app_root}}"
-      creates: "{{dpn_server_app_root}}/.ruby-version"
+      chdir: "{{dpnserver_app_root}}"
+      creates: "{{dpnserver_app_root}}/.ruby-version"
     environment: "{{ruby_env}}"
     become: yes
     become_user: "{{ system_default_user }}"
@@ -37,14 +38,18 @@
     become_user: "{{ system_default_user }}"
     gem:  name=bundler state=latest user_install=yes
 
+# Add figaro since we will use this for env vars
+# Note: This deviates from dpn-server standard setup
+ - name: Install figaro gem
+   become: true
+   become_user: "{{ system_default_user }}"
+   gem:  name=figaro state=latest user_install=yes
 
 # Install Gems from Gemfile
   - name: Install dpn gems
     become: true
     become_user: "{{ system_default_user }}"
-# TODO: Check if user_install would need to be set. User Vagrant doesn't run
-# nginx or passenger, so not sure if it is needed.
-    bundler: state=present chdir="{{dpn_server_app_root}}"
+    bundler: state=present chdir="{{dpnserver_app_root}}"
 
 # Create DB on RDS if it doesn't exist.
 # Note: When command is changed to modify, comment [db_name, subnet, tags] out.
@@ -52,40 +57,40 @@
     rds:
         command: create
         instance_name: "dpn-{{RAILS_ENV}}"
-        instance_type: "{{ dpn_rds_instance_type | default('db.t2.small') }}"
-        size: "{{dpn_db_size | default('16') }}"
-        username: "{{dpn_db_user}}"
-        password: "{{dpn_db_pwd}}"
-        db_name: "dpn_{{RAILS_ENV}}"
+        instance_type: "{{ dpnserver_rds_instance_type | default('db.t2.small') }}"
+        size: "{{dpnserver_db_size | default('16') }}"
+        username: "{{dpnserver_db_user}}"
+        password: "{{dpnserver_db_pwd}}"
+        db_name: "{{dpnserver_db_name}}"
         db_engine: postgres
-        multi_zone: "{{dpn_rds_multi_az | default('no')}}"
-        region: "{{dpn_rds_region | default('us-east-1')}}"
+        multi_zone: "{{dpnserver_rds_multi_az | default('no')}}"
+        region: "{{dpnserver_rds_region | default('us-east-1')}}"
 # TODO: dependent on environment. set default to demo
 # Note: security group name doesn't work, only id. Security groups have to be
 #       configured manually via AWS web console.
-        vpc_security_groups: "{{  dpn_vpc_sec_group | default('sg-65b4211f') }}"
-        subnet: "{{ dpn_rds_subnet | default('demo') }}"
+        vpc_security_groups: "{{  dpnserver_vpc_sec_group | default('sg-65b4211f') }}"
+        subnet: "{{ dpnserver_rds_subnet | default('demo') }}"
 # Note: Timeout is set high since inital RDS creation may take a while.
         wait_timeout: 600
         wait: yes
         aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
         aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
-        backup_retention: "{{dpn_rds_backup_retention | default('1')}}"
+        backup_retention: "{{dpnserver_rds_backup_retention | default('1')}}"
         backup_window: '10:00-10:30'
         maint_window: 'Tue:10:30-Tue:11:00'
         tags:
             Environment: "{{RAILS_ENV}}"
     tags: createrds
     register: rds_facts
-    when: dpn_local_db == False
+    when: dpnserver_local_db == False
 
   - name: Set RDS db_host fact
-    set_fact: dpn_db_host="{{rds_facts.instance.endpoint}}"
-    when: dpn_local_db == False
+    set_fact: dpnserver_db_host="{{rds_facts.instance.endpoint}}"
+    when: dpnserver_local_db == False
 
   - name: Set local db_host fact
-    set_fact: dpn_db_host="localhost"
-    when: dpn_local_db == true
+    set_fact: dpnserver_db_host="localhost"
+    when: dpnserver_local_db == true
 
 # TODO: May want to add a task if a non-RDS db instance already exists.
 #       In which case we will need an db address to connect to.
@@ -98,7 +103,7 @@
     register: dpn_timestamp
 
   - name: Set Release fact
-    set_fact: dpn_RELEASE="{{dpn_timestamp.stdout}}"
+    set_fact: dpnserver_RELEASE="{{dpn_timestamp.stdout}}"
 
 # TODO: This is only if figaro is used.
   - name: Define application environment configuration
@@ -109,19 +114,7 @@
         group: "{{deploy_group}}"
         mode: 0644
     vars:
-        dpn_RELEASE: "{{dpn_RELEASE}}"
-
-# Only loads DB schema at first deploy. Skipped when .schema_loaded exists
-# Note: Careful! This assumes dpn has been deployed with this role before.
-#       Otherwise the DB might be wiped!
-  - name: Load DB Schema at first deploy
-    shell: "bundle exec rake db:schema:load RAILS_ENV={{RAILS_ENV}} && touch log/.schema_loaded"
-    args:
-        chdir: "{{dpn_server_app_root}}"
-        creates: "{{dpn_server_app_root}}/log/.schema_loaded"
-    become: true
-    become_user: "{{ system_default_user }}"
-    tags: dbmigrate
+        dpn_RELEASE: "{{dpnserver_RELEASE}}"
 
   - name: Migrate DB Schema
     shell: chdir="{{dpn_server_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"

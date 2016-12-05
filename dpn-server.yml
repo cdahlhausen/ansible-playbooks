@@ -7,6 +7,8 @@
     environment: "{{ruby_env}}"
     vars:
         playbook_name: dpn-server
+
+        # Ansistrano Deployment
         ansistrano_deploy_to: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"
         ansistrano_deploy_via: "git"
         ansistrano_git_repo: "git@github.com:dpn-admin/dpn-server.git"
@@ -20,6 +22,7 @@
         # DPN-Server Role
         dpn_server_app_root: "{{ ansistrano_deploy_to }}/current"
         dpn_server_environment: "{{ruby_env}}"
+        dpnserver_local_db: True
 
         # NGINX Webserver
         nginx_vhosts:

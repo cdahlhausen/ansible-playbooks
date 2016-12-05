@@ -12,6 +12,39 @@
 
 {{RAILS_ENV}}:
 #    RAILS_ENV: {{RAILS_ENV}}
+      DPN_RELEASE: "{{DPN_RELEASE}}"
+      FLUCTUS_API_USER: "{{fluctus_api_user}}"
+      FLUCTUS_API_KEY: "{{fluctus_api_key}}"
+
+      # Credentials for DPN REST servers.
+      # DPN_REST_TOKEN is for our own local server.
+      DPN_REST_TOKEN: "{{dpn_rest_token}}"
+      DPN_CHRON_TOKEN: "{{dpn_chron_token}}"
+      DPN_HATHI_TOKEN: "{{dpn_hathi_token}}"
+      DPN_SDR_TOKEN: "{{dpn_sdr_token}}"
+      DPN_TDR_TOKEN: "{{dpn_tdr_token}}"
+
+      # Rails-specific stuff
+      DPN_DEVISE_SECRET_KEY: "{{dpn_devise_secret_key}}"
+      DPN_SECRET_KEY: "{{dpn_secret_key}}"
+      DPN_CIPHER_KEY: "{{dpn_cipher_key}}"
+      DPN_CIPHER_IV: "{{dpn_sipher_iv}}"
+      DPN_NAMESPACE: "{{dpn_namespace}}"
+      DPN_API_ROOT: "{{dpn_api_root}}"
+      DPN_STAGING_DIR: "{{dpn_staging_dir}}"
+
+      # Connection info for the postgres RDS instance
+      DPN_DB_ADAPTER: "{{dpn_db_adapter}}"
+      DPN_DB_PORT: "{{dpn_db_port}}"
+      DPN_DB_NAME: "{{dpn_db_name}}"
+      DPN_DB_HOSTNAME: "{{dpn_db_hostname}}"
+      DPN_DB_USER: "{{dpn_db_user}}"
+      DPN_DB_PASSWORD: "{{dpn_db_password}}"
+
+      # Outgoing email
+      AWS_SES_USER: "AKIAIAMIE6RZQQMF543Q"
+      AWS_SES_PASSWORD: "Ai/L3vvOCafNALAt9wXrEmf0c5gmORfGGku+0ZL7Uqhr"
+
     PHAROS_DB_HOST: "{{pharos_db_host}}"
     PHAROS_DB_USER: "{{pharos_db_user}}"
     PHAROS_DB_PWD: "{{pharos_db_pwd}}"

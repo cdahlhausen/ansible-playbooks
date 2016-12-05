@@ -122,11 +122,28 @@
     become_user: "{{ system_default_user }}"
     tags: dbmigrate
 
-# Creates institutions, roles and users
-  - name: Initial dpn setup
-    shell: chdir="{{dpn_server_app_root}}" bundle exec rake dpn:setup RAILS_ENV="{{RAILS_ENV}}"
-    become: true
-    become_user: "{{ system_default_user }}"
+# Copy DPN nodes config script
+  - name: Copy node config script
+    template:
+        src: node_config.rb.j2
+        dest: "{{dpn_server_app_root}}/lib/tasks/node_config.rb"
+        owner: "{{system_default_user}}"
+        group: "{{deploy_group}}"
+        mode: 0644
+#
+# Configure Nodes
+  - name: Configure DPN nodes
+    shell: bundle exec rails runner "eval(File.read 'lib/tasks/node_config.rb')"
+    args:
+        chdir: "{{dpn_server_app_root}}"
+    with_nested:
+        - dpnserver_nodes
+
+# TODO: DPN NEEDS SOMETHING DIFFERENT TO SET UP ACCOUNTS.
+#  - name: Initial dpn setup
+#    shell: chdir="{{dpn_server_app_root}}" bundle exec rake dpn:setup RAILS_ENV="{{RAILS_ENV}}"
+#    become: true
+#    become_user: "{{ system_default_user }}"
 
   - name: Assets precompile
     shell: chdir="{{dpn_server_app_root}}" bundle exec rake assets:precompile RAILS_ENV="{{RAILS_ENV}}"

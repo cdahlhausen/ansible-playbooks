@@ -24,10 +24,13 @@
 # Add dpn-apt private key
 - name: Install private ssh key
   copy:
-    content: "{{ dpn_apt_private_sshkey }}"
-    dest: "{{ dpn_transfer_private_key }}"
+    content: "{{ item.content }}"
+    dest: "{{ item.dest }}"
     mode: 0600
     owner: "{{system_default_user}}"
+  with_items:
+    - { content: "{{ dpn_apt_private_sshkey }}", dest: "{{ dpn_transfer_private_key }}" }
+    - { content: "{{ dpn_apt_public_sshkey }}", dest: "{{ dpn_transfer_public_key }}" }
 
 # Message of the day explaining server is under control of Ansible.
 - name: MOTD

@@ -136,18 +136,18 @@
   - name: Configure DPN nodes
     shell: bundle exec rails runner "eval(File.read 'lib/tasks/node_config.rb')"
     args:
-        chdir: "{{dpn_server_app_root}}"
+        chdir: "{{dpnserver_app_root}}"
     with_nested:
         - dpnserver_nodes
 
 # TODO: DPN NEEDS SOMETHING DIFFERENT TO SET UP ACCOUNTS.
 #  - name: Initial dpn setup
-#    shell: chdir="{{dpn_server_app_root}}" bundle exec rake dpn:setup RAILS_ENV="{{RAILS_ENV}}"
+#    shell: chdir="{{dpnserver_app_root}}" bundle exec rake dpn:setup RAILS_ENV="{{RAILS_ENV}}"
 #    become: true
 #    become_user: "{{ system_default_user }}"
 
   - name: Assets precompile
-    shell: chdir="{{dpn_server_app_root}}" bundle exec rake assets:precompile RAILS_ENV="{{RAILS_ENV}}"
+    shell: chdir="{{dpnserver_app_root}}" bundle exec rake assets:precompile RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
     notify: reload nginx

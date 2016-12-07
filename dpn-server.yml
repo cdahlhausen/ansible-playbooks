@@ -20,8 +20,8 @@
         ansistrano_before_symlink_shared_tasks_file: "roles/dpn.dpn-server/tasks/before-symlink.yml"
 
         # DPN-Server Role
-        dpn_server_app_root: "{{ ansistrano_deploy_to }}/current"
-        dpn_server_environment: "{{ruby_env}}"
+        dpnserver_app_root: "{{ ansistrano_deploy_to }}/current"
+        dpnserver_environment: "{{ruby_env}}"
         dpnserver_local_db: True
 
         # NGINX Webserver
@@ -58,6 +58,7 @@
       - {role: common, tags: common}
       - {role: dpn-common, tags: dpn-common}
       - {role: rsync, tags: rsync}
+      - {role: zzet.rbenv, tags: rbenv}
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: dpn.dpn-server, tags: dpn-server}

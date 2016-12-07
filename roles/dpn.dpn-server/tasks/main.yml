@@ -100,7 +100,7 @@
 
 # Note: This creates a dependency on ansistrano-deploy
   - name: Get Git Hash Fact
-    shell: tail -n1 "{{dpn_server_app_root}}/REVISION" | cut -c1-5
+    shell: tail -n1 "{{dpnserver_app_root}}/REVISION" | cut -c1-5
     register: dpn_timestamp
 
   - name: Set Release fact
@@ -110,15 +110,15 @@
   - name: Define application environment configuration
     template:
         src: application.yml.j2
-        dest: "{{dpn_server_app_root}}/config/application.yml"
+        dest: "{{dpnserver_app_root}}/config/application.yml"
         owner: "{{system_default_user}}"
         group: "{{deploy_group}}"
         mode: 0644
     vars:
-        dpn_RELEASE: "{{dpnserver_RELEASE}}"
+        dpnserver_RELEASE: "{{dpnserver_RELEASE}}"
 
   - name: Migrate DB Schema
-    shell: chdir="{{dpn_server_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
+    shell: chdir="{{dpnserver_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
     tags: dbmigrate
@@ -127,7 +127,7 @@
   - name: Copy node config script
     template:
         src: node_config.rb.j2
-        dest: "{{dpn_server_app_root}}/lib/tasks/node_config.rb"
+        dest: "{{dpnserver_app_root}}/lib/tasks/node_config.rb"
         owner: "{{system_default_user}}"
         group: "{{deploy_group}}"
         mode: 0644

@@ -104,7 +104,7 @@
     register: dpn_timestamp
 
   - name: Set Release fact
-    set_fact: dpnserver_RELEASE="{{dpn_timestamp.stdout}}"
+    set_fact: DPNSERVER_RELEASE="{{dpn_timestamp.stdout}}"
 
 # TODO: This is only if figaro is used.
   - name: Define application environment configuration
@@ -115,7 +115,7 @@
         group: "{{deploy_group}}"
         mode: 0644
     vars:
-        dpnserver_RELEASE: "{{dpnserver_RELEASE}}"
+        DPNSERVER_RELEASE: "{{DPNSERVER_RELEASE}}"
 
   - name: Migrate DB Schema
     shell: chdir="{{dpnserver_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"

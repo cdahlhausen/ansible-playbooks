@@ -40,16 +40,17 @@
 
 # Add figaro since we will use this for env vars
 # Note: This deviates from dpn-server standard setup
- - name: Install figaro gem
-   become: true
-   become_user: "{{ system_default_user }}"
-   gem:  name=figaro state=latest user_install=yes
+  - name: Install figaro gem
+    become: true
+    become_user: "{{ system_default_user }}"
+    gem:  name=figaro state=latest user_install=yes
 
 # Install Gems from Gemfile
   - name: Install dpn gems
     become: true
     become_user: "{{ system_default_user }}"
     bundler: state=present chdir="{{dpnserver_app_root}}"
+    tags: dpngems
 
 # Create DB on RDS if it doesn't exist.
 # Note: When command is changed to modify, comment [db_name, subnet, tags] out.

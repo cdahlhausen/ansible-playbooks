@@ -45,6 +45,22 @@
     become_user: "{{ system_default_user }}"
     gem:  name=figaro state=latest user_install=yes
 
+# Copy config ymls
+# This is the same action rake -T config takes, but files # are using env vars provided by figaro and application.yml
+  - name: Copy dpn-server app configs
+    template:
+        src: "{{item}}.yml.j2"
+        dest: "{{dpnserver_app_root}}/config/{{item}}.yml"
+        owner: "{{system_default_user}}"
+        group: "{{deploy_group}}"
+        mode: 0644
+    with_items:
+        - database
+        - dpn
+        - resque-pool
+        - resque
+        - secrets
+
 # Install Gems from Gemfile
   - name: Install dpn gems
     become: true
@@ -106,7 +122,6 @@
   - name: Set Release fact
     set_fact: DPNSERVER_RELEASE="{{dpn_timestamp.stdout}}"
 
-# TODO: This is only if figaro is used.
   - name: Define application environment configuration
     template:
         src: application.yml.j2

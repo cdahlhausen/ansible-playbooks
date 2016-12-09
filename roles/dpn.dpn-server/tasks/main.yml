@@ -33,18 +33,20 @@
     become_user: "{{ system_default_user }}"
     tags: rbenv_dpn
 
+# Copy Gemfile.local for APTrust specific gems (pg, figaro)
+  - name: Copy Gemfile.local for APTrust Gems
+    template:
+        src: "Gemfile.local"
+        dest: "{{dpnserver_app_root}}/Gemfile.local"
+        owner: "{{system_default_user}}"
+        group: "{{deploy_group}}"
+        mode: 0644
+
 # Install Bundler
   - name: Install Bundler
     become: true
     become_user: "{{ system_default_user }}"
     gem:  name=bundler state=latest user_install=yes
-
-# Add figaro since we will use this for env vars
-# Note: This deviates from dpn-server standard setup
-  - name: Install figaro gem
-    become: true
-    become_user: "{{ system_default_user }}"
-    gem:  name=figaro state=latest user_install=yes
 
 # Copy config ymls
 # This is the same action rake -T config takes, but files # are using env vars provided by figaro and application.yml

@@ -6,11 +6,12 @@
     apt: pkg={{item}} state=present update_cache=yes
     with_items:
         - sqlite3
-        - libssl-dev
+        - libmysqlclient-dev
+        - libsqlite3-dev
         - postgresql-client
         - libpq5
         - libpqxx-dev
-        - libsqlite3-dev
+        - libssl-dev
         - nodejs
         - zip
         - mailutils

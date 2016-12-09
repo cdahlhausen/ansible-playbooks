@@ -6,9 +6,13 @@
                    password="{{dpnserver_db_pwd}}"
 
 - name: DPN-SERVER | Create Postgres DPN DB
-  postgresql_db: name="dpn_{{RAILS_ENV}}"
+  postgresql_db: name="{{dpnserver_db_name}}"
                  encoding='UTF-8'
                  owner="{{dpnserver_db_user}}"
                  state=present
+
+- name: DPN-SERVER | Update DB hostname if local
+  set_fact: dpnserver_db_hostname=localhost
+
 
 

@@ -179,11 +179,3 @@
     become: true
     become_user: "{{ system_default_user }}"
     notify: reload nginx
-
-# Note: This wipes the database first. But provides fixtures that dpn:setup does not.
-  - name: dpn | Populate DB with fixtures
-    shell: chdir="{{dpn_server_app_root}}" rake dpn:populate_db
-    become: true
-    become_user: "{{ system_default_user }}"
-    when: RAILS_ENV == 'development'
-    tags: populatedb

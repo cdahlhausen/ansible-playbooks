@@ -51,7 +51,7 @@ apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_ei
 
 [dpn-demo-servers]
 dpn-demo hostname=dpn-demo.aptrust.org hostname_fqdn=dpn-demo.aptrust.org host_eip=54.88.231.192
-dpn-local-demo ansible_user=vagrant hostname_name=dpn-local-demo hostname_fqdn=dpn-local-demo.aptrust.local host_eip=192.168.33.13
+dpn-local-demo ansible_user=vagrant hostname_name=dpn-local-demo hostname_fqdn=dpn-demo.aptrust.local host_eip=192.168.33.13
 
 [dpn-prod-servers]
 dpn-prod hostname=dpn.aptrust.org hostname_fqdn=dpn.aptrust.org host_eip=54.86.37.226

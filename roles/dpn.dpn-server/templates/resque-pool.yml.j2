@@ -1,3 +1,4 @@
+{% if use_redis %}
 development:
   sync: 1
   repl: 1
@@ -7,3 +8,5 @@ test:
 production:
   sync: 4
   repl: 2
+{% else %}
+{% endif %}

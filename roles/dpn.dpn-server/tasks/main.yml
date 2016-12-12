@@ -159,14 +159,22 @@
         owner: "{{system_default_user}}"
         group: "{{deploy_group}}"
         mode: 0644
+    with_items: "{{ dpnserver_nodes | list }}"
+    tags: nodeconfig
+
+  - name: debug nested
+    debug: msg="node {{ item.key }} is {{ item.value.name }} ({{ item.value.token }}) {{item.value.credential}}"
+
+    with_dict: "{{dpnserver_nodes}}"
+    tags: nested
 #
 # Configure Nodes
-  - name: Configure DPN nodes
-    shell: bundle exec rails runner "eval(File.read 'lib/tasks/node_config.rb')"
-    args:
-        chdir: "{{dpnserver_app_root}}"
-    with_nested:
-        - dpnserver_nodes
+#   - name: Configure DPN nodes
+#    shell: bundle exec rails runner "eval(File.read 'lib/tasks/node_config.rb')"
+#    args:
+#        chdir: "{{dpnserver_app_root}}"
+#    with_dict: "{{dpnserver_nodes}}"
+#    tags: nodeconfig
 
 # TODO: DPN NEEDS SOMETHING DIFFERENT TO SET UP ACCOUNTS.
 #  - name: Initial dpn setup

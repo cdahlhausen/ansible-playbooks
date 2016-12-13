@@ -160,13 +160,26 @@
         group: "{{deploy_group}}"
         mode: 0644
     with_items: "{{ dpnserver_nodes | list }}"
+    tags: OLDnodeconfig
+
+  - name: Copy node seeds json
+    template:
+        src: node_{{RAILS_ENV}}_seeds.json.j2
+        dest: "{{dpnserver_app_root}}/db/seeds/{{RAILS_ENV}}.seeds.json"
+        owner: "{{system_default_user}}"
+        group: "{{deploy_group}}"
+        mode: 0644
+    with_items: "{{ dpnserver_nodes | list }}"
     tags: nodeconfig
 
-  - name: debug nested
-    debug: msg="node {{ item.key }} is {{ item.value.name }} ({{ item.value.token }}) {{item.value.credential}}"
+  - name: Seed {{RAILS_ENV}} env nodes
+    shell: chdir="{{dpnserver_app_root}}" RAILS_ENV="{{RAILS_ENV}}" rake db:seed
+    tags: nodeconfig
 
-    with_dict: "{{dpnserver_nodes}}"
-    tags: nested
+#  - name: debug nested
+#    debug: msg="node {{ item.key }} is {{ item.value.name }} ({{ item.value.token }}) {{item.value.credential}}"
+#    with_dict: "{{dpnserver_nodes}}"
+#    tags: nested
 #
 # Configure Nodes
 #   - name: Configure DPN nodes

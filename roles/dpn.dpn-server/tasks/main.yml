@@ -151,6 +151,11 @@
     become_user: "{{ system_default_user }}"
     tags: dbmigrate
 
+# Setup default admin user
+  - name: Create default admin user
+    shell: chdir="{{dpnserver_app_root}}" RAILS_ENV="{{RAILS_ENV}}" rake db:admin_user
+    tags: nodeconfig
+#
 # Copy DPN nodes config script
   - name: Copy node config script
     template:

@@ -48,7 +48,12 @@
           env: user
           version: v1.0.0
           ruby_version: 2.3.1
-        rbenv_users: "{{system_default_user}}"
+        rbenv_users:
+            - "{{system_default_user}}"
+            - adiamond
+            - cd3ef
+        rbenv_group: 'deploy'
+
 
 # THESE ARE SUPPLIED PER GROUP/HOST-VARS
 ## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user

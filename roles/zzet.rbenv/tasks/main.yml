@@ -39,9 +39,9 @@
   become: yes
   become_user: '{{ rbenv_owner }}'
   git: >
-    repo={{ item.repo }}
-    dest={{ rbenv_root }}/plugins/{{ item.name }}
-    version={{ item.version }}
+    repo="{{ item.repo }}"
+    dest="{{ rbenv_root }}/plugins/{{ item.name }}"
+    version="{{ item.version }}"
     accept_hostkey=yes
     force=yes
   with_items: "{{ rbenv_plugins }}"
@@ -84,9 +84,9 @@
 
 - name: checkout rbenv_repo for selected users
   git: >
-    repo={{ rbenv_repo }}
-    dest={{ rbenv_root }}
-    version={{ rbenv.version }}
+    repo="{{ rbenv_repo }}"
+    dest="{{ rbenv_root }}"
+    version="{{ rbenv.version }}"
     accept_hostkey=yes
     force=yes
   with_items: "{{ rbenv_users }}"
@@ -109,9 +109,9 @@
 
 - name: install plugins for selected users
   git: >
-    repo={{ item[1].repo }}
-    dest={{ rbenv_root }}/plugins/{{ item[1].name }}
-    version={{ item[1].version }}
+    repo="{{ item[1].repo }}"
+    dest="{{ rbenv_root }}/plugins/{{ item[1].name }}"
+    version="{{ item[1].version }}"
     accept_hostkey=yes
     force=yes
   with_nested:
@@ -133,7 +133,7 @@
     - rbenv
 
 - name: set default-gems for select users
-  copy: src=default-gems dest={{ rbenv_root }}/default-gems
+  copy: src=default-gems dest="{{ rbenv_root }}/default-gems"
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
@@ -145,7 +145,7 @@
     - rbenv
 
 - name: set custom default-gems for select users
-  copy: src={{ default_gems_file }} dest={{ rbenv_root }}/default-gems
+  copy: src="{{ default_gems_file }}" dest="{{ rbenv_root }}/default-gems"
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
@@ -167,7 +167,7 @@
     - rbenv
 
 - name: set vars for select users
-  copy: src=vars dest={{ rbenv_root }}/vars
+  copy: src=vars dest="{{ rbenv_root }}/vars"
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
@@ -176,7 +176,7 @@
   tags:
     - rbenv
 
-- name: check ruby {{ rbenv.ruby_version }} installed for system
+- name: check ruby "{{ rbenv.ruby_version }}" installed for system
   shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   register: ruby_installed
   changed_when: false
@@ -186,7 +186,7 @@
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }} for system
+- name: install ruby "{{ rbenv.ruby_version }}" for system
   shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
   become: yes
   when:
@@ -195,7 +195,7 @@
   tags:
     - rbenv
 
-- name: check if current system ruby version is {{ rbenv.ruby_version }}
+- name: check if current system ruby version is "{{ rbenv.ruby_version }}"
   shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
   register: ruby_selected
   changed_when: false
@@ -205,7 +205,7 @@
   tags:
     - rbenv
 
-- name: set ruby {{ rbenv.ruby_version }} for system
+- name: set ruby "{{ rbenv.ruby_version }}" for system
   become: yes
   shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   when:
@@ -214,7 +214,7 @@
   tags:
     - rbenv
 
-- name: check ruby {{ rbenv.ruby_version }} installed for select users
+- name: check ruby "{{ rbenv.ruby_version }}" installed for select users
   shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   become: yes
   become_user: "{{ item }}"
@@ -227,7 +227,7 @@
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }} for select users
+- name: install ruby "{{ rbenv.ruby_version }}" for select users
   shell: $SHELL -lc "rbenv install {{ rbenv.ruby_version }}"
   become: yes
   become_user: "{{ item[1] }}"
@@ -241,7 +241,7 @@
   tags:
     - rbenv
 
-- name: check if user ruby version is {{ rbenv.ruby_version }}
+- name: check if user ruby version is "{{ rbenv.ruby_version }}"
   shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
   become: yes
   become_user: "{{ item }}"
@@ -254,7 +254,7 @@
   tags:
     - rbenv
 
-- name: set ruby {{ rbenv.ruby_version }} for select users
+- name: set ruby "{{ rbenv.ruby_version }}" for select users
   shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   become: yes
   become_user: "{{ item[1] }}"

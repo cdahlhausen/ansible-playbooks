@@ -12,6 +12,7 @@
 - name: Check if Apache is installed.
   shell: apache2ctl status
   ignore_errors: yes
+  changed_when: false
   register: apachestatus
 
 - name: Set fact
@@ -21,6 +22,7 @@
 - name: Check if Nginx is installed.
   shell: nginx -v
   ignore_errors: yes
+  changed_when: false
   register: nginxstatus
 
 - name: Set fact

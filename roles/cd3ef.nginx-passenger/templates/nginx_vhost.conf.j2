@@ -4,6 +4,7 @@
 server {
     listen {{ vhost.listen | default('80 default_server') }};
 
+    client_max_body_size {{nginx_client_max_body_size}};
 {% if vhost.server_name is defined %}
     server_name {{ vhost.server_name }};
     {% endif %}

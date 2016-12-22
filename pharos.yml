@@ -42,6 +42,7 @@
                 # SSL Chain if Nginx, SSL cert if Apache2
                 ssl_certificate    {{ssl_cert_path}};
                 ssl_certificate_key {{ ssl_key_path }};
+        nginx_client_max_body_size: 0
 
         # RBenv
         rbenv:

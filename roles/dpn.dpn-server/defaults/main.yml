@@ -17,7 +17,7 @@ dpnserver_db_name: "dpn_demo"
 dpnserver_rds_instance_type: "db.t2.medium"
 dpnserver_db_size: '16'
 dpnserver_vpc_sec_group: "sg-18a4ac62"
-dpnserver_rds_subnet: "dpn-demo"
+dpnserver_rds_subnet: "demo"
 
 # If true, postgresql is installed locally and used for pharos db
 dpnserver_local_db: False

@@ -96,6 +96,7 @@
   ignore_errors: yes
   tags:
     - rbenv
+    - rbenvusers
 
 - name: create plugins directory for selected users
   file: state=directory path={{ rbenv_root }}/plugins

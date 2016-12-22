@@ -29,6 +29,8 @@
     - sqlite3
     - libsqlite3-dev
     - nfs-common
+# https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
+    - acl
 
 - name: Install AWS CLI tools and Boto
   become: yes

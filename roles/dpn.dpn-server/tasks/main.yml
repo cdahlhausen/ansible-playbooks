@@ -112,6 +112,27 @@
   - name: Set local db_host fact
     set_fact: dpnserver_db_host="localhost"
     when: dpnserver_local_db == true
+    tags: appenv, deployenv
+
+# AWS EFS for staging directory
+# sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs-b915cef0.efs.us-east-1.amazonaws.com:/ efs
+  - name: Ensure EFS mounting directory exist
+    file:
+        path: "{{dpnserver_efs_mountpoint}}"
+        state: directory
+        owner: "{{system_default_user}}"
+        group: "{{deploy_group}}"
+        mode: 0775
+    when: use_efs == true and ansible_bios_version != "VirtualBox"
+
+  - name: Mount EFS staging directory
+    mount:
+        name: "{{dpnserver_efs_mountpoint}}"
+        src: "{{dpnserver_efs_mounttarget}}"
+        fstype: nfs4
+        opts: rw,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,
+        state: present
+    when: use_efs == true and ansible_bios_version != "VirtualBox"
 
 # TODO: May want to add a task if a non-RDS db instance already exists.
 #       In which case we will need an db address to connect to.

@@ -1,6 +1,6 @@
 ---
 # DPN Server 2.0
-  - hosts: dpn-local-demo #dpn-servers once 2.0 is status quo
+  - hosts: dpn-demo2 #dpn-servers once 2.0 is status quo
     vars_files:
         - "group_vars/vault.yml"
 
@@ -23,7 +23,10 @@
         # DPN-Server Role
         dpnserver_app_root: "{{ ansistrano_deploy_to }}/current"
         dpnserver_environment: "{{ruby_env}}"
-        dpnserver_local_db: True
+## This is set in group vars
+#        dpnserver_local_db: False
+        # AWS EFS
+#        use_efs: true
 
         # NGINX Webserver
         nginx_vhosts:

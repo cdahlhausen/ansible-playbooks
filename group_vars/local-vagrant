@@ -27,3 +27,8 @@ pharos_rails_key: "{{ vault_pharos_dev_rails_key}}"
 GO_ENV: 'demo'
 
 ruby_version: 2.3.1
+
+# DPN-SERVER
+dpnserver_local_db: true
+use_efs: False
+

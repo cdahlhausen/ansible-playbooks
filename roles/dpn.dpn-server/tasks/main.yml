@@ -100,13 +100,14 @@
         maint_window: 'Tue:10:30-Tue:11:00'
         tags:
             Environment: "{{RAILS_ENV}}"
-    tags: createrds
+    tags: createrds, appenv, deployenv
     register: rds_facts
     when: dpnserver_local_db == False
 
   - name: Set RDS db_host fact
     set_fact: dpnserver_db_host="{{rds_facts.instance.endpoint}}"
     when: dpnserver_local_db == False
+    tags: appenv, deployenv
 
   - name: Set local db_host fact
     set_fact: dpnserver_db_host="localhost"
@@ -121,9 +122,11 @@
   - name: Get Git Hash Fact
     shell: tail -n1 "{{dpnserver_app_root}}/REVISION" | cut -c1-5
     register: dpn_timestamp
+    tags: appenv, deployenv
 
   - name: Set Release fact
     set_fact: DPNSERVER_RELEASE="{{dpn_timestamp.stdout}}"
+    tags: appenv, deployenv
 
   - name: Define application environment configuration
     template:
@@ -134,6 +137,16 @@
         mode: 0644
     vars:
         DPNSERVER_RELEASE: "{{DPNSERVER_RELEASE}}"
+    tags: appenv
+
+  - name: Define deploy user environment
+    template:
+        src: bash_profile.yml.j2
+        dest: "/home/{{system_default_user}}/.bash_profile"
+        owner: "{{system_default_user}}"
+        group: "{{deploy_group}}"
+        mode: 0644
+    tags: deployenv
 
 # TODO: This is just temporary for development. production.rb should be copied instead as the demo environment should be identical.
   - name: Create demo environment

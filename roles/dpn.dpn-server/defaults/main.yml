@@ -19,6 +19,13 @@ dpnserver_db_size: '16'
 dpnserver_vpc_sec_group: "sg-18a4ac62"
 dpnserver_rds_subnet: "demo"
 
+# AWS EFS
+use_efs: False
+# Need EFS address here.
+dpnserver_efs_mounttarget: ''
+dpnserver_efs_mountpoint: /mnt/efs/dpn
+
+
 # If true, postgresql is installed locally and used for pharos db
 dpnserver_local_db: False
 

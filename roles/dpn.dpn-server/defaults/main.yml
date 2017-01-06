@@ -23,7 +23,7 @@ dpnserver_rds_subnet: "demo"
 use_efs: False
 # Need EFS address here.
 dpnserver_efs_mounttarget: ''
-dpnserver_efs_mountpoint: /mnt/efs/dpn
+dpnserver_efs_mountpoint: /mnt/dpn
 
 
 # If true, postgresql is installed locally and used for pharos db

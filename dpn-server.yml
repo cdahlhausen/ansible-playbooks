@@ -23,10 +23,6 @@
         # DPN-Server Role
         dpnserver_app_root: "{{ ansistrano_deploy_to }}/current"
         dpnserver_environment: "{{ruby_env}}"
-## This is set in group vars
-#        dpnserver_local_db: False
-        # AWS EFS
-#        use_efs: true
 
         # NGINX Webserver
         nginx_vhosts:

@@ -88,7 +88,8 @@
 # Mount EFS volume.
 - name: Mount EFS volume
   mount:
-    src: "{{my_aws_az.stdout}}{{efs_mount_uri}}"
+    # src: "{{my_aws_az.stdout}}{{efs_mount_uri}}"
+    src: "{{efs_mount_uri}}"
     name: "/mnt/{{orgtype}}"
     fstype: nfs
     opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2

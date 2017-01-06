@@ -42,7 +42,7 @@
 # Identify type of server, DPN or APTrust
 - name: Is this an APT or DPN Server
   set_fact: orgtype="{% if 'apt' in ansible_hostname%}apt{%else%}dpn{%endif%}"
-  tags: orgtype
+  tags: orgtype, nfsmount
 
 # Message of the day explaining server is under control of Ansible.
 - name: MOTD

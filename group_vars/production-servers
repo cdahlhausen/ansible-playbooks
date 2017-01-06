@@ -27,8 +27,8 @@ pharos_rds_backup_retention: '10'
 
 # AWS EFS/DBS
 # External Filesystems
-efs_mount: false
-ebs_mount: false
+use_efs: false
+use_ebs: false
 # EFS PROD
 efs_mount_uri: ".fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
 

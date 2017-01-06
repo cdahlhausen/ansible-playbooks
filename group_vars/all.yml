@@ -39,8 +39,8 @@ sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond]
 sshd_port: ['1984']
 
 # External Filesystems (EBS, EFS)
-efs_mount: False
-ebs_mount: False
+use_efs: False
+use_ebs: False
 
 ##
 # Ruby Variables

@@ -170,7 +170,7 @@
     tags: deployenv
 
 # TODO: This is just temporary for development. production.rb should be copied instead as the demo environment should be identical.
-  - name: Create demo environment
+  - name: Copy development to demo environment
     copy:
         src: "{{dpnserver_app_root}}/config/environments/development.rb"
         dest: "{{dpnserver_app_root}}/config/environments/demo.rb"
@@ -178,6 +178,7 @@
         owner: "{{system_default_user}}"
         group: "{{deploy_group}}"
         mode: 0644
+    when: "'demo' in ansible_hostname"
 
   - name: Migrate DB Schema
     shell: chdir="{{dpnserver_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"

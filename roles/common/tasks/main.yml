@@ -67,7 +67,7 @@
     path: "{{item}}"
     owner: "{{system_default_user}}"
     group: "{{deploy_group}}"
-    mode: 0755
+    mode: 0775
     state: directory
   with_items:
     - /mnt/aptrust

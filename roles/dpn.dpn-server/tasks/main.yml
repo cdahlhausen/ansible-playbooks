@@ -192,7 +192,8 @@
     args:
         chdir: "{{dpnserver_app_root}}"
         creates: "{{dpnserver_app_root}}/log/.admin_user_created"
-    tags: nodeconfig
+    when: "'demo' in ansible_hostname"
+    tags: nodeconfig, adminuser
 #
 # Copy DPN nodes config script
   - name: Copy node config script

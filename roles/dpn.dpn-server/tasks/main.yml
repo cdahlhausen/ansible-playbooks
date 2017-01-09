@@ -208,7 +208,8 @@
 
   - name: Copy node seeds json
     template:
-        src: node_{{RAILS_ENV}}_seeds.json.j2
+        # src: node_{{RAILS_ENV}}_seeds.json.j2
+        src: node_seeds.json.j2
         dest: "{{dpnserver_app_root}}/db/seeds/{{RAILS_ENV}}.seeds.json"
         owner: "{{system_default_user}}"
         group: "{{deploy_group}}"

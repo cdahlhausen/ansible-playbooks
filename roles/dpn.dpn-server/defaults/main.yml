@@ -14,8 +14,8 @@ dpnserver_url: "https://dpn-demo.aptrust.org"
 # AWS RDS
 # Note: sec_group and subnet have to be setup prior deployment
 dpnserver_db_name: "dpn_demo"
-dpnserver_rds_instance_type: "db.t2.medium"
-dpnserver_db_size: '16'
+dpnserver_rds_instance_type: "db.t2.micro"
+dpnserver_db_size: '20'
 dpnserver_vpc_sec_group: "sg-18a4ac62"
 dpnserver_rds_subnet: "demo"
 

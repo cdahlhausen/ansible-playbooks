@@ -13,7 +13,6 @@
 
     roles:
       - {role: common, tags: common}
-      - {role: oracle-java8, tags: oracle-java8 }
       - {role: futurice.supervisor, tags: supervisor}
       - {role: sansible.golang, tags: golang}
       - {role: retr0h.nsq, tags: nsq}

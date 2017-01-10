@@ -13,7 +13,8 @@
         ansistrano_deploy_via: "git"
         ansistrano_git_repo: "git@github.com:dpn-admin/dpn-server.git"
         # ansistrano_git_branch: "e748b2ba8068a902b215dd7524923416756b9d0b"
-        ansistrano_git_branch: "develop"
+        # ansistrano_git_branch: "develop"
+        ansistrano_git_branch: "541a4dfce55706218fe4f00b81805fcd8e8ed6bf"
         ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
 # TODO: Test shared paths and see if any more tasks have to be set for this to work.
         ansistrano_shared_paths: ["log"]
@@ -62,4 +63,3 @@
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: dpn.dpn-server, tags: dpn-server}
-

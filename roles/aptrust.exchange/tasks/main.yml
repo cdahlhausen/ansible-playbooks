@@ -1,9 +1,3 @@
----
-
-# Check if GO is installed, if not fail. Alternatively include go role in meta.
-# TODO: Distinguish between ingest and restore services and add a condition
-#       that only starts respective services
-
 # Install required packages
 - name: Install required packages
   become: yes
@@ -36,33 +30,27 @@
 
 # Note: Commmon role creates and mounts external filesystems like EFS/EBS.
 #       If deploy is on virtualbox, directories will be created locally.
-- name: Create EBS/EFS volume directories
+- name: Create EFS volume directories
   become: yes
   file:
-    path: "{{item}}"
+    path: "/mnt/efs/{{item.0}}/{{item.1}}"
     owner: "{{system_default_user}}"
     group: "{{deploy_group}}"
-    mode: 0755
+    mode: 0775
     state: directory
-  with_items:
-    - /mnt/apt
-    - /mnt/apt/data
-    - /mnt/apt/logs
-    - /mnt/apt/restore
-    - /mnt/apt/replication
-    - /mnt/dpn
-    - /mnt/dpn/data
-    - /mnt/dpn/logs
-    - /mnt/dpn/restore
-    - /mnt/dpn/replication
+  with_nested:
+    - ['apt', 'dpn']
+    - ['data','logs','restore','replication']
 
-# This checks if the code on github was updated and runs a git reset since the config for the environment has been changed in the source directory which prevents a go -u -f -d later.
+# This checks if the code on github was updated and runs a git reset since
+# the config for the environment has been changed in the source directory
+# which prevents a go -u -f -d later.
 - name: Check if code was updated and reset local repo
-  script: gitcheck.sh {{goapp_src_path}}
+  script: gitcheck.sh
   args:
     chdir: "{{goapp_src_path}}"
   register: gitresult
-  changed_when: gitresult != 'up to date'
+  changed_when: gitresult != 'Up-to-date'
   tags: bashcheck
 
 # Checkout Exchange repo
@@ -118,6 +106,7 @@
   cron: name='apt_bucket_reader'
         user="{{system_default_user}}"
         minute='*/1'
+        hour='*/2'
         job=". $HOME/.profile; {{goapp_bin_path}}/apt_bucket_reader -config={{goapp_cfg_path}}/{{GO_ENV}}.json > {{goapp_log_path}}/cron_apt_bucket_reader.log 2>&1"
   tags: cronjobber
 

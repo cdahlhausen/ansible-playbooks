@@ -59,8 +59,6 @@
   become: yes
   file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
 
-# TODO This should be revisited once all machines are ansible managed.
-# Currently this is skipped unless newdeploy is True. False by default.
 - name: Create /mnt/apt if not mounted already.
   become: yes
   file:
@@ -71,8 +69,8 @@
     state: directory
   with_items:
     - /mnt/aptrust
-    - /mnt/apt
-    - /mnt/dpn
+    - /mnt/efs/apt
+    - /mnt/efs/dpn
   when: (ansible_bios_version != 'VirtualBox' and (use_efs == True or use_ebs == True))
   tags: aptmount
 
@@ -90,7 +88,7 @@
   mount:
     # src: "{{my_aws_az.stdout}}{{efs_mount_uri}}"
     src: "{{efs_mount_uri}}"
-    name: "/mnt/{{orgtype}}"
+    name: "/mnt/efs/{{orgtype}}"
     fstype: nfs
     opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
     state: mounted

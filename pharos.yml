@@ -68,7 +68,6 @@
 
     roles:
       - {role: common, tags: common}
-      - {role: oracle-java8, tags: oracle-java8 }
       - {role: zzet.rbenv, tags: rbenv}
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}

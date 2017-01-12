@@ -13,18 +13,14 @@ Academic Preservation Trust.
 These are very early files as we are getting use to ansible and particularly
 getting use to ansible best practices and they are prone to change often.
 
-# External Var Files
-Private variables are stored in an external folder.  See the Lead Engineer for
-access these external folders. It should be copied to your home directory under
-the ~/.ansible directory to work approparitely.
-
-Eventually we will be calling this via a command line argument but for now
-just put it where we indicate above.
+# Var Files
+Var files are Ansible-conform stored in the group_vars and host_vars directories.
+Sensitive information files are encrypted using Ansible Vault. 
 
 ## Vagrant Setup
 
 You can set up a local development environment to build, run, develop
-and test both Fluctus and the APTrust Go services. First, download and
+and test playbooks. First, download and
 install [Vagrant](https://docs.vagrantup.com/v2/installation/).
 
 Copy the Vagrant file in this repository to the directory where you
@@ -61,107 +57,6 @@ You can connect to the Vagrant via SSH with this command:
 
 > vagrant ssh
 
-You'll be logged in as user vagrant. Now do this:
-
-> cd ~/go/src/github.com/APTrust/bagman/bagman/
-> go test
-
-You should see output like this:
-
-Skipping fluctus integration tests: Fluctus server is not running at http://localhost:3000
-Skipping IngestHelper tests because Fluctus is not running at http://localhost:3000
-PASS
-ok      github.com/APTrust/bagman/bagman        36.316s
-
-Now finish setting up Fluctus. You should not have to run migrations
-the first time, since the Ansible setup did that for you.
-
-> cd ~/aptrust/fluctus
-
-> bundle exec rake jetty:start
-
-Jetty will take a while to start. Once it's running, run setup to
-create an admin account.
-
-> bundle exec rake fluctus:setup
-
-Run this to create the required institutions:
-
-> bundle exec rake fluctus:reset_data
-
-Run the spec tests. These will take a few minutes to complete.
-
-> bundle exec rake spec
-
-Start the Rails app:
-
-> rails server
-
-Now, from your host machine, if you go to http://192.168.33.10:3000/,
-you can log in to the Rails app with the email and password you
-created when you ran the fluctus:setup task.
-
-After logging in, go to the Admin menu and click New User. Create a
-user with email address system@aptrust.org. Make sure this user has
-the Admin role at the APTrust institution.
-
-After creating the user, click the button to Generate API Secret
-Key. Copy the API key into ~/.bash_profile on your Vagrant box. The Go
-services will use system@aptrust.org with the specified API key to
-talk to Fluctus. You should have the following lines in your
-~/.bash_profile:
-
-export FLUCTUS_API_USER='system@aptrust.org'
-export FLUCTUS_API_KEY='<the key you just generated>'
-
-Run this to reload your ~/.bash_profile:
-
-> source ~/.bash_profile
-
-With the Rails server still running, open another ssh connection using
-vagrant ssh, and do this:
-
-> cd ~/go/src/github.com/APTrust/bagman/
-
-> ./scripts/process_items.sh
-
-The process_items script ingests a number of bags from our AWS test
-bucket into your local Fluctus app. It takes a few minutes to run, and
-it does print at least one error (an invalid bag that we want to make
-sure the system handles correctly). When the script is done, go back
-to your browser, click the Processed Items tab at the top, then click
-the Search button. You should see 11 items: 9 that succeeded and 2
-that failed for invalid format.
-
-Now click the Objects & Files tab and then click the Search
-button. Click one of the 9 objects, then click the Delete button. You
-should see a list of Pending delete operations.
-
-Now click the Objects & Files, then Search again. Click any object,
-then click its Restore Object button.
-
-Click the Processed Items tab, then Search, and you'll see one item
-Pending restore.
-
-Now go back to the Vagrant SSH session where you ran the process_items
-script. Kill the script with Control+C. Now run this:
-
-> ./scripts/restore_items
-
-That script handles pending restore and delete requests. It should
-complete within 30 seconds if there are no network issues.
-
-Go back to your browser and search again for Processed Items. At the
-top of the list, you should see that the restore and delete operations
-were all successful.
-
-You can now run one last test. Because Rails is now set up and
-running, the Go tests will run several interaction tests. This may
-take two minutes or more.
-
-> cd ~/cd go/src/github.com/APTrust/bagman/bagman/
-> go test
-
 ### Troubleshooting Your Vagrant Setup
 
 If Ansible has trouble connecting to your Vagrant VM, try running:
@@ -183,11 +78,12 @@ VM. Ansible will fail to connect but will not give a meaningful
 error. Open ~/.ssh/known_hosts and delete the entry for host
 192.168.33.10, then try again.
 
-
 ## Ansible Vault
-In order to store sensitive information securely we use Ansible Vault. This feature of Ansible encrypts any file with AES-256bit encryption. This allows for storing encrypted files in a public repo (GitHub).
+Sensitive information is securely stored via Ansible Vault. This feature of Ansible encrypts any file with AES-256bit encryption. This allows for storing encrypted files in a public repo (GitHub).
 
-A best practice with Ansible Vault is to keep all variables in a single file (vault.yml) and reference them using an unencrypted file (vars.yml) in order to be able to grep for variables without decrypting the vault every time. Having a single vault file might prove impractical in the future, so we might revisit this later.
+A best practice with Ansible Vault is to keep all variables in a single file (vault.yml) and reference them using an unencrypted file (all.yml) in order to be able to grep for variables without decrypting the vault every time. 
+
+Variable files are grouped by host groups that are defined in the hosts inventory file. For example all dpn-demo-servers have a `group_vars/dpn-demo-servers.yml` vault/var file where sensitive information is kept.
 
 The process involves three basic commands:
 
@@ -208,13 +104,70 @@ ansible-playbook site.yml --ask-vault-pass
 
 ## .ansible.cfg
 It is advisable to keep an Ansible config file in your home directory to make use of Ansible simpler. A config file could look like this:
+```
+ [defaults]
+  # Defines default inventory file.
+ inventory = ~/aptrust/ansible-playbooks/hosts
+ roles_path = ~/aptrust/ansible-playbooks/roles
+ # Ask for vault_pass at every Ansible execution if no i
+ # vault_password_file is defined.
+ # ask_vault_pass = True
+ # Defines vault password file to avoid password prompts and
+ # unencrypt vault at playbook runtime.
+ vault_password_file=~/aptrust/ansible-playbooks/.vault_password
+ # Callback plugins that are executed at runtime.
+ callback_plugins = ~/aptrust/ansible-playbooks/callback_plugins/
+ filter_plugins = ~/aptrust/ansible-playbooks/filter_plugins/
+ gathering = smart
+ fact_caching = jsonfile
+ fact_caching_connection = /tmp/ansible_factcache
+ fact_caching_timeout = 31557600
+ 
+ # Disables host_key checking when running plays on servers
+ host_key_checking = False
+ retry_files_enabled = False # Do not create them
+ 
+[ssh_connection]
+ ssh_args = -o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s -o ControlPath=~/.ssh/%h-%r
+ # Performance improvement and workaround for
+ # http://stackoverflow.com/questions/36646880/ansible-2-1-0-using-become-become-user-fails-to-set-permissions-on-temp-file
+ pipelining = True
+ ```
+ 
+ ## Using Ansible for deployment
 
-> [defaults]
-> inventory = ~/aptrust/ansible-playbooks/hosts
->
-> # Prompts for vault password with every run of a playbook
-> ask_vault_pass = True
->
-> # The vault password can be stored in a flat-file to avoid the password prompt
-> # Be aware that it is not advisable to keep passwords in text files in clear #text.
-> vault_password_file=~/.ansible/vault_pass
+### Limit to certain hosts only
+Some playbooks are applied to multiple hosts. For example pharos may be deployed in production, demo and local development environments. Therefore pharos servers may be grouped as `pharos-servers` in the inventory (hosts) file.
+The pharos.yml play states, 
+```
+- hosts: pharos-servers
+  vars_files: ....
+```
+which applies it to _all_ pharos servers in the inventory:
+```
+[pharos-servers]
+ apt-demo-repo hostname_name=apt-demo-repo hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo
+ apt-demo-repo2 hostname_name=apt-demo-repo2 hostname_fqdn=demo.aptrust.org host_eip=34.196.207.37 # Pharos Demo2
+ pharos ansible_user=vagrant hostname_name=pharos hostname_fqdn=pharos.aptrust.local host_eip=192.168.33.12
+ apt-prod-repo2 hostname_name=apt-prod-repo2 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
+ ```
+ In order to limit the play to only one server you may run it like this:
+ ` ansible-playbook pharos.yml --diff -l apt-demo-repo2`
+
+### Tags
+Some playbooks have tagged roles so one can only run a specific role from an otherwise complete playbook to provision and setup from scratch. For example the pharos.yml playbook here:
+```  
+     roles:
+       - {role: common, tags: common}
+       - {role: zzet.rbenv, tags: rbenv}
+       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
+       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
+       - {role: aptrust.pharos, tags: pharos, deploy}
+```
+If you just want to deploy a change to the pharos repom, you wont need to run the whole playbook everytime. Instead just run 
+` ansible-playbook pharos.yml -t deploy`
+
+
+ 
+ 
+ 

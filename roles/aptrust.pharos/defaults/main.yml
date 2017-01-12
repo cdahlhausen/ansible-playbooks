@@ -26,3 +26,8 @@ pharos_local_db: False
 PHAROS_RELEASE: "Unknown"
 
 
+# Variable defaults are generelly set for a development/demo environment.
+#
+
+pharos_setup: false
+

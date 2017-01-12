@@ -15,7 +15,7 @@ getting use to ansible best practices and they are prone to change often.
 
 # Var Files
 Var files are Ansible-conform stored in the group_vars and host_vars directories.
-Sensitive information files are encrypted using Ansible Vault. 
+Sensitive information files are encrypted using Ansible Vault.
 
 ## Vagrant Setup
 
@@ -81,7 +81,7 @@ error. Open ~/.ssh/known_hosts and delete the entry for host
 ## Ansible Vault
 Sensitive information is securely stored via Ansible Vault. This feature of Ansible encrypts any file with AES-256bit encryption. This allows for storing encrypted files in a public repo (GitHub).
 
-A best practice with Ansible Vault is to keep all variables in a single file (vault.yml) and reference them using an unencrypted file (all.yml) in order to be able to grep for variables without decrypting the vault every time. 
+A best practice with Ansible Vault is to keep all variables in a single file (vault.yml) and reference them using an unencrypted file (all.yml) in order to be able to grep for variables without decrypting the vault every time.
 
 Variable files are grouped by host groups that are defined in the hosts inventory file. For example all dpn-demo-servers have a `group_vars/dpn-demo-servers.yml` vault/var file where sensitive information is kept.
 
@@ -122,23 +122,23 @@ It is advisable to keep an Ansible config file in your home directory to make us
  fact_caching = jsonfile
  fact_caching_connection = /tmp/ansible_factcache
  fact_caching_timeout = 31557600
- 
+
  # Disables host_key checking when running plays on servers
  host_key_checking = False
  retry_files_enabled = False # Do not create them
- 
+
 [ssh_connection]
  ssh_args = -o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s -o ControlPath=~/.ssh/%h-%r
  # Performance improvement and workaround for
  # http://stackoverflow.com/questions/36646880/ansible-2-1-0-using-become-become-user-fails-to-set-permissions-on-temp-file
  pipelining = True
  ```
- 
+
  ## Using Ansible for deployment
 
 ### Limit to certain hosts only
 Some playbooks are applied to multiple hosts. For example pharos may be deployed in production, demo and local development environments. Therefore pharos servers may be grouped as `pharos-servers` in the inventory (hosts) file.
-The pharos.yml play states, 
+The pharos.yml play states,
 ```
 - hosts: pharos-servers
   vars_files: ....
@@ -152,11 +152,11 @@ which applies it to _all_ pharos servers in the inventory:
  apt-prod-repo2 hostname_name=apt-prod-repo2 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
  ```
  In order to limit the play to only one server you may run it like this:
- ` ansible-playbook pharos.yml --diff -l apt-demo-repo2`
+ ` ansible-playbook pharos.yml --diff -b -l apt-demo-repo2`
 
 ### Tags
 Some playbooks have tagged roles so one can only run a specific role from an otherwise complete playbook to provision and setup from scratch. For example the pharos.yml playbook here:
-```  
+```
      roles:
        - {role: common, tags: common}
        - {role: zzet.rbenv, tags: rbenv}
@@ -164,10 +164,10 @@ Some playbooks have tagged roles so one can only run a specific role from an oth
        - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
        - {role: aptrust.pharos, tags: pharos, deploy}
 ```
-If you just want to deploy a change to the pharos repom, you wont need to run the whole playbook everytime. Instead just run 
-` ansible-playbook pharos.yml -t deploy`
+If you just want to deploy a change to the pharos repom, you wont need to run the whole playbook everytime. Instead just run
+` ansible-playbook pharos.yml -t deploy -b`
 
 
- 
- 
- 
+
+
+

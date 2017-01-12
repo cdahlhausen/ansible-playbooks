@@ -111,6 +111,7 @@
     vars:
         PHAROS_RELEASE: "{{PHAROS_RELEASE}}"
 
+# TODO: Come up with a better condition reference than the file.
 # Only loads DB schema at first deploy. Skipped when .schema_loaded exists
 # Note: Careful! This assumes pharos has been deployed with this role before.
 #       Otherwise the DB might be wiped!
@@ -121,6 +122,7 @@
         creates: "{{pharos_app_root}}/log/.schema_loaded"
     become: true
     become_user: "{{ system_default_user }}"
+    when: "'production' not in '{{RAILS_ENV}}'"
     tags: dbmigrate
 
   - name: Migrate DB Schema

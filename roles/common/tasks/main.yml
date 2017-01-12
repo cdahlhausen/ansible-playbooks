@@ -39,9 +39,9 @@
     - awscli
     - boto
 
-# Identify type of server, DPN or APTrust
+# Identify type of server, DPN or APTrust. Default to apt.
 - name: Is this an APT or DPN Server
-  set_fact: orgtype="{% if 'apt' in ansible_hostname%}apt{%else%}dpn{%endif%}"
+  set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
   tags: orgtype, nfsmount
 
 # Message of the day explaining server is under control of Ansible.

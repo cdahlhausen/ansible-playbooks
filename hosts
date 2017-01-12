@@ -23,11 +23,11 @@ apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.
 # APTrust 2.0 world
 # All new servers have '2' suffix in their hostname except demo, since it's a new 'namespace'
 [demo-servers]
-apt-demo-repo hostname_name=apt-demo-repo hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo
+apt-demo-repo2 hostname_name=apt-demo-repo2 hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo2
 # apt-demo-inre hostname_name=apt-demo-inre hostname_fqdn=apt-demo-inre.aptrust.org host_eip=
 
 [pharos-servers]
-apt-demo-repo hostname_name=apt-demo-repo hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo
+apt-demo-repo2 hostname_name=apt-demo-repo2 hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo2
 pharos ansible_user=vagrant hostname_name=pharos hostname_fqdn=pharos.aptrust.local host_eip=192.168.33.12
 apt-prod-repo2 hostname_name=apt-prod-repo2 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
 

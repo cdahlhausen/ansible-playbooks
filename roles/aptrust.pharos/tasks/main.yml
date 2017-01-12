@@ -111,7 +111,6 @@
     vars:
         PHAROS_RELEASE: "{{PHAROS_RELEASE}}"
 
-# TODO: Come up with a better condition reference than the file.
 # Only loads DB schema at first deploy. Skipped when .schema_loaded exists
 # Note: Careful! This assumes pharos has been deployed with this role before.
 #       Otherwise the DB might be wiped!

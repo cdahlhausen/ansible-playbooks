@@ -3,7 +3,7 @@ goapp_name: exchange
 goapp_bin_path: "{{ go_env.GOPATH }}/bin"
 goapp_src_path: "{{ go_env.GOPATH }}/src/github.com/APTrust/{{goapp_name}}"
 goapp_cfg_path: "{{ goapp_src_path }}/config"
-goapp_log_path: "/mnt/apt/logs"
+goapp_log_path: "/mnt/efs/apt/logs"
 
 # Used to determine which services to deploy on server.
 # Demo server will have ingeste and restore, prod will

@@ -89,22 +89,13 @@
 
 - name: Set Exchange services fact to configure
   set_fact:
-        exchangeservices: "{{dir_out.stdout_lines}}"
+      exchangeservices: "{{dir_out.stdout_lines}}"
   tags: lsfiles
 
-#- name: Get list of compiled go services
-#  find:
-#        path: "{{goapp_bin_path}}"
-#        file_type: file
-#        patterns: "^{{orgtype}}.*"
-#        use_regex: true
-#  register: comp_go_list
-#  tags: lsfiles
-
-#- name: Debug list of files
-#  debug: var="{{comp_go_list.files.path}}"
-#  tags: lsfiles
-
+- name: Set nsq services fact to configure supervisor
+  set_fact:
+      nsqservices: ['nsqadmin','nsqlookupd','nsqd']
+  tags: lsfiles
 
 # TODO: Replace this with lineinfile of only necessary lines.
 - name: Update Exchange config file

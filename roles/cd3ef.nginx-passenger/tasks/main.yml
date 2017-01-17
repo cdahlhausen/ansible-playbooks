@@ -51,7 +51,7 @@
     become: yes
     tags: dheparam
 
-  - name: Ruby | Install Nginx extra and Phusion Passenger
+  - name: Install Nginx extra and Phusion Passenger
     become: yes
     apt: state=present update_cache=yes pkg="{{item}}"
     when: ansible_os_family == "Debian" and nginx_present|failed
@@ -109,9 +109,7 @@
     become: yes
     lineinfile: dest=/etc/nginx/passenger.conf
                 insertafter="^passenger_root"
-                regexp="^passenger_min_instances"
                 line="passenger_min_instances 4;"
-                backrefs=yes
     tags:
       - nginx
       - passenger

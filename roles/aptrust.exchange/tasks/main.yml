@@ -109,10 +109,13 @@
 #  template: src=nsq.config.j2
 #            dest="{{goapp_cfg_path}}/nsq/{{GO_ENV}}.config"
 
-- name: Create the Supervisor config file for Exchange Services
-  template: src=supervisor.conf.j2
-            dest=/etc/supervisor/conf.d/exchange.conf
+- name: Set Supervisor config for Exchange and NSQ Services
+  template: src="{{item.name}}"
+            dest="/etc/supervisor/conf.d/{{item.dest}}"
   register: supervisor_config_files
+  with_items:
+    - { name: 'exchange_supervisor.conf.j2', dest: 'exchange.conf'}
+    - { name: 'nsq_supervisor.conf.j2', dest: 'nsq.conf'}
   tags: listfiles
 
 - name: Add Cronjob for apt_bucket_reader

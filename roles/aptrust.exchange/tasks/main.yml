@@ -118,34 +118,42 @@
     - { name: 'nsq_supervisor.conf.j2', dest: 'nsq.conf'}
   tags: listfiles
 
-- name: Add Cronjob for apt_bucket_reader
-  cron: name='apt_bucket_reader'
+# TODO: Enable again once all services are running
+- name: Add Cronjob for {{item}}"
+  cron: name="{{item}}"
         user="{{system_default_user}}"
         minute='*/1'
         hour='*/2'
-        job=". $HOME/.profile; {{goapp_bin_path}}/apt_bucket_reader -config={{goapp_cfg_path}}/{{GO_ENV}}.json > {{goapp_log_path}}/cron_apt_bucket_reader.log 2>&1"
+        job=". $HOME/.profile; {{goapp_bin_path}}/{{item}} -config={{goapp_cfg_path}}/{{GO_ENV}}.json > {{goapp_log_path}}/cron_{{item}}.log 2>&1"
+        state=absent
+  with_items:
+      - apt_bucket_reader
+      - apt_queue
   tags: cronjobber
 
 # When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist
 - name: Reread/Add supervisor app config files
-  supervisorctl: name="exchange:{{item}}" state=present
-  with_items: "{{exchangeservices}}"
+  supervisorctl: name="{{item}}" state=present
+#  with_items: "{{exchangeservices}}"
+  with_items:
+    - 'nsqservices:'
+    - 'exchange:'
   register: supervisor_config_update
-  when: supervisor_config_files.changed
+  when: supervisor_config_files.changed or go_build_result.changed
 
-# Golang nsq_service handles nsq. Disable nsq upstart services.
+# Supervisor controls nsq, not upstart. Disable nsq upstart services.
 - name: Ensure nsq upstart services are stopped and disabled
   service: name="{{item}}" state=stopped enabled=no
   ignore_errors: true
   with_items:
-#    - nsqd
+    - nsqd
     - nsqadmin
     - nsqlookupd
 
 # When state = restarted, the module will call supervisorctl update then call supervisorctl restart.
 - name: Update and restart supervisor processes
   supervisorctl: name="exchange:{{item}}" state=restarted
-  when: supervisor_config_files.changed
+  when: supervisor_config_files.changed or go_build_result.changed
   with_items: "{{exchangeservices}}"
 
 # Note: exchange is the program group used in supervisor config.

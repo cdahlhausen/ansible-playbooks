@@ -106,7 +106,7 @@ ex_recordworker: {
 		readtimeout: "60s",
 		writetimeout: "10s",
 		messagetimeout: "180m"
-	},
+	}
 
 ex_replicationworker: {
 		networkconnections: "4",
@@ -119,19 +119,19 @@ ex_replicationworker: {
 		readtimeout: "60s",
 		writetimeout: "10s",
 		messagetimeout: "180m"
-	},
+	}
 
 ex_restoreworker: {
 		networkconnections: "8",
 		workers: "4",
 		nsqtopic: "apt_restore_topic",
 		nsqchannel: "apt_restore_channel",
-		maxattempts: "3":
+		maxattempts: "3",
 		heartbeatinterval: "10s",
 		readtimeout: "60s",
 		writetimeout: "10s",
 		messagetimeout: "180m"
-	},
+	}
 
 ex_filedeleteworker: {
 		networkconnections: "12",
@@ -144,7 +144,7 @@ ex_filedeleteworker: {
 		readtimeout: "60s",
 		writetimeout: "10s",
 		messagetimeout: "30m"
-	},
+	}
 
 ex_fixityworker: {
 		networkconnections: "4",
@@ -157,27 +157,27 @@ ex_fixityworker: {
 		readtimeout: "60s",
 		writetimeout: "10s",
 		messagetimeout: "180m"
-	},
+	}
 
 ex_receivingbuckets: [
-		aptrust.receiving.test.columbia.edu,
-		aptrust.receiving.test.georgetown.edu,
-		aptrust.receiving.test.indiana.edu,
-		aptrust.receiving.test.jhu.edu,
-		aptrust.receiving.test.miami.edu,
-		aptrust.receiving.test.ncsu.edu,
-		aptrust.receiving.test.psu.edu,
-		aptrust.receiving.test.syr.edu,
-		aptrust.receiving.test.uchicago.edu,
-		aptrust.receiving.test.uc.edu,
-		aptrust.receiving.test.uchicago.edu,
-		aptrust.receiving.test.uconn.edu,
-		aptrust.receiving.test.umd.edu,
-		aptrust.receiving.test.umich.edu,
-		aptrust.receiving.test.unc.edu,
-		aptrust.receiving.test.nd.edu,
-		aptrust.receiving.test.virginia.edu,
-		aptrust.receiving.test.vt.edu
+		'aptrust.receiving.test.columbia.edu',
+		'aptrust.receiving.test.georgetown.edu',
+		'aptrust.receiving.test.indiana.edu',
+		'aptrust.receiving.test.jhu.edu',
+		'aptrust.receiving.test.miami.edu',
+		'aptrust.receiving.test.ncsu.edu',
+		'aptrust.receiving.test.psu.edu',
+		'aptrust.receiving.test.syr.edu',
+		'aptrust.receiving.test.uchicago.edu',
+		'aptrust.receiving.test.uc.edu',
+		'aptrust.receiving.test.uchicago.edu',
+		'aptrust.receiving.test.uconn.edu',
+		'aptrust.receiving.test.umd.edu',
+		'aptrust.receiving.test.umich.edu',
+		'aptrust.receiving.test.unc.edu',
+		'aptrust.receiving.test.nd.edu',
+		'aptrust.receiving.test.virginia.edu',
+		'aptrust.receiving.test.vt.edu',
 	]
 
 ex_dpn: {
@@ -212,21 +212,21 @@ ex_dpn: {
 			ingestnodecontactname: "aptrust administrator",
 			ingestnodecontactemail: "help@aptrust.org"
 		},
-		comment: "remote node admin tokens are ignored in this config.",
+    # comment: "remote node admin tokens are ignored in this config.",
 		remotenodeadmintokensfortesting: {
 			chron: "",
 			hathi: "",
 			sdr:   "",
 			tdr:   ""
 		},
-		comment: set these in the environment, not here. export dpn_<node>_token.,
+    # comment: set these in the environment, not here. export dpn_<node>_token.,
 		remotenodetokens: {
 			chron: "",
 			hathi: "",
 			sdr:   "",
 			tdr:   ""
 		},
-		comment: "remote node urls in demo come from node records in the local rest service.",
+    # comment: "remote node urls in demo come from node records in the local rest service.",
 		remotenodeurls: {
 			chron: "",
 			hathi: "",
@@ -316,5 +316,5 @@ ex_dpn: {
 			readtimeout: "60s",
 			writetimeout: "10s",
 			messagetimeout: "180m"
-		}
+		},
 	}

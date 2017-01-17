@@ -68,7 +68,6 @@
     mode: 0775
     state: directory
   with_items:
-    - /mnt/aptrust
     - /mnt/efs/apt
     - /mnt/efs/dpn
   when: (ansible_bios_version != 'VirtualBox' and (use_efs == True or use_ebs == True))

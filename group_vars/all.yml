@@ -94,9 +94,6 @@ aws_go_pwd: "{{ vault_aws_go_pwd }}"
 fluctus_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
 fluctus_aws_ses_pwd: "{{ vault_fluctus_aws_ses_pwd }}"
 
-pharos_aws_ses_user: "{{ vault_fluctus_aws_ses_user }}"
-pharos_aws_ses_pwd: "{{ vault_fluctus_aws_ses_pwd }}"
-
 ##
 # User variables
 ##

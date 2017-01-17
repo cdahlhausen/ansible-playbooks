@@ -97,15 +97,17 @@
       nsqservices: ['nsqadmin','nsqlookupd','nsqd']
   tags: lsfiles
 
-# TODO: Replace this with lineinfile of only necessary lines.
-- name: Update Exchange config file
-  template: src=exchange.json.j2
-            dest="{{goapp_cfg_path}}/{{GO_ENV}}.json"
+# TODO: Re-enable once config jinja template is finished.
+# - name: Update Exchange config file
+#  template: src=exchange.json.j2
+#            dest="/{{goapp_cfg_path}}/{{GO_ENV}}.json"
+#  tags: exchangetemplate
 
+# TODO: Re-enable once config jinja template is finished.
 # TODO: Check NSQ installation if it uses a different config.
-- name: Update NSQ config file
-  template: src=nsq.config.j2
-            dest="{{goapp_cfg_path}}/nsq/{{GO_ENV}}.config"
+# - name: Update NSQ config file
+#  template: src=nsq.config.j2
+#            dest="{{goapp_cfg_path}}/nsq/{{GO_ENV}}.config"
 
 - name: Create the Supervisor config file for Exchange Services
   template: src=supervisor.conf.j2

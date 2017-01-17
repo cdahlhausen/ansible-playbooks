@@ -42,6 +42,8 @@
     - ['apt', 'dpn']
     - ['data','logs','restore','replication']
 
+# TODO: Refactor this as it will clone the repo on every run and overwrite the
+#      config files everytime. Consider moving config files in ~/go/bin/config
 # Checking if repo has been updated. Does not clone since 'go get' below will
 - name: clone exchange repository
   git: repo="git@github.com:APTrust/exchange.git"
@@ -70,10 +72,10 @@
     chdir: "{{goapp_src_path}}"
   environment: "{{go_env}}"
   when: checkout.changed
-  register: build_result
-  failed_when: "'no buildable Go source files' not in build_result.stderr"
+  register: go_build_result
+  failed_when: "'no buildable Go source files' not in go_build_result.stderr"
   # Note: even if status is sucessful this will be a changed task.?
-  changed_when: "'no buildable Go source files' not in build_result.stderr"
+  changed_when: "'no buildable Go source files' not in go_build_result.stderr"
   tags: buildgo
 
 # Identify type of server, DPN or APTrust

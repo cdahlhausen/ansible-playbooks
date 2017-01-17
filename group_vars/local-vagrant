@@ -23,6 +23,8 @@ pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"
 pharos_devise_key: "{{ vault_pharos_dev_devise_key}}"
 pharos_rails_key: "{{ vault_pharos_dev_rails_key}}"
 
+pharos_url: "https://demo.aptrust.org"
+
 # Exchange
 GO_ENV: 'demo'
 
@@ -31,4 +33,287 @@ ruby_version: 2.3.1
 # DPN-SERVER
 dpnserver_local_db: true
 use_efs: False
+#
+# Exchange Go Services
+ex_tardirectory: "/mnt/apt/data"
+ex_restoredirectory: "/mnt/apt/restore"
+ex_logdirectory: "/mnt/apt/logs"
+ex_replicationdirectory: "/mnt/apt/replicate"
+ex_maxfilesize: "0"
+ex_skipalreadyprocessed: "true"
+ex_deleteonsuccess: "true"
+ex_logtostderr: "false"
+ex_volumeserviceport: 8898
+ex_loglevel: 4
+ex_bucketreadercachehours: 24
+ex_bagvalidationconfigfile: "config/aptrust_bag_validation_config.json"
+ex_bagitversion: "0.97"
+ex_bagitencoding: "utf-8"
 
+ex_pharosurl: "{{pharos_url}}"
+ex_pharosapiversion: "v2"
+
+ex_nsqdhttpaddress: "http://prod-services.aptrust.org:4151"
+ex_nsqlookupd: "prod-services.aptrust.org:4161"
+
+ex_aptrusts3region: "us-east-1"
+ex_aptrustglacierregion: "us-west-2"
+
+ex_preservationbucket: "aptrust.preservation.storage"
+ex_replicationbucket: "aptrust.preservation.oregon"
+
+ex_customrestorebucket: ""
+ex_restoretotestbuckets: false
+ex_maxdayssincefixitycheck: 90
+
+# This may need to loose { }
+# https://www.sbarjatiya.com/notes_wiki/index.php/Working_with_lists_and_dictionary_variables_in_ansible
+ex_fetchworker: {
+		networkconnections: "6",
+		workers: "6",
+		nsqtopic: "apt_fetch_topic",
+		nsqchannel: "apt_fetch_channel",
+		maxattempts: "3",
+		maxinflight: "20",
+		heartbeatinterval: "10s",
+		readtimeout: "60s",
+		writetimeout: "10s",
+		messagetimeout: "180m"
+	}
+
+ex_storeworker: {
+		networkconnections: "12",
+		workers: "6",
+		nsqtopic: "apt_store_topic",
+		nsqchannel: "apt_store_channel",
+		maxattempts: "3",
+		maxinflight: "20",
+		heartbeatinterval: "10s",
+		readtimeout: "60s",
+		writetimeout: "10s",
+		messagetimeout: "180m"
+	}
+
+ex_recordworker: {
+		networkconnections: "6",
+		workers: "3",
+		nsqtopic: "apt_record_topic",
+		nsqchannel: "apt_record_channel",
+		maxattempts: "3",
+		maxinflight: "20",
+		heartbeatinterval: "10s",
+		readtimeout: "60s",
+		writetimeout: "10s",
+		messagetimeout: "180m"
+	}
+
+ex_replicationworker: {
+		networkconnections: "12",
+		workers: "8",
+		nsqtopic: "apt_replication_topic",
+		nsqchannel: "apt_replication_channel",
+		maxattempts: "5",
+		maxinflight: "20",
+		heartbeatinterval: "10s",
+		readtimeout: "60s",
+		writetimeout: "10s",
+		messagetimeout: "180m"
+	}
+
+ex_restoreworker: {
+		networkconnections: "8",
+		workers: "4",
+		nsqtopic: "apt_restore_topic",
+		nsqchannel: "apt_restore_channel",
+		maxattempts: "3",
+		heartbeatinterval: "10s",
+		readtimeout: "60s",
+		writetimeout: "10s",
+		messagetimeout: "720m"
+	}
+
+ex_filedeleteworker: {
+		networkconnections: "12",
+		workers: "4",
+		nsqtopic: "apt_file_delete_topic",
+		nsqchannel: "apt_file_delete_channel",
+		maxattempts: "3",
+		maxinflight: "20",
+		heartbeatinterval: "10s",
+		readtimeout: "60s",
+		writetimeout: "10s",
+		messagetimeout: "30m"
+	}
+
+ex_fixityworker: {
+		networkconnections: "4",
+		workers: "4",
+		nsqtopic: "apt_fixity_topic",
+		nsqchannel: "apt_fixity_channel",
+		maxattempts: "3",
+		maxinflight: "20",
+		heartbeatinterval: "10s",
+		readtimeout: "60s",
+		writetimeout: "10s",
+		messagetimeout: "180m"
+	}
+
+ex_receivingbuckets: [
+		'aptrust.receiving.columbia.edu',
+		'aptrust.receiving.georgetown.edu',
+		'aptrust.receiving.indiana.edu',
+		'aptrust.receiving.jhu.edu',
+		'aptrust.receiving.miami.edu',
+		'aptrust.receiving.ncsu.edu',
+		'aptrust.receiving.psu.edu',
+		'aptrust.receiving.syr.edu',
+		'aptrust.receiving.uchicago.edu',
+		'aptrust.receiving.uc.edu',
+		'aptrust.receiving.uchicago.edu',
+		'aptrust.receiving.uconn.edu',
+		'aptrust.receiving.umd.edu',
+		'aptrust.receiving.umich.edu',
+		'aptrust.receiving.unc.edu',
+		'aptrust.receiving.nd.edu',
+		'aptrust.receiving.virginia.edu',
+		'aptrust.receiving.vt.edu'
+	]
+
+ex_dpn: {
+		localnode: "aptrust",
+		logdirectory: "/mnt/efs/dpn/logs",
+		stagingdirectory: "/mnt/efs/dpn/staging",
+		remotenodehomedirectory: "/mnt/efs/dpn",
+		loglevel: "4",
+		logtostderr: "false",
+		replicatetonumnodes: "2",
+		dpnapiversion: "api-v2",
+		dpnpreservationbucket: "aptrust.dpn.preservation",
+		acceptinvalidsslcerts: "false",
+		usesshwithrsync: "true",
+		dpnglacierregion: "us-east-1",
+# TODO: Is this relative or absolute to the go bin or go src directory?
+#       We may want to move configs in the bin directory anyways. and only
+#       update them if the repo has updated.
+		bagvalidationconfigfile: "config/dpn_bag_validation_config.json",
+		restclient: {
+#			comment: "settings for our local dpn rest api server. load localauthtoken from environment!",
+			localserviceurl: "https://dpn.aptrust.org/",
+			localapiroot: "api-v2",
+			localauthtoken: ""
+		},
+		defaultmetadata: {
+#			comment: "config settings for common dpn bagit metadata",
+			bagitversion: "0.97",
+			bagitencoding: "utf-8",
+			ingestnodename: "aptrust",
+			ingestnodeaddress: "160 mccormick rd., charlottesville, va 22904",
+			ingestnodecontactname: "aptrust administrator",
+			ingestnodecontactemail: "help@aptrust.org"
+		},
+#		comment: "remote node admin tokens are ignored in this config.",
+		remotenodeadmintokensfortesting: {
+			chron: "",
+			hathi: "",
+			sdr:   "",
+			tdr:   ""
+		},
+#		comment: set these in the environment, not here. export dpn_<node>_token.,
+		remotenodetokens: {
+			chron: "",
+			hathi: "",
+			sdr:   "",
+			tdr:   ""
+		},
+#		comment: "remote node urls in demo come from node records in the local rest service.",
+		remotenodeurls: {
+			chron: "",
+			hathi: "",
+			sdr:   "",
+			tdr:   ""
+		},
+		dpnpackageworker: {
+			networkconnections: "8",
+			workers: "4",
+			nsqtopic: "dpn_package_topic",
+			nsqchannel: "dpn_package_channel",
+			maxattempts: "3",
+			maxinflight: "20",
+			heartbeatinterval: "10s",
+			readtimeout: "60s",
+			writetimeout: "10s",
+			messagetimeout: "180m"
+		},
+		dpnvalidationworker: {
+			networkconnections: "8",
+			workers: "4",
+			nsqtopic: "dpn_validation_topic",
+			nsqchannel: "dpn_validation_channel",
+			maxattempts: "3",
+			maxinflight: "20",
+			heartbeatinterval: "10s",
+			readtimeout: "60s",
+			writetimeout: "10s",
+			messagetimeout: "180m"
+		},
+		dpncopyworker: {
+			networkconnections: "8",
+			workers: "4",
+			nsqtopic: "dpn_copy_topic",
+			nsqchannel: "dpn_copy_channel",
+			maxattempts: "3",
+			maxinflight: "20",
+			heartbeatinterval: "10s",
+			readtimeout: "60s",
+			writetimeout: "10s",
+			messagetimeout: "180m"
+		},
+		dpningeststoreworker: {
+			networkconnections: "4",
+			workers: "4",
+			nsqtopic: "dpn_ingest_store_topic",
+			nsqchannel: "dpn_ingest_store_channel",
+			maxattempts: "3",
+			maxinflight: "20",
+			heartbeatinterval: "10s",
+			readtimeout: "60s",
+			writetimeout: "10s",
+			messagetimeout: "180m"
+		},
+		dpningestrecordworker: {
+			networkconnections: "4",
+			workers: "4",
+			nsqtopic: "dpn_record_topic",
+			nsqchannel: "dpn_record_channel",
+			maxattempts: "3",
+			maxinflight: "20",
+			heartbeatinterval: "10s",
+			readtimeout: "60s",
+			writetimeout: "10s",
+			messagetimeout: "180m"
+		},
+		dpnreplicationstoreworker: {
+			networkconnections: "4",
+			workers: "4",
+			nsqtopic: "dpn_replication_store_topic",
+			nsqchannel: "dpn_replication_store_channel",
+			maxattempts: "3",
+			maxinflight: "20",
+			heartbeatinterval: "10s",
+			readtimeout: "60s",
+			writetimeout: "10s",
+			messagetimeout: "180m"
+		},
+		dpnrestoreworker: {
+			networkconnections: "4",
+			workers: "4",
+			nsqtopic: "dpn_restore_topic",
+			nsqchannel: "dpn_restore_channel",
+			maxattempts: "3",
+			maxinflight: "20",
+			heartbeatinterval: "10s",
+			readtimeout: "60s",
+			writetimeout: "10s",
+			messagetimeout: "180m"
+		},
+	}

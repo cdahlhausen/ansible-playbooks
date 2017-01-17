@@ -1,10 +1,10 @@
 #jinja2: trim_blocks: True, lstrip_blocks: True
 #{{ansible_managed}}
 
-{% for item in nsq_services %}
+{% for item in nsqservices %}
 
 [program:{{ item }}]
-command={{ goapp_bin_path }}/{{ item }} -config={{ goapp_cfg_path }}/nsq/{{GO_ENV}}.config
+command=/usr/local/sbin/{{ item }} -config={{ goapp_cfg_path }}/nsq/{{GO_ENV}}.config
 environment=GOPATH="{{go_env.GOPATH}}",EXCHANGE_HOME="{{goapp_src_path}}",PATH="$PATH:{{goapp_bin_path}}:/usr/local/go/bin:/usr/local/sbin"
 
 autostart=true
@@ -20,6 +20,6 @@ stdout_logfile_backups=10
 
 {% endfor %}
 
-[group:nsq_services]
-programs={% for item in nsq_services %}{{item}}{% if not loop.last %},{% endif %}{% endfor %}
+[group:nsqservices]
+programs={% for item in nsqservices %}{{item}}{% if not loop.last %},{% endif %}{% endfor %}
 

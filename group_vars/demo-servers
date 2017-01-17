@@ -9,6 +9,9 @@ var_fedora_pid_namespace: 'aptrust'
 
 ruby_version: 2.3.1
 
+# GO
+GO_ENV: 'demo'
+
 # Pharos
 RAILS_ENV: 'demo'
 pharos_local_db: False
@@ -24,8 +27,13 @@ pharos_db_size: '16'
 pharos_vpc_sec_group: "sg-18a4ac62"
 pharos_rds_subnet: "demo"
 
-# GO
-GO_ENV: 'demo'
+
+# AWS EFS/DBS
+# External Filesystems
+use_efs: true
+use_ebs: false
+# EFS PROD
+efs_mount_uri: "fs-97ff5bde.efs.us-east-1.amazonaws.com:/"
 
 # Exchange Go Services
 ex_tardirectory: "/mnt/apt/data"

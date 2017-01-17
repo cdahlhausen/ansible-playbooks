@@ -47,6 +47,7 @@ apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.ap
 [exchange-services]
 apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services
 apt-demo-services hostname_name=apt-demo-services hostname_fqdn=demo-services.aptrust.org host_eip=34.196.207.37 # Demo Go Services
+pharos ansible_user=vagrant hostname_name=pharos hostname_fqdn=pharos.aptrust.local host_eip=192.168.33.12
 
 [us-east-servers]
 apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96

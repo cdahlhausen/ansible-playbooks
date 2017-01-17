@@ -24,7 +24,7 @@ apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.
 # All new servers have '2' suffix in their hostname except demo, since it's a new 'namespace'
 [demo-servers]
 apt-demo-repo2 hostname_name=apt-demo-repo2 hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo2
-# apt-demo-inre hostname_name=apt-demo-inre hostname_fqdn=apt-demo-inre.aptrust.org host_eip=
+apt-demo-services hostname_name=apt-demo-services hostname_fqdn=demo-services.aptrust.org host_eip=34.196.207.37 # Demo Go Services
 
 [pharos-servers]
 apt-demo-repo2 hostname_name=apt-demo-repo2 hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo2
@@ -41,9 +41,12 @@ apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_ei
 # APTrust 2.0
 apt-prod-repo2 hostname_name=apt-prod-repo2 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
 #apt-prod-inge2  hostname_name=apt-prod-inge2 hostname_fqdn=apt-prod-inge2.aptrust.org host_eip=
+apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services
 #apt-prod-rest2 hostname_name=apt-prod-rest2 hostname_fqdn=apt-prod-rest2.aptrust.org host_eip=
 
-[us-west-servers]
+[exchange-services]
+apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services
+apt-demo-services hostname_name=apt-demo-services hostname_fqdn=demo-services.aptrust.org host_eip=34.196.207.37 # Demo Go Services
 
 [us-east-servers]
 apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96

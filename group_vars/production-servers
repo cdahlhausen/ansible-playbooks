@@ -15,6 +15,9 @@ pharos_rails_key: "{{ vault_pharos_prod_rails_key}}"
 
 pharos_url: "https://repo.aptrust.org"
 
+pharos_aws_ses_user: "{{vault_pharos_prod_aws_ses_user}}"
+pharos_aws_ses_pwd: "{{vault_pharos_prod_aws_ses_pwd}}"
+
 # AWS RDS
 pharos_rds_instance_type: "db.m4.large"
 pharos_vpc_sec_group: "sg-27544d5d"
@@ -30,7 +33,7 @@ pharos_rds_backup_retention: '10'
 use_efs: false
 use_ebs: false
 # EFS PROD
-efs_mount_uri: ".fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
+efs_mount_uri: "fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
 
 
 # Exchange Go Services

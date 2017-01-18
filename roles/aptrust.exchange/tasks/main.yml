@@ -134,7 +134,6 @@
 # When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist
 - name: Reread/Add supervisor app config files
   supervisorctl: name="{{item}}" state=present
-#  with_items: "{{exchangeservices}}"
   with_items:
     - 'nsqservices:'
     - 'exchange:'
@@ -152,11 +151,16 @@
 
 # When state = restarted, the module will call supervisorctl update then call supervisorctl restart.
 - name: Update and restart supervisor processes
-  supervisorctl: name="exchange:{{item}}" state=restarted
+  supervisorctl: name="{{item}}" state=restarted
   when: supervisor_config_files.changed or go_build_result.changed
-  with_items: "{{exchangeservices}}"
+  with_items:
+    - 'nsqservices:'
+    - 'exchange:'
 
 # Note: exchange is the program group used in supervisor config.
 - name: Ensure Exchange services are running
-  supervisorctl: name="exchange:{{item}}" state=started
-  with_items: "{{exchangeservices}}"
+  supervisorctl: name="{{item}}" state=started
+  with_items:
+    - 'nsqservices:'
+    - 'exchange:'
+

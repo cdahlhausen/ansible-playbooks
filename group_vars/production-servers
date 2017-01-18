@@ -37,6 +37,9 @@ efs_mount_uri: "fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
 
 
 # Exchange Go Services
+pharos_api_user: "{{vault_pharos_prod_api_user}}"
+pharos_api_key: "{{vault_pharos_prod_api_pwd}}"
+
 ex_tardirectory: "/mnt/efs/apt/data"
 ex_restoredirectory: "/mnt/efs/apt/restore"
 ex_logdirectory: "/mnt/efs/apt/logs"

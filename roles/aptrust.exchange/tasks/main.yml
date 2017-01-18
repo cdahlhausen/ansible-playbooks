@@ -26,6 +26,8 @@
     - { name: "AWS_SECRET_ACCESS_KEY", value: "{{aws_go_pwd}}"}
     - { name: "GOPATH", value: "{{go_env.GOPATH}}"}
     - { name: "EXCHANGE_HOME", value: "{{goapp_src_path}}"}
+    - { name: "PHAROS_API_USER", value: "{{pharos_api_user}}"}
+    - { name: "PHAROS_API_KEY", value: "{{pharos_api_key}}"}
   tags: envvars
 
 # Note: Commmon role creates and mounts external filesystems like EFS/EBS.

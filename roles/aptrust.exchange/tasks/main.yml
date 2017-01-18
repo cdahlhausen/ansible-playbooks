@@ -143,7 +143,7 @@
     - 'nsqservices:'
     - 'exchange:'
   register: supervisor_config_update
-  when: supervisor_config_files.changed or go_build_result.changed
+  when: supervisor_config_files.changed or go_build_result.changed or checkout.changed
 
 # Supervisor controls nsq, not upstart. Disable nsq upstart services.
 - name: Ensure nsq upstart services are stopped and disabled

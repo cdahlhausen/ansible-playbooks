@@ -55,6 +55,7 @@
 - name: clone exchange repository
   git: repo="git@github.com:APTrust/exchange.git"
       dest="{{ goapp_src_path }}"
+      key_file={{aptdeploy_sshkey_private}}
       accept_hostkey=yes
       clone=yes
       update=yes

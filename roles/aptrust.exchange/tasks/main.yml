@@ -30,6 +30,9 @@
 
 # Note: Commmon role creates and mounts external filesystems like EFS/EBS.
 #       When deploy is on virtualbox, directories will be created locally.
+#       Applying permissions recursively to avoid Supervisor bug that creates
+#       logfiles only with root:root rw access.
+#       https://github.com/Supervisor/supervisor/issues/114
 - name: Create EFS volume directories
   become: yes
   file:
@@ -37,6 +40,7 @@
     owner: "{{system_default_user}}"
     group: "{{deploy_group}}"
     mode: 0775
+    recurse: yes
     state: directory
   with_nested:
     - ['apt', 'dpn']

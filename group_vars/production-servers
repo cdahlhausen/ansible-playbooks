@@ -74,55 +74,55 @@ ex_maxdayssincefixitycheck: 90
 # This may need to loose { }
 # https://www.sbarjatiya.com/notes_wiki/index.php/Working_with_lists_and_dictionary_variables_in_ansible
 ex_fetchworker: {
-		networkconnections: "6",
-		workers: "6",
-		nsqtopic: "apt_fetch_topic",
-		nsqchannel: "apt_fetch_channel",
-		maxattempts: "3",
-		maxinflight: "20",
-		heartbeatinterval: "10s",
-		readtimeout: "60s",
-		writetimeout: "10s",
-		messagetimeout: "180m"
+  networkconnections: "6",
+  workers: "6",
+  nsqtopic: "apt_fetch_topic",
+  nsqchannel: "apt_fetch_channel",
+  maxattempts: "3",
+  maxinflight: "20",
+  heartbeatinterval: "10s",
+  readtimeout: "60s",
+  writetimeout: "10s",
+  messagetimeout: "180m"
 	}
 
 ex_storeworker: {
-		networkconnections: "12",
-		workers: "6",
-		nsqtopic: "apt_store_topic",
-		nsqchannel: "apt_store_channel",
-		maxattempts: "3",
-		maxinflight: "20",
-		heartbeatinterval: "10s",
-		readtimeout: "60s",
-		writetimeout: "10s",
-		messagetimeout: "180m"
+  networkconnections: "12",
+  workers: "6",
+  nsqtopic: "apt_store_topic",
+  nsqchannel: "apt_store_channel",
+  maxattempts: "3",
+  maxinflight: "20",
+  heartbeatinterval: "10s",
+  readtimeout: "60s",
+  writetimeout: "10s",
+  messagetimeout: "180m"
 	}
 
 ex_recordworker: {
-		networkconnections: "6",
-		workers: "3",
-		nsqtopic: "apt_record_topic",
-		nsqchannel: "apt_record_channel",
-		maxattempts: "3",
-		maxinflight: "20",
-		heartbeatinterval: "10s",
-		readtimeout: "60s",
-		writetimeout: "10s",
-		messagetimeout: "180m"
+  networkconnections: "6",
+  workers: "3",
+  nsqtopic: "apt_record_topic",
+  nsqchannel: "apt_record_channel",
+  maxattempts: "3",
+  maxinflight: "20",
+  heartbeatinterval: "10s",
+  readtimeout: "60s",
+  writetimeout: "10s",
+  messagetimeout: "180m"
 	}
 
 ex_replicationworker: {
-		networkconnections: "12",
-		workers: "8",
-		nsqtopic: "apt_replication_topic",
-		nsqchannel: "apt_replication_channel",
-		maxattempts: "5",
-		maxinflight: "20",
-		heartbeatinterval: "10s",
-		readtimeout: "60s",
-		writetimeout: "10s",
-		messagetimeout: "180m"
+  networkconnections: "12",
+  workers: "8",
+  nsqtopic: "apt_replication_topic",
+  nsqchannel: "apt_replication_channel",
+  maxattempts: "5",
+  maxinflight: "20",
+  heartbeatinterval: "10s",
+  readtimeout: "60s",
+  writetimeout: "10s",
+  messagetimeout: "180m"
 	}
 
 ex_restoreworker: {

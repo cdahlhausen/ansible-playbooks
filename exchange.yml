@@ -8,7 +8,6 @@
         playbook_name: exchange
 
         # Golang
-        GO_ENV: 'demo'
         golang_workspace_user: "{{system_default_user}}"
 
     roles:

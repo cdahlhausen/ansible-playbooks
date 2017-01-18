@@ -1,5 +1,5 @@
 {
-	"Comment": "Config file for APTrust {{RAILS_ENV}} server.",
+	"Comment": "Config file for APTrust {{GO_ENV}} server.",
 
 	"TarDirectory": "{{ex_tardirectory}}",
 	"RestoreDirectory": "{{ex_restoredirectory}}",
@@ -33,11 +33,11 @@
 
 	"FetchWorker": {
 		"NetworkConnections": "{{ex_fetchworker.networkconnections}}",
-		"Workers": 4,
-		"NsqTopic": "apt_fetch_topic",
-		"NsqChannel": "apt_fetch_channel",
-		"MaxAttempts": 3,
-		"MaxInFlight": 20,
+		"Workers": "{{ex_fetchworker.workers}}",
+		"NsqTopic": "{{ex_fetchworker.nsqtopic}}",
+		"NsqChannel": "{{ex_fetchworker.nsqchannel}}",
+		"MaxAttempts": "{{ex_fetchworker.maxattempts}}",
+		"MaxInFlight": "{{ex_fetchworker.maxinflight}}",
 		"HeartbeatInterval": "10s",
 		"ReadTimeout": "60s",
 		"WriteTimeout": "10s",

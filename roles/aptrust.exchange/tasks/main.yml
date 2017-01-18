@@ -105,9 +105,9 @@
 
 # TODO: Re-enable once config jinja template is finished.
 # TODO: Check NSQ installation if it uses a different config.
-# - name: Update NSQ config file
-#  template: src=nsq.config.j2
-#            dest="{{goapp_cfg_path}}/nsq/{{GO_ENV}}.config"
+- name: Update NSQ config file
+  template: src=nsq.config.j2
+            dest="{{goapp_cfg_path}}/nsq/{{GO_ENV}}.config"
 
 - name: Set Supervisor config for Exchange and NSQ Services
   template: src="{{item.name}}"

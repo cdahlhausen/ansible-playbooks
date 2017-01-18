@@ -51,11 +51,12 @@
 # Checking if repo has been updated. Does not clone since 'go get' below will
 - name: clone exchange repository
   git: repo="git@github.com:APTrust/exchange.git"
-       dest="{{ goapp_src_path }}"
-       accept_hostkey=yes
-       clone=yes
-       update=no
-       version=master
+      dest="{{ goapp_src_path }}"
+      accept_hostkey=yes
+      clone=yes
+      update=yes
+      force=yes
+      version=master
   become_user: "{{system_default_user}}"
   register: gitclone
   tags: gitclone

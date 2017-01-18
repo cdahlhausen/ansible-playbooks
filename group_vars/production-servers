@@ -37,10 +37,10 @@ efs_mount_uri: "fs-b4c91cfd.efs.us-east-1.amazonaws.com:/"
 
 
 # Exchange Go Services
-ex_tardirectory: "/mnt/apt/data"
-ex_restoredirectory: "/mnt/apt/restore"
-ex_logdirectory: "/mnt/apt/logs"
-ex_replicationdirectory: "/mnt/apt/replicate"
+ex_tardirectory: "/mnt/efs/apt/data"
+ex_restoredirectory: "/mnt/efs/apt/restore"
+ex_logdirectory: "/mnt/efs/apt/logs"
+ex_replicationdirectory: "/mnt/efs/apt/replicate"
 ex_maxfilesize: "0"
 ex_skipalreadyprocessed: "true"
 ex_deleteonsuccess: "true"

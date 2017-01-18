@@ -23,8 +23,11 @@ tcp_address="0.0.0.0:4150"
 # If you don't specific broadcast_address, NSQ will use the system's
 # hostname, and if that name isn't a fully qualified domain name
 # with a proper DNS entry, all NSQ clients will fail to connect.
+{% if GO_ENV == 'production' %}
+broadcast_address="prod-services.aptrust.org"
+{% else %}
 broadcast_address="{{GO_ENV}}-services.aptrust.org"
-
+{% endif %}
 # Specify nslookupd location, so nsqd can tell the discovery
 # service that it's up and running.
 #lookupd_tcp_address="127.0.0.1:4160"

@@ -97,7 +97,7 @@ ex_storeworker: {
     readtimeout: "60s",
     writetimeout: "10s",
     messagetimeout: "180m"
-	}
+  }
 
 ex_recordworker: {
     networkconnections: "6",
@@ -110,7 +110,7 @@ ex_recordworker: {
     readtimeout: "60s",
     writetimeout: "10s",
     messagetimeout: "180m"
-	}
+  }
 
 ex_replicationworker: {
     networkconnections: "12",
@@ -123,7 +123,7 @@ ex_replicationworker: {
     readtimeout: "60s",
     writetimeout: "10s",
     messagetimeout: "180m"
-	}
+  }
 
 ex_restoreworker: {
     networkconnections: "8",
@@ -135,7 +135,7 @@ ex_restoreworker: {
     readtimeout: "60s",
     writetimeout: "10s",
     messagetimeout: "720m"
-	}
+  }
 
 ex_filedeleteworker: {
     networkconnections: "12",
@@ -148,7 +148,7 @@ ex_filedeleteworker: {
     readtimeout: "60s",
     writetimeout: "10s",
     messagetimeout: "30m"
-	}
+  }
 
 ex_fixityworker: {
     networkconnections: "4",
@@ -161,28 +161,28 @@ ex_fixityworker: {
     readtimeout: "60s",
     writetimeout: "10s",
     messagetimeout: "180m"
-	}
+  }
 
 ex_receivingbuckets: [
-		'aptrust.receiving.columbia.edu',
-		'aptrust.receiving.georgetown.edu',
-		'aptrust.receiving.indiana.edu',
-		'aptrust.receiving.jhu.edu',
-		'aptrust.receiving.miami.edu',
-		'aptrust.receiving.ncsu.edu',
-		'aptrust.receiving.psu.edu',
-		'aptrust.receiving.syr.edu',
-		'aptrust.receiving.uchicago.edu',
-		'aptrust.receiving.uc.edu',
-		'aptrust.receiving.uchicago.edu',
-		'aptrust.receiving.uconn.edu',
-		'aptrust.receiving.umd.edu',
-		'aptrust.receiving.umich.edu',
-		'aptrust.receiving.unc.edu',
-		'aptrust.receiving.nd.edu',
-		'aptrust.receiving.virginia.edu',
-		'aptrust.receiving.vt.edu'
-	]
+    'aptrust.receiving.columbia.edu',
+    'aptrust.receiving.georgetown.edu',
+    'aptrust.receiving.indiana.edu',
+    'aptrust.receiving.jhu.edu',
+    'aptrust.receiving.miami.edu',
+    'aptrust.receiving.ncsu.edu',
+    'aptrust.receiving.psu.edu',
+    'aptrust.receiving.syr.edu',
+    'aptrust.receiving.uchicago.edu',
+    'aptrust.receiving.uc.edu',
+    'aptrust.receiving.uchicago.edu',
+    'aptrust.receiving.uconn.edu',
+    'aptrust.receiving.umd.edu',
+    'aptrust.receiving.umich.edu',
+    'aptrust.receiving.unc.edu',
+    'aptrust.receiving.nd.edu',
+    'aptrust.receiving.virginia.edu',
+    'aptrust.receiving.vt.edu'
+    ]
 
 ex_dpn: {
     localnode: "aptrust",
@@ -198,46 +198,46 @@ ex_dpn: {
     usesshwithrsync: "true",
     dpnglacierregion: "us-east-1",
 # TODO: Is this relative or absolute to the go bin or go src directory?
-#       We may want to move configs in the bin directory anyways. and only
-#       update them if the repo has updated.
+#     We may want to move configs in the bin directory anyways. and only
+#     update them if the repo has updated.
     bagvalidationconfigfile: "config/dpn_bag_validation_config.json",
     restclient: {
-#			comment: "settings for our local dpn rest api server. load localauthtoken from environment!",
+#     comment: "settings for our local dpn rest api server. load localauthtoken from environment!",
       localserviceurl: "https://dpn.aptrust.org/",
       localapiroot: "api-v2",
       localauthtoken: ""
-		},
-		defaultmetadata: {
-#			comment: "config settings for common dpn bagit metadata",
+      },
+      defaultmetadata: {
+#     comment: "config settings for common dpn bagit metadata",
       bagitversion: "0.97",
       bagitencoding: "utf-8",
       ingestnodename: "aptrust",
       ingestnodeaddress: "160 mccormick rd., charlottesville, va 22904",
       ingestnodecontactname: "aptrust administrator",
       ingestnodecontactemail: "help@aptrust.org"
-		},
-#		comment: "remote node admin tokens are ignored in this config.",
-		remotenodeadmintokensfortesting: {
+      },
+#     comment: "remote node admin tokens are ignored in this config.",
+      remotenodeadmintokensfortesting: {
       chron: "",
       hathi: "",
       sdr:   "",
       tdr:   ""
-		},
-#		comment: set these in the environment, not here. export dpn_<node>_token.,
-		remotenodetokens: {
+      },
+#     comment: set these in the environment, not here. export dpn_<node>_token.,
+      remotenodetokens: {
       chron: "",
       hathi: "",
       sdr:   "",
       tdr:   ""
-		},
-#		comment: "remote node urls in demo come from node records in the local rest service.",
-		remotenodeurls: {
+      },
+#     comment: "remote node urls in demo come from node records in the local rest service.",
+      remotenodeurls: {
       chron: "",
       hathi: "",
       sdr:   "",
       tdr:   ""
-		},
-		dpnpackageworker: {
+      },
+      dpnpackageworker: {
       networkconnections: "8",
       workers: "4",
       nsqtopic: "dpn_package_topic",
@@ -248,8 +248,8 @@ ex_dpn: {
       readtimeout: "60s",
       writetimeout: "10s",
       messagetimeout: "180m"
-		},
-		dpnvalidationworker: {
+      },
+      dpnvalidationworker: {
       networkconnections: "8",
       workers: "4",
       nsqtopic: "dpn_validation_topic",
@@ -260,8 +260,8 @@ ex_dpn: {
       readtimeout: "60s",
       writetimeout: "10s",
       messagetimeout: "180m"
-		},
-		dpncopyworker: {
+      },
+      dpncopyworker: {
       networkconnections: "8",
       workers: "4",
       nsqtopic: "dpn_copy_topic",
@@ -272,8 +272,8 @@ ex_dpn: {
       readtimeout: "60s",
       writetimeout: "10s",
       messagetimeout: "180m"
-		},
-		dpningeststoreworker: {
+      },
+      dpningeststoreworker: {
       networkconnections: "4",
       workers: "4",
       nsqtopic: "dpn_ingest_store_topic",
@@ -284,8 +284,8 @@ ex_dpn: {
       readtimeout: "60s",
       writetimeout: "10s",
       messagetimeout: "180m"
-		},
-		dpningestrecordworker: {
+      },
+      dpningestrecordworker: {
       networkconnections: "4",
       workers: "4",
       nsqtopic: "dpn_record_topic",
@@ -296,8 +296,8 @@ ex_dpn: {
       readtimeout: "60s",
       writetimeout: "10s",
       messagetimeout: "180m"
-		},
-		dpnreplicationstoreworker: {
+      },
+      dpnreplicationstoreworker: {
       networkconnections: "4",
       workers: "4",
       nsqtopic: "dpn_replication_store_topic",
@@ -308,8 +308,8 @@ ex_dpn: {
       readtimeout: "60s",
       writetimeout: "10s",
       messagetimeout: "180m"
-		},
-		dpnrestoreworker: {
+      },
+      dpnrestoreworker: {
       networkconnections: "4",
       workers: "4",
       nsqtopic: "dpn_restore_topic",
@@ -320,5 +320,5 @@ ex_dpn: {
       readtimeout: "60s",
       writetimeout: "10s",
       messagetimeout: "180m"
-		},
-	}
+      },
+    }

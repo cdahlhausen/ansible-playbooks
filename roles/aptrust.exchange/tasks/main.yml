@@ -45,6 +45,7 @@
   with_nested:
     - ['apt', 'dpn']
     - ['data','logs','restore','replication']
+  tags: exchange_efs
 
 # TODO: Refactor this as it will clone the repo on every run and overwrite the
 #      config files everytime. Consider moving config files in ~/go/bin/config
@@ -67,8 +68,8 @@
   shell: "go get -u -f -d github.com/APTrust/exchange/..."
   environment: "{{go_env}}"
   register: checkout
-  when: gitclone.changed
-  tags: buildgo, gitclone
+  #  when: gitclone.changed
+  tags: buildgo, gitclone2
 
 # go install exchange binaries.
 - name: Build and install go binaries
@@ -113,6 +114,7 @@
 - name: Update NSQ config file
   template: src=nsq.config.j2
             dest="{{goapp_cfg_path}}/nsq/{{GO_ENV}}.config"
+  tags: nsq_supervisor
 
 - name: Set Supervisor config for Exchange and NSQ Services
   template: src="{{item.name}}"
@@ -150,7 +152,7 @@
   service: name="{{item}}" state=stopped enabled=no
   ignore_errors: true
   with_items:
-    - nsqd
+#    - nsqd
     - nsqadmin
     - nsqlookupd
 

@@ -69,10 +69,11 @@
 # Checkout Exchange repo
 - name: Checkout exchange repo
   become_user: "{{system_default_user}}"
+  become: true
   shell: "go get -u -f -d github.com/APTrust/exchange/..."
   environment: "{{go_env}}"
   register: checkout
-  #  when: gitclone.changed
+  when: gitclone.changed
   tags: buildgo, gitclone2
 
 # go install exchange binaries.

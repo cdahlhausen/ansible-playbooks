@@ -8,12 +8,13 @@
   become: yes
   become_user: root
   copy:
-    content="{{ ssl_cert }}"
+    content="{{ ssl_cert }}\n{{ssl_interm_cert}}"
     dest="{{ssl_cert_path}}"
     force=yes
     owner=root
     group=root
     mode=0755
+    backup=yes
   tags: ssl
 
 - name: Copy ssl intermediate cert

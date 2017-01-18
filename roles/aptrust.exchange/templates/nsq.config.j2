@@ -12,7 +12,7 @@
 mem_queue_size="0"
 
 # Directory in which nsqd should store its data files
-data_path="/mnt/apt/data/"
+data_path="/mnt/efs/apt/data/"
 
 # Specify the address for accepting tcp connections from consumers.
 # In production, we should set this to listen only on the private
@@ -23,7 +23,7 @@ tcp_address="0.0.0.0:4150"
 # If you don't specific broadcast_address, NSQ will use the system's
 # hostname, and if that name isn't a fully qualified domain name
 # with a proper DNS entry, all NSQ clients will fail to connect.
-broadcast_address="apt-util.aptrust.org"
+broadcast_address="{{GO_ENV}}-services.aptrust.org"
 
 # Specify nslookupd location, so nsqd can tell the discovery
 # service that it's up and running.
@@ -41,7 +41,6 @@ msg_timeout="360m0s"
 # before nsqd decides to requeue the message. Some of our very
 # large files really will take this long to process!
 max_msg_timeout="720m0s"
-
 
 # Max message size is 30MB, because we get some really big bags
 # and we need to pass a JSON message with info about thousands

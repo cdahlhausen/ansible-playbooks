@@ -62,6 +62,7 @@
       force=yes
       version=master
   become_user: "{{system_default_user}}"
+  become: true
   register: gitclone
   tags: gitclone
 

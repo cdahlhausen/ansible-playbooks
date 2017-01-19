@@ -27,6 +27,8 @@ pharos_url: "https://demo.aptrust.org"
 
 # Exchange
 GO_ENV: 'demo'
+pharos_api_user: "{{vault_pharos_demo_api_user}}"
+pharos_api_key: "{{vault_pharos_demo_api_pwd}}"
 
 ruby_version: 2.3.1
 

@@ -1,5 +1,5 @@
 ---
-supervisor_config: '/etc/supervisord.conf'
+supervisor_config: '/etc/supervisor/supervisord.conf'
 supervisor_conf_dir: '/etc/supervisor/conf.d'
 supervisor_log_dir: "/var/log/supervisor"
 supervisor_pid_path: "/var/run/"

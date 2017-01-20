@@ -10,6 +10,12 @@
         # Golang
         golang_workspace_user: "{{system_default_user}}"
 
+        # Supervisor
+        supervisor_user: "{{system_default_user}}"
+        supervisor_user_group: "{{system_default_group}}"
+        supervisor_pid_path: "/tmp"
+
+
     roles:
       - {role: common, tags: common}
       - {role: futurice.supervisor, tags: supervisor}

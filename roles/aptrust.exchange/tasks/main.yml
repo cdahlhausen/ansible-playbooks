@@ -113,8 +113,6 @@
 #            dest="/{{goapp_cfg_path}}/{{GO_ENV}}.json"
 #  tags: exchangetemplate
 
-# TODO: Re-enable once config jinja template is finished.
-# TODO: Check NSQ installation if it uses a different config.
 - name: Update NSQ config file
   template: src=nsq.config.j2
             dest="{{goapp_cfg_path}}/nsq/{{GO_ENV}}.config"

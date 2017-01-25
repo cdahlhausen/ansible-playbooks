@@ -70,8 +70,8 @@
       - {role: common, tags: common}
       - {role: zzet.rbenv, tags: rbenv}
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
-      - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
-      - {role: aptrust.pharos, tags: pharos}
+      - {role: carlosbuenosvinos.ansistrano-deploy, tags: [deploy, pharos]}
+      - {role: aptrust.pharos, tags: [pharos, deploy]}
     tasks:
 
     - name: Slack to all

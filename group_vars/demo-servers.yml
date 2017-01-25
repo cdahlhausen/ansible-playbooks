@@ -1,6 +1,10 @@
 ---
 
 include_vars: vault.yml
+# APP Env as language agnostic variable
+APP_ENV: 'demo'
+GO_ENV: 'demo'
+RAILS_ENV: 'demo'
 
 # Fedora
 fedora_db_user: "{{vault_fedora_user}}"
@@ -9,11 +13,7 @@ var_fedora_pid_namespace: 'aptrust'
 
 ruby_version: 2.3.1
 
-# GO
-GO_ENV: 'demo'
-
 # Pharos
-RAILS_ENV: 'demo'
 pharos_local_db: False
 pharos_db_user: "{{ vault_pharos_dev_db_user}}"
 pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"

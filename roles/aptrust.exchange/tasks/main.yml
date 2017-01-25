@@ -107,11 +107,10 @@
       nsqservices: ['nsqadmin','nsqlookupd','nsqd']
   tags: lsfiles
 
-# TODO: Re-enable once config jinja template is finished.
-# - name: Update Exchange config file
-#  template: src=exchange.json.j2
-#            dest="/{{goapp_cfg_path}}/{{GO_ENV}}.json"
-#  tags: exchangetemplate
+- name: Update Exchange config file
+  template: src=exchange.json.j2
+            dest="/{{goapp_cfg_path}}/{{GO_ENV}}.json"
+  tags: exchangetemplate
 
 - name: Update NSQ config file
   template: src=nsq.config.j2

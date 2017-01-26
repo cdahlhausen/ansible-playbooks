@@ -9,33 +9,30 @@
 
 # Setting mem-queue-size to zero causes nsqd to persist all queue
 # data to disk.
-mem_queue_size="0"
+mem_queue_size="{{ex_nsq_mem_queue_size}}"
 
 # Directory in which nsqd should store its data files
-data_path="/mnt/efs/apt/data/"
+data_path="{{ex_nsq_data_path}}"
 
 # Specify the address for accepting tcp connections from consumers.
 # In production, we should set this to listen only on the private
 # AWS subnet.
-tcp_address="0.0.0.0:4150"
+tcp_address="{{ex_nsq_tcp_address}}"
 
 # Use a hostname without :port for the broadcast address.
 # If you don't specific broadcast_address, NSQ will use the system's
 # hostname, and if that name isn't a fully qualified domain name
 # with a proper DNS entry, all NSQ clients will fail to connect.
-{% if GO_ENV == 'production' %}
-broadcast_address="prod-services.aptrust.org"
-{% else %}
-broadcast_address="{{GO_ENV}}-services.aptrust.org"
-{% endif %}
+broadcast_address="{{ex_nsq_broadcast_address}}"
+
 # Specify nslookupd location, so nsqd can tell the discovery
 # service that it's up and running.
 #lookupd_tcp_address="127.0.0.1:4160"
-nsqlookupd_tcp_addresses="127.0.0.1:4160"
+nsqlookupd_tcp_addresses="{{ex_nsq_nsqlookupd_tcp_addresses}}"
 
 # If nsqd doesn't hear from a worker in this amount of time,
 # the message times out and nsqd requeues it.
-msg_timeout="360m0s"
+msg_timeout="{{ex_nsq_msg_timeout}}"
 
 # Workers can send periodic touch messages to nsqd to say they
 # are still actively processing a request. The touch request
@@ -43,12 +40,13 @@ msg_timeout="360m0s"
 # However, you can only touch the message up to max-msg-threshold
 # before nsqd decides to requeue the message. Some of our very
 # large files really will take this long to process!
-max_msg_timeout="720m0s"
+max_msg_timeout="{{ex_nsq_max_msg_timeout}}"
 
 # Max message size is 30MB, because we get some really big bags
 # and we need to pass a JSON message with info about thousands
 # of files to NSQ.
-max_msg_size="31457280"
+# NSQ uses its default of 1MB. We're actually using very small messages. Like 10-20 bytes
+# max_msg_size="31457280"
 
 # Max number of items to send in a single batch to one worker.
 # Leave commented for now. Need to read up on documentation for this one.

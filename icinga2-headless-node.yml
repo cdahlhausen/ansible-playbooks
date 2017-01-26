@@ -11,17 +11,17 @@
   vars_files:
       - "group_vars/vault.yml"
   roles:
-   - role: icinga2/icinga2-ansible-no-ui
-     icinga2_conf_global: |
-       include "constants.conf"
-       include "zones.conf"
-       include <itl>
-       include <plugins>
-       include "features-enabled/*.conf"
-     check_commands:
-       check_nrpe: |
-          "-H", "$address$",
-              "-c", "$remote_nrpe_command$",
+    - role: icinga2-ansible/icinga2-ansible-no-ui
+       icinga2_conf_global: |
+         include "constants.conf"
+         include "zones.conf"
+         include <itl>
+         include <plugins>
+         include "features-enabled/*.conf"
+       check_commands:
+         check_nrpe: |
+            "-H", "$address$",
+                "-c", "$remote_nrpe_command$",
      tags: icinga2-no-ui
   tasks:
     - name: Enable API feature

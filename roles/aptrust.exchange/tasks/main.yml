@@ -131,8 +131,8 @@
 - name: Add Cronjob for {{item}}"
   cron: name="{{item}}"
         user="{{system_default_user}}"
-        minute='*/1'
-        hour='*/2'
+        minute='*/2'
+        hour='*/1'
         job=". $HOME/.profile; {{goapp_bin_path}}/{{item}}
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
              > {{goapp_log_path}}/cron_{{item}}.log 2>&1

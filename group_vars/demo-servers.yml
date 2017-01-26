@@ -132,6 +132,7 @@ ex_restoreworker: {
         nsqtopic: "apt_restore_topic",
         nsqchannel: "apt_restore_channel",
         maxattempts: "3",
+        maxinflight: "20",
         heartbeatinterval: "10s",
         readtimeout: "60s",
         writetimeout: "10s",

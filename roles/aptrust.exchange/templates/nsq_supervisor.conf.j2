@@ -19,7 +19,7 @@ stdout_logfile_backups=10
 
 stderr_logfile={{goapp_log_path}}/{{ item }}.stderr.log
 stderr_logfile_maxbytes=50MB
-stdout_logfile_backups=10
+stderr_logfile_backups=10
 {% endfor %}
 
 [group:nsqservices]

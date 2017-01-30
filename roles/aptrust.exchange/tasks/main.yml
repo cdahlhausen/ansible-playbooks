@@ -91,9 +91,10 @@
 # Identify type of server, DPN or APTrust
 - name: Is this an APT or DPN Server
   set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
-  tags: orgtype, lsfiles
+  tags: orgtype, lsfiles, cronjobber
 
-- shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor'"
+- name: Get list of applications
+  shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync'"
   register: dir_out
   tags: lsfiles
 

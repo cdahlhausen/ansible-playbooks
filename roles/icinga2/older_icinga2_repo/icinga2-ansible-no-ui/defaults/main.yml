@@ -12,6 +12,7 @@ icinga2_debmon_repo: "deb http://debmon.org/debmon debmon-{{ ansible_distributio
 icinga2_pkg:
  - { package: "icinga2" }
  - { package: "nagios-plugins" }
+ - { package: "vim-icinga2" }
 
 icinga2_url_yum: "http://packages.icinga.org/epel/ICINGA-release.repo"
 icinga2_url_yum_fedora: "http://packages.icinga.org/fedora/ICINGA-release.repo"
@@ -23,3 +24,7 @@ icinga2_yum:
 
 icinga2_main_conf: "/etc/icinga2/icinga2.conf"
 icinga2_conf_d: "/etc/icinga2/conf.d"
+
+icinga2_const_conf: "/etc/icinga2/constants.conf"
+nagios_plugin_dir: "/usr/lib/nagios/plugins"
+

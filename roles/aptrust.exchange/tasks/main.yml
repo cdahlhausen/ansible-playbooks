@@ -141,8 +141,8 @@
         state=present
         disabled=yes
   with_items:
-        - { name: dpn_sync}
-        - { name: dpn_queue, hour: "*/1", minute: "*/30"}
+        - { name: dpn_sync, hour: "*/2", minute: "*/0"}
+        - { name: dpn_queue, hour: "*/1", minute: "*/10"}
   when: orgtype == 'dpn'
   tags: cronjobber
 

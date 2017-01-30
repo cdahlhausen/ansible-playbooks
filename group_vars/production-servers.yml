@@ -44,7 +44,7 @@ ex_tardirectory: "/mnt/efs/apt/data"
 ex_restoredirectory: "/mnt/efs/apt/restore"
 ex_logdirectory: "/mnt/efs/apt/logs"
 ex_replicationdirectory: "/mnt/efs/apt/replication"
-ex_maxfilesize: "0"
+ex_maxfilesize: "5497558138880"
 ex_skipalreadyprocessed: "true"
 ex_deleteonsuccess: "true"
 ex_logtostderr: "false"
@@ -82,7 +82,7 @@ ex_fetchworker: {
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "180m"
+    messagetimeout: "720m"
   }
 
 ex_storeworker: {
@@ -95,7 +95,7 @@ ex_storeworker: {
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "180m"
+    messagetimeout: "720m"
   }
 
 ex_recordworker: {
@@ -108,7 +108,7 @@ ex_recordworker: {
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "180m"
+    messagetimeout: "360m"
   }
 
 ex_replicationworker: {

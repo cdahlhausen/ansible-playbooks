@@ -5,6 +5,8 @@
 #
 # Initial ansible run fails because icinga2 restart fails due to missing pki certs
 # Run this playbook twice to have everything set up correctly.
+# you may also limit second run with -t nodeaction to create the pki's correctly
+# Consider rewriting this play.
 
 - hosts: "{{ nodeitem | default('all')}}"
   gather_facts: True
@@ -12,17 +14,17 @@
       - "group_vars/vault.yml"
   roles:
     - role: icinga2-ansible/icinga2-ansible-no-ui
-       icinga2_conf_global: |
+      icinga2_conf_global: |
          include "constants.conf"
          include "zones.conf"
          include <itl>
          include <plugins>
          include "features-enabled/*.conf"
-       check_commands:
+      check_commands:
          check_nrpe: |
             "-H", "$address$",
                 "-c", "$remote_nrpe_command$",
-     tags: icinga2-no-ui
+      tags: icinga2-no-ui
   tasks:
     - name: Enable API feature
       become: true

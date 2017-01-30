@@ -1,15 +1,20 @@
+---
+# This role generates a pki ticket on the icinga2 server for a new monitoring nodes.
+# To pass in hostitem and masteritem (both just subdomain part) run:
+# ansible-playbook icinga2-generate-certs.yml --extra-vars "masteritem=apt-util hostitem=apt-test-repo"
+#
+# Initial ansible run fails because icinga2 restart fails due to missing pki certs
+# Run this playbook twice to have everything set up correctly.
+
 - hosts: apt-util
-  vars:
-   hostitem: apt-prod-inge.aptrust.org
   tasks:
    - name: generate ticket on the icinga master and save it as a variable
-     shell: /usr/sbin/icinga2 pki ticket --cn {{ hostitem }}
+     shell: /usr/sbin/icinga2 pki ticket --cn {{ hostitem }}.aptrust.org
      register: ticket
 
-- hosts: apt-prod-inge
-# {{ hostitem }}"
+- hosts: "{{ hostitem }}"
   vars:
-   hostitem: apt-prod-inge.aptrust.org
+   hostitem: {{hostitem}}.aptrust.org
    master_hostname: apt-util.aptrust.org
    master_ip: "{{ hostvars['apt-util'].host_eip }}"
    master_port: 5665
@@ -41,10 +46,10 @@
 
 - hosts: apt-util
   vars:
-   hostitem: apt-prod-inge.aptrust.org
+    hostitem: {{hostitem}}.aptrust.org
   tasks:
    - name: add host
      shell: icinga2 node add {{ hostitem }}
 
    - name: set host ip
-     shell: icinga2 node set {{ hostitem }} --host {{ hostitem }}.aptrust.org --port 5665
+     shell: icinga2 node set {{ hostitem }} --host {{ hostitem }} --port 5665

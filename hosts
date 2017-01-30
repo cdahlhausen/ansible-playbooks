@@ -14,6 +14,7 @@ dpn-local-demo ansible_user=vagrant hostname_name=dpn-local-demo hostname_fqdn=d
 [monitoring_servers]
 # fluctus ansible_port=2222 ansible_user=vagrant hostname_name=fluctus hostname_fqdn=fluctus.aptrust.local host_eip=192.168.33.10
 apt-util hostname_name=apt-util hostname_fqdn=icinga.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
+apt-ops hostname_name=apt-ops hostname_fqdn=ops.aptrust.org host_eip=34.198.129.76 # Operations Instance
 
 # APTrust 1.0 world
 [test-servers]
@@ -40,9 +41,8 @@ apt-prod-rest hostname_name=apt-prod-rest hostname_fqdn=apt-prod-rest.aptrust.or
 apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_eip=54.186.169.96
 # APTrust 2.0
 apt-prod-repo2 hostname_name=apt-prod-repo2 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
-#apt-prod-inge2  hostname_name=apt-prod-inge2 hostname_fqdn=apt-prod-inge2.aptrust.org host_eip=
 apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services
-#apt-prod-rest2 hostname_name=apt-prod-rest2 hostname_fqdn=apt-prod-rest2.aptrust.org host_eip=
+pharos ansible_user=vagrant hostname_name=pharos hostname_fqdn=pharos.aptrust.local host_eip=192.168.33.12
 
 [exchange-services]
 apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services

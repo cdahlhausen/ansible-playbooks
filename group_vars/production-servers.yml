@@ -82,7 +82,7 @@ ex_fetchworker: {
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "1440m"
+    messagetimeout: "720m"
   }
 
 ex_storeworker: {
@@ -95,7 +95,7 @@ ex_storeworker: {
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "1440m"
+    messagetimeout: "720m"
   }
 
 ex_recordworker: {

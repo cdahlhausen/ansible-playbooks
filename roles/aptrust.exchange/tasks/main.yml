@@ -129,19 +129,38 @@
 
 # TODO: Enable again once all services are running
 #      - apt_queue
-- name: Add Cronjob for {{item}}"
-  cron: name="{{item}}"
+- name: Add DPN cronjob for {{item.name}}"
+  cron: name="{{item.name}}"
         user="{{system_default_user}}"
-        minute='*/2'
-        hour='*/1'
-        job=". $HOME/.profile; {{goapp_bin_path}}/{{item}}
+        minute="{{item.minute | default('*/1')}}"
+        hour="{{item.hour | default('*/1')}}"
+        job=". $HOME/.profile; {{goapp_bin_path}}/{{item.name}}
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
-             > {{goapp_log_path}}/cron_{{item}}.log 2>&1
-             -stats={{goapp_log_path}}/bucket_reader_stats.json"
+             > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1
+             -stats={{goapp_log_path}}/{{item.name}}_stats.json"
         state=present
         disabled=yes
   with_items:
-      - apt_bucket_reader
+        - { name: dpn_sync}
+        - { name: dpn_queue, hour: "*/1", minute: "*/30"}
+  when: orgtype == 'dpn'
+  tags: cronjobber
+
+- name: Add APTrust cronjob for {{item.name}}"
+  cron: name="{{item.name}}"
+        user="{{system_default_user}}"
+        minute="{{item.minute | default('*/1')}}"
+        hour="{{item.hour | default('*/1')}}"
+        job=". $HOME/.profile; {{goapp_bin_path}}/{{item.name}}
+             -config={{goapp_cfg_path}}/{{GO_ENV}}.json
+             > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1
+             -stats={{goapp_log_path}}/{{item.name}}_stats.json"
+        state=present
+        disabled=yes
+  with_items:
+        - { name: apt_bucket_reader, hour: "*/1", minute: "*/2"}
+        - { name: apt_queue, hour: "*/1", minute: "*/30"}
+  when: orgtype == 'apt'
   tags: cronjobber
 
 # When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist

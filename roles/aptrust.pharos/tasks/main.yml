@@ -128,6 +128,7 @@
     shell: chdir="{{pharos_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
+    notify: reload nginx
     tags: dbmigrate
 
 # Creates institutions, roles and users

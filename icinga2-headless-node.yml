@@ -59,6 +59,7 @@
 
     - name: save the masters cert as trustedcert
       shell: icinga2 pki save-cert --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --host {{ master_hostname }}
+      become: yes
       tags: ['nodeaction']
 
     - name: request the certificate from the icinga server
@@ -133,6 +134,7 @@
                 enable_notifications = true
                 vars.os = "Linux"
                 vars.disks["disk"] = {}
+                vars.ssh_port = "1984"
                 vars.notification["mail"] = {
                   groups = [ "apt-ops-group" ]
               }

@@ -49,7 +49,8 @@
     gem:  name=bundler state=latest user_install=yes
 
 # Copy config ymls
-# This is the same action rake -T config takes, but files # are using env vars provided by figaro and application.yml
+# This is the same action rake -T config takes, but files # are using env vars
+# provided by figaro and application.yml
   - name: Copy dpn-server app configs
     template:
         src: "{{item}}.yml.j2"

@@ -1,6 +1,8 @@
 ---
 # DPN Server 2.0
-  - hosts: dpn-demo2 #dpn-servers once 2.0 is status quo
+  - hosts:
+      - dpn-demo2 #dpn-servers once 2.0 is status quo
+      - dpn-prod2
     vars_files:
         - "group_vars/vault.yml"
 
@@ -14,6 +16,7 @@
         ansistrano_git_repo: "git@github.com:dpn-admin/dpn-server.git"
         # ansistrano_git_branch: "e748b2ba8068a902b215dd7524923416756b9d0b"
         # ansistrano_git_branch: "develop"
+        # This is tagged version 2.0.1
         ansistrano_git_branch: "541a4dfce55706218fe4f00b81805fcd8e8ed6bf"
         ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
 # TODO: Test shared paths and see if any more tasks have to be set for this to work.
@@ -25,6 +28,12 @@
         dpnserver_app_root: "{{ ansistrano_deploy_to }}/current"
         dpnserver_environment: "{{ruby_env}}"
 
+        # Postgresql privileges
+#        postgresql_user_privileges:
+#          - name: "{{dpnserver_db_user}}"
+#            db: "{{dpnserver_db_name}}"       # database
+#            priv: "ALL"    # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+#            role_attr_flags: "CREATEDB" # role attribute flags
         # NGINX Webserver
         nginx_vhosts:
           - listen: "80 default_server"

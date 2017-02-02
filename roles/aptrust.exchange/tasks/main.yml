@@ -156,7 +156,7 @@
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
              > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1"
         state=present
-        disabled=yes
+        disabled=no
   with_items:
         - { name: apt_bucket_reader, hour: "*/1", minute: "*/2"}
         - { name: apt_queue, hour: "*/1", minute: "*/30"}

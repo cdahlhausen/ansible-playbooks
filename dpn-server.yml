@@ -67,7 +67,6 @@
     roles:
       - {role: common, tags: common}
       - {role: dpn-common, tags: dpn-common}
-      - {role: rsync, tags: rsync}
       - {role: zzet.rbenv, tags: rbenv}
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}

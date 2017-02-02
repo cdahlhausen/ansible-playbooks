@@ -2,7 +2,25 @@
 # Add DPN users to the system.
 # Run the rsync playbook before this, so that rssh is installed.
 #
-- name: add common users
+# Install rsync and rssh. rssh limits what users can do
+- name: Install Rsync and RSSH
+  become: yes
+  apt: pkg="{{item}}" state=latest
+  with_items:
+    - rsync
+    - rssh
+  tags: rsshrsync
+
+- name: Allow rsync for node users
+  lineinfile:
+    dest=/etc/rssh.conf
+    regexp="#allowrsync"
+    line='allowrsync'
+    state=present
+    backrefs=yes
+  tags: rsshrsync
+
+- name: Add node users
   user: name="{{ item }}" state=present shell='/usr/bin/rssh'
   tags: dpn-common
   with_items:

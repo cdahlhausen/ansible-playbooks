@@ -135,9 +135,9 @@
         minute="{{item.minute | default('*/1')}}"
         hour="{{item.hour | default('*/1')}}"
         job=". $HOME/.profile; {{goapp_bin_path}}/{{item.name}}
+             -stats={{goapp_log_path}}/{{item.name}}_stats.json
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
-             > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1
-             -stats={{goapp_log_path}}/{{item.name}}_stats.json"
+             > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1"
         state=present
         disabled=yes
   with_items:
@@ -152,9 +152,9 @@
         minute="{{item.minute | default('*/1')}}"
         hour="{{item.hour | default('*/1')}}"
         job=". $HOME/.profile; {{goapp_bin_path}}/{{item.name}}
+             -stats={{goapp_log_path}}/{{item.name}}_stats.json
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
-             > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1
-             -stats={{goapp_log_path}}/{{item.name}}_stats.json"
+             > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1"
         state=present
         disabled=yes
   with_items:

@@ -1,0 +1,15 @@
+{% for item in dpnserver_nodes %}
+
+########################################
+# {{ dpnserver_nodes[item].name}}
+########################################
+Host {{ dpnserver_nodes[item].hostname}}
+    User aptrust
+    IdentityFile "{{dpn_transfer_private_key}}"
+    KbdInteractiveAuthentication no
+    PasswordAuthentication no
+    IdentitiesOnly yes
+    Hostname {{ dpnserver_nodes[item].hostname}}
+{% endfor %}
+
+

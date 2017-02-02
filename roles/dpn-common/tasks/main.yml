@@ -31,7 +31,7 @@
 
 - name: add common user public keys
   authorized_key: user={{ item.name }} key="{{ item.keyfile }}" state=present
-  tags: dpn-common
+  tags: dpn-ssh-pubkeys
   with_items:
     - { name: 'dpn.hathi', keyfile: '{{dpn_hathi_sshkey}}' }
     - { name: 'dpn.chron', keyfile: '{{dpn_chron_sshkey}}' }
@@ -49,6 +49,17 @@
   with_items:
     - { content: "{{ dpn_apt_private_sshkey }}", dest: "{{ dpn_transfer_private_key }}" }
     - { content: "{{ dpn_apt_public_sshkey }}", dest: "{{ dpn_transfer_public_key }}" }
+
+# Set node information in ssh config
+- name: Setup node info in ssh config
+  template:
+    src: "ssh_config.j2"
+    dest: "/home/{{system_default_user}}/.ssh/config"
+    owner: "{{system_default_user}}"
+    group: "{{system_default_user}}"
+    mode: 0644
+  with_items: "{{dpnserver_nodes | list}}"
+  tags: dpnsshconfig
 
 # Message of the day explaining server is under control of Ansible.
 - name: MOTD

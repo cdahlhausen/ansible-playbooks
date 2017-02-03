@@ -157,17 +157,30 @@ which applies it to _all_ pharos servers in the inventory:
 ### Tags
 Some playbooks have tagged roles so one can only run a specific role from an otherwise complete playbook to provision and setup from scratch. For example the pharos.yml playbook here:
 ```
-     roles:
-       - {role: common, tags: common}
-       - {role: zzet.rbenv, tags: rbenv}
-       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
-       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
-       - {role: aptrust.pharos, tags: pharos, deploy}
+	 roles:
+	   - {role: common, tags: common}
+	   - {role: zzet.rbenv, tags: rbenv}
+	   - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
+	   - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
+	   - {role: aptrust.pharos, tags: pharos, deploy}
 ```
 If you just want to deploy a change to the pharos repom, you wont need to run the whole playbook everytime. Instead just run
 ` ansible-playbook pharos.yml -t deploy -b`
 
+### Example deployments for people who can't remember anything
 
+Deploy Pharos to demo:
 
+`ansible-playbook pharos.yml -t deploy -b -l apt-demo-repo2`
 
+Deploy Pharos to production:
 
+`ansible-playbook pharos.yml -t deploy -b -l apt-prod-repo2`
+
+Deploy exchange to demo:
+
+`ansible-playbook exchange.yml --diff -t exchange -b -l apt-demo-services`
+
+Deploy exchange to production:
+
+`ansible-playbook exchange.yml --diff -t exchange -b -l apt-prod-services`

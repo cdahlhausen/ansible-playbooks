@@ -184,7 +184,7 @@
 # When state = restarted, the module will call supervisorctl update then call supervisorctl restart.
 - name: Update and restart supervisor processes
   supervisorctl: name="{{item}}" state=restarted
-  when: supervisor_config_files.changed or go_build_result.changed
+  when: supervisor_config_files.changed or go_build_result.changed or checkout.changed
   with_items:
     - 'nsqservices:'
     - 'exchange:'

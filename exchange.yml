@@ -21,7 +21,7 @@
       - {role: futurice.supervisor, tags: supervisor}
       - {role: sansible.golang, tags: golang}
       - {role: retr0h.nsq, tags: nsq}
-      - {role: aptrust.exchange, tags: exchange}
+      - {role: aptrust.exchange, tags: [exchange, deploy]}
     tasks:
 
     - name: Slack to all
@@ -30,4 +30,4 @@
         msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
         icon_emoji: ":dog:"
         channel: 'ops'
-      tags: [pharos,slack]
+      tags: [exchange,slack,deploy]

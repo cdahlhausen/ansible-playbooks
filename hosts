@@ -54,12 +54,10 @@ apt-oregon hostname_name=apt-oregon hostname_fqdn=apt-oregon.aptrust.org host_ei
 
 
 [dpn-demo-servers]
-dpn-demo hostname=dpn-demo.aptrust.org hostname_fqdn=dpn-demo.aptrust.org host_eip=54.88.231.192
 dpn-demo2 hostname=dpn-demo2 hostname_fqdn=dpn-demo2.aptrust.org host_eip=34.195.115.140
 
 
 [dpn-prod-servers]
-dpn-prod hostname=dpn.aptrust.org hostname_fqdn=dpn.aptrust.org host_eip=54.86.37.226
 dpn-prod2 hostname=dpn-prod2.aptrust.org hostname_fqdn=dpn-prod2.aptrust.org host_eip=34.195.237.213
 
 [dpn-servers:children]
@@ -69,4 +67,5 @@ dpn-demo-servers
 [decommmissioned]
 apt-prod-inge  hostname_name=apt-prod-inge hostname_fqdn=apt-prod-inge.aptrust.org host_eip=54.209.148.33
 apt-prod-rest hostname_name=apt-prod-rest hostname_fqdn=apt-prod-rest.aptrust.org host_eip=54.175.41.111
-
+dpn-demo hostname=dpn-demo.aptrust.org hostname_fqdn=dpn-demo.aptrust.org host_eip=54.88.231.192
+dpn-prod hostname=dpn.aptrust.org hostname_fqdn=dpn.aptrust.org host_eip=54.86.37.226

@@ -1,0 +1,15 @@
+-   hosts: apt-ops
+    vars_files:
+      - "group_vars/vault.yml"
+    vars:
+        playbook_name: 'grafana'
+
+        # InfluxDB
+
+    roles:
+      - {role: common, tags: common}
+      - {role: mtchavez.influxdb, tags: influxdb}
+        #      - {role: ansiblebit.grafana, tags: grafana}
+
+
+    tasks:

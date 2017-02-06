@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Ansible 2.1 Vault issue:
 There is a bug in Ansible 2.0.1 that prevents saving changes to an Ansible vault file. A fix requires changing an Ansible file as follows.

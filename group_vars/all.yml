@@ -179,7 +179,9 @@ influxdb_port: "{{vault_influxdb_port}}"
 influxdb_username: "{{vault_influxdb_username}}"
 influxdb_password: "{{vault_influxdb_password}}"
 #
-#
+# Grafana
+grafana_admin_password: "{{vault_grafana_admin_password}}"
+
 # Fail2Ban settings
 fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='host_eip')|join (' ')}}"
 fail2ban_config_destemail: ops@aptrust.org

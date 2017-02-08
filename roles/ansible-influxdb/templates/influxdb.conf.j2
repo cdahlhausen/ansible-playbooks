@@ -1,0 +1,96 @@
+reporting-enabled = {{influxdb_reporting_disabled}}
+
+[meta]
+  enabled = true
+  dir = "{{influxdb_meta_dir}}"
+  bind-address = ":8088"
+  http-bind-address = ":8091"
+  https-enabled = false
+  https-certificate = ""
+  retention-autocreate = {{influxdb_meta_retention_autocreate}}
+  election-timeout = "1s"
+  heartbeat-timeout = "1s"
+  leader-lease-timeout = "500ms"
+  commit-timeout = "50ms"
+  cluster-tracing = false
+  raft-promotion-enabled = true
+  logging-enabled = {{influxdb_meta_logging_enabled}}
+  pprof-enabled = {{influxdb_meta_pprof_enabled}}
+  lease-duration = "{{influxdb_meta_lease_duration}}"
+
+[data]
+  enabled = {{influxdb_data_enabled}}
+  dir = "{{influxdb_data_dir}}"
+  engine = "tsm1"
+  max-wal-size = 104857600
+  wal-flush-interval = "10m0s"
+  wal-partition-flush-delay = "2s"
+  wal-dir = "{{influxdb_data_wal_dir}}"
+  wal-logging-enabled = {{influxdb_data_wal_logging_enabled}}
+  wal-ready-series-size = 30720
+  wal-compaction-threshold = 0.5
+  wal-max-series-size = 1048576
+  wal-flush-cold-interval = "5s"
+  wal-partition-size-threshold = 52428800
+  query-log-enabled = true
+  cache-max-memory-size = 524288000
+  cache-snapshot-memory-size = 26214400
+  cache-snapshot-write-cold-duration = "1h0m0s"
+  compact-full-write-cold-duration = "24h0m0s"
+  max-points-per-block = 0
+  data-logging-enabled = true
+
+[cluster]
+  force-remote-mapping = false
+  write-timeout = "5s"
+  shard-writer-timeout = "5s"
+  max-remote-write-connections = 3
+  shard-mapper-timeout = "5s"
+
+[retention]
+  enabled = {{influxdb_retention_enabled}}
+  check-interval = "{{influxdb_retention_check_interval}}"
+
+[shard-precreation]
+  enabled = {{influxdb_shard_precreation_enabled}}
+  check-interval = "{{influxdb_shard_precreation_check_interval}}"
+  advance-period = "{{influxdb_shard_precreation_advance_period}}"
+
+[admin]
+  enabled = {{influxdb_admin_enabled}}
+  bind-address = "{{ influxdb_admin_bind_address }}"
+  https-enabled = {{influxdb_admin_https_enabled}}
+  https-certificate = "{{influxdb_admin_https_certificate}}"
+
+[monitor]
+  store-enabled = {{influxdb_monitor_store_enabled}}
+  store-database = "{{influxdb_monitor_store_database}}"
+  store-interval = "{{influxdb_monitor_store_interval}}"
+
+[subscriber]
+  enabled = {{influxdb_subscriber_enabled}}
+
+[http]
+  enabled = {{influxdb_http_enabled}}
+  bind-address = "{{influxdb_http_bind_address}}"
+  auth-enabled = {{influxdb_http_auth_enabled}}
+  log-enabled = {{influxdb_http_log_enabled}}
+  write-tracing = {{influxdb_http_write_tracing}}
+  pprof-enabled = {{influxdb_http_pprof_enabled}}
+  https-enabled = {{influxdb_http_https_enabled}}
+  https-certificate = "{{influxdb_http_https_certificate}}"
+
+[continuous_queries]
+  log-enabled = {{influxdb_continuous_queries_log_enabled}}
+  enabled = {{influxdb_continuous_queries_enabled}}
+  run-interval = "1s"
+
+[hinted-handoff]
+  enabled = true
+  dir = "/var/lib/influxdb/hh"
+  max-size = 1073741824
+  max-age = "168h0m0s"
+  retry-rate-limit = 0
+  retry-interval = "1s"
+  retry-max-interval = "1m0s"
+  purge-interval = "1h0m0s"

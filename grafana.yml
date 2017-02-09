@@ -12,8 +12,21 @@
         ops_data_influxdb: /mnt/efs/apt/ops_data/influxdb
         ops_data_grafana: /mnt/efs/apt/ops_data/grafana
 
+        # Postgresql
+        psql_db: grafana
+        psql_owner: grafana_admin
+        psql_pass: gr4f4n4
+
         # Grafana
-        grafana_admin_password: 'testinstall'
+        # grafana_admin_password set by vault.
+        grafana_dir_data: "{{ops_data_grafana}}"
+        grafana_database:
+          type: postgres
+          host: 127.0.0.1:5432
+          name: "{{psql_db}}"
+          user: "{{psql_owner}}"
+          password: "{{psql_pass}}"
+          path: "{{ops_data_grafana}}"
 
         # InfluxDB
         influxdb_admin_https_enabled: "true"
@@ -23,13 +36,25 @@
 
 
     roles:
-      #      - {role: common, tags: common}
+      - {role: common, tags: common}
+      - {role: postgresql, tags: postgresql}
       - {role: ansible-influxdb, tags: influxdb}
       - {role: ansiblebit.grafana, tags: grafana}
       - {role: cd3ef.nginx-passenger, tags: nginx}
 
 
     tasks:
+      - name: Create grafana DB user
+        postgresql_user: name="{{psql_owner}}"
+                         password="{{psql_pass}}"
+        tags: postgresql
+
+      - name: Create grafana DB user
+        postgresql_db: name="{{psql_db}}"
+                       encoding='UTF-8'
+                       owner="{{psql_owner}}"
+                       state=present
+        tags: postgresql
 
       - name: Create OPS data directory
         file:

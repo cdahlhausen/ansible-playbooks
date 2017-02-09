@@ -102,7 +102,7 @@
             state: present
 
       - name: Check if icinga2 is installed
-        shell: icinga2 -V
+        shell: icinga2 -V > /dev/null
         register: icinga_installed
 
       - name: Enable icinga2 influxdbwriter
@@ -112,13 +112,10 @@
           - perfdata
         when: icinga_installed
 
-        # TODO: Update influxdb template.
-
       - name: Define influxdb config template
         template:
-          src: icinga2-ansible/icinga2-ansible-no-ui/templates/influxdb.conf.j2
+          src: roles/icinga2-ansible/icinga2-ansible-no-ui/templates/influxdb.conf.j2
           dest: /etc/icinga2/features-available/influxdb.conf
           owner: root
           group: deploy
           mode: 0644
-

@@ -32,6 +32,9 @@
 # https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
     - acl
 
+- name: Make sure requests/urllib3 is uptodate
+  pip: name=requests[secure]
+
 - name: Install AWS CLI tools and Boto
   become: yes
   pip: name={{item}}

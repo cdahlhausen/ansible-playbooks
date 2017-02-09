@@ -32,8 +32,14 @@
 # https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
     - acl
 
-- name: Make sure requests/urllib3 is uptodate
-  pip: name=requests[secure]
+# http://stackoverflow.com/questions/35535566/installing-pip-using-get-pip-py-snimissingwarning
+- name: Make up for outdated Python libraries. SNIMissingWarning
+  pip: name={{item}}
+  with_items:
+    - pyopenssl
+    - ndg-httpsclient
+    - pyasn1
+
 
 - name: Install AWS CLI tools and Boto
   become: yes

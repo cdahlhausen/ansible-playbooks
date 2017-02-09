@@ -85,17 +85,19 @@
           owner: "{{system_default_user}}"
           group: "{{deploy_group}}"
           mode: 0775
+          recurse: yes
           state: directory
         with_items:
             - "{{ops_data}}"
             - "{{ops_data}}/influxdb"
             - "{{ops_data}}/grafana"
+        tags: opsdatadir
 
       - name: Create icinga2 database
         influxdb_database:
             hostname: "127.0.0.1"
             database_name: "icinga2"
-            username: "{{inflxudb_username}}"
+            username: "{{influxdb_username}}"
             password: "{{influxdb_password}}"
             state: present
 

@@ -33,7 +33,30 @@
         influxdb_admin_https_certificate: "{{ssl_cert_path}}"
         influxdb_http_https_enabled: "true"
         influxdb_http_https_certificate: "{{ssl_cert_path}}"
+        influxdb_data_dir: "{{ops_data_influxdb}}"
 
+        # NGINX Webserver
+        nginx_vhosts:
+          - listen: "80 default_server"
+            server_name: "_"
+            return: 301 https://$host$request_uri
+          - listen: "443 ssl"
+            server_name: "grafana.aptrust.org"
+            #            root: "{{ ansistrano_deploy_to }}/current/public"
+            access_log: "/var/log/nginx/grafana_aptrust_org_access.log"
+            error_log: "/var/log/nginx/grafana_aptrust_org_error.log"
+            extra_parameters: |
+                location / {
+                proxy_pass http://localhost:3000;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                }
+                ssl    on;
+                # SSL Chain if Nginx, SSL cert if Apache2
+                ssl_certificate    {{ssl_cert_path}};
+                ssl_certificate_key {{ ssl_key_path }};
 
     roles:
       - {role: common, tags: common}

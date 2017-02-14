@@ -35,6 +35,8 @@
         influxdb_http_https_certificate: "{{ssl_cert_path}}"
         influxdb_data_dir: "{{ops_data_influxdb}}"
 
+        influxb_hostname: 'ops.aptrust.org'
+        influxdb_db: 'icinga2'
         # NGINX Webserver
         nginx_vhosts:
           - listen: "80 default_server"

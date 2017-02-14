@@ -1,0 +1,30 @@
+/**
+ * The InfluxdbWriter type writes check result metrics and
+ * performance data to an InfluxDB HTTP API
+ */
+
+library "perfdata"
+
+object InfluxdbWriter "influxdb" {
+  host = "{{influxdbwriter_host | default ('127.0.0.1')}}"
+  port = {{influxdbwriter_port | default ('8086')}}
+  database = "icinga2"
+  username = "{{influxdb_username}}"
+  password = "{{influxdb_password}}"
+  enable_send_thresholds = true
+  enable_send_metadata = true
+
+  host_template = {
+    measurement = "$host.check_command$"
+    tags = {
+      hostname = "$host.name$"
+    }
+  }
+  service_template = {
+    measurement = "$service.check_command$"
+    tags = {
+      hostname = "$host.name$"
+      service = "$service.name$"
+    }
+  }
+}

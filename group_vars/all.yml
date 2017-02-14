@@ -181,6 +181,8 @@ influxdb_password: "{{vault_influxdb_password}}"
 #
 # Grafana
 grafana_admin_password: "{{vault_grafana_admin_password}}"
+grafana_psql_owner: "{{vault_grafana_psql_owner}}"
+grafana_psql_pwd: "{{vault_grafana_psql_pwd}}"
 
 # Fail2Ban settings
 fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='host_eip')|join (' ')}}"

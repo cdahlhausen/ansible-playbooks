@@ -185,6 +185,7 @@
     shell: chdir="{{dpnserver_app_root}}" bundle exec rake db:migrate RAILS_ENV="{{RAILS_ENV}}"
     become: true
     become_user: "{{ system_default_user }}"
+    notify: reload nginx
     tags: dbmigrate
 
 # Setup default admin user

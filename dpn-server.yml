@@ -16,8 +16,8 @@
         ansistrano_git_repo: "git@github.com:dpn-admin/dpn-server.git"
         # ansistrano_git_branch: "e748b2ba8068a902b215dd7524923416756b9d0b"
         # ansistrano_git_branch: "develop"
-        # This is tagged version 2.0.1
-        ansistrano_git_branch: "541a4dfce55706218fe4f00b81805fcd8e8ed6bf"
+        # This is tagged version 2.0.2
+        ansistrano_git_branch: "2559169292b4e365f7399aeb6db43fe36947986d"
         ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
 # TODO: Test shared paths and see if any more tasks have to be set for this to work.
         ansistrano_shared_paths: ["log"]

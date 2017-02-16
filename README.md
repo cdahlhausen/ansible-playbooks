@@ -185,3 +185,11 @@ Deploy exchange to demo:
 Deploy exchange to production:
 
 `ansible-playbook exchange.yml --diff -t exchange -b -l apt-prod-services`
+
+Deploy exchange to DPN demo:
+
+`ansible-playbook exchange.yml --diff -t exchange -b -l dpn-demo2`
+
+Deploy exchange to DPN production:
+
+`ansible-playbook exchange.yml --diff -t exchange -b -l dpn-prod2`

@@ -276,7 +276,7 @@ ex_dpn_dpncopyworker: {
     nsqtopic: "dpn_copy_topic",
     nsqchannel: "dpn_copy_channel",
     maxattempts: "3",
-    maxinflight: "20",
+    maxinflight: "6",
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",

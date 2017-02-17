@@ -113,7 +113,7 @@
 
 
 - name: Get list of applications
-  shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync'"
+  shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync|dpn_cleanup'"
   register: dir_out
   tags: lsfiles
 

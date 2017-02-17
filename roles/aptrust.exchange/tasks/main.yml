@@ -49,6 +49,24 @@
     - ['data','logs','restore','replication']
   tags: exchange_efs
 
+# Create symlink outbound directories for each DPN node user on the system.
+- name: Create and symlink outbound directories to EFS staging dir
+  become: yes
+  file:
+    src: "/mnt/efs/dpn/staging"
+    dest: "/home/{{item}}/outbound"
+    owner: "{{item}}"
+    group: "{{deploy_group}}"
+    mode: 0775
+    state: link
+  with_items:
+    - dpn.hathi
+    - dpn.chron
+    - dpn.sdr
+    - dpn.tdr
+  tags: outboundsymlink
+  when: orgtype == 'dpn'
+
 # TODO: Refactor this as it will clone the repo on every run and overwrite the
 #      config files everytime. Consider moving config files in ~/go/bin/config
 # Checking if repo has been updated. Does not clone since 'go get' below will

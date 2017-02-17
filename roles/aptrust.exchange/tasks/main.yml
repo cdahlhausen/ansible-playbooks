@@ -1,3 +1,8 @@
+# Identify type of server, DPN or APTrust
+- name: Is this an APT or DPN Server
+  set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
+  tags: orgtype, lsfiles, cronjobber, reread_supervisor
+
 # Install required packages
 - name: Install required packages
   become: yes
@@ -106,10 +111,6 @@
   changed_when: "'no buildable Go source files' not in go_build_result.stderr"
   tags: buildgo
 
-# Identify type of server, DPN or APTrust
-- name: Is this an APT or DPN Server
-  set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
-  tags: orgtype, lsfiles, cronjobber, reread_supervisor
 
 - name: Get list of applications
   shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync'"

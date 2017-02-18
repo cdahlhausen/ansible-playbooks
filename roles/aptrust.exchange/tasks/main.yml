@@ -1,3 +1,8 @@
+# Identify type of server, DPN or APTrust
+- name: Is this an APT or DPN Server
+  set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
+  tags: orgtype, lsfiles, cronjobber, reread_supervisor
+
 # Install required packages
 - name: Install required packages
   become: yes
@@ -49,6 +54,24 @@
     - ['data','logs','restore','replication']
   tags: exchange_efs
 
+# Create symlink outbound directories for each DPN node user on the system.
+- name: Create and symlink outbound directories to EFS staging dir
+  become: yes
+  file:
+    src: "/mnt/efs/dpn/staging"
+    dest: "/home/{{item}}/outbound"
+    owner: "{{item}}"
+    group: "{{deploy_group}}"
+    mode: 0775
+    state: link
+  with_items:
+    - dpn.hathi
+    - dpn.chron
+    - dpn.sdr
+    - dpn.tdr
+  tags: outboundsymlink
+  when: orgtype == 'dpn'
+
 # TODO: Refactor this as it will clone the repo on every run and overwrite the
 #      config files everytime. Consider moving config files in ~/go/bin/config
 # Checking if repo has been updated. Does not clone since 'go get' below will
@@ -88,10 +111,6 @@
   changed_when: "'no buildable Go source files' not in go_build_result.stderr"
   tags: buildgo
 
-# Identify type of server, DPN or APTrust
-- name: Is this an APT or DPN Server
-  set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
-  tags: orgtype, lsfiles, cronjobber
 
 - name: Get list of applications
   shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync'"
@@ -163,14 +182,24 @@
   when: orgtype == 'apt'
   tags: cronjobber
 
+- set_fact:
+      supervisor_apps:
+        - 'nsqservices:'
+        - 'exchange:'
+  when: orgtype == 'apt'
+
+- set_fact:
+      supervisor_apps:
+        - 'exchange:'
+  when: orgtype == 'dpn'
+
 # When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist
 - name: Reread/Add supervisor app config files
   supervisorctl: name="{{item}}" state=present
-  with_items:
-    - 'nsqservices:'
-    - 'exchange:'
+  with_items: "{{supervisor_apps}}"
   register: supervisor_config_update
   when: supervisor_config_files.changed or go_build_result.changed or checkout.changed
+  tags: reread_supervisor
 
 # Supervisor controls nsq, not upstart. Disable nsq upstart services.
 - name: Ensure nsq upstart services are stopped and disabled
@@ -185,14 +214,9 @@
 - name: Update and restart supervisor processes
   supervisorctl: name="{{item}}" state=restarted
   when: supervisor_config_files.changed or go_build_result.changed or checkout.changed
-  with_items:
-    - 'nsqservices:'
-    - 'exchange:'
+  with_items: "{{supervisor_apps}}"
 
 # Note: exchange is the program group used in supervisor config.
 - name: Ensure Exchange services are running
   supervisorctl: name="{{item}}" state=started
-  with_items:
-    - 'nsqservices:'
-    - 'exchange:'
-
+  with_items: "{{supervisor_apps}}"

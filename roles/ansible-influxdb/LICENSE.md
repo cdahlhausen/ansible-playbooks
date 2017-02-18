@@ -1,5 +1,3 @@
-APTrust Ansible Configuration by APTrust is licensed under a Creative Commons Attribution 4.0 International License.
-=======
 The MIT License (MIT)
 
 Copyright (c) 2016 Peter Bonrad

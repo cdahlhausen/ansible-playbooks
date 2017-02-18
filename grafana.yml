@@ -1,0 +1,124 @@
+-   hosts:
+        - apt-util
+        - apt-ops
+        - pharos
+    vars_files:
+      - "group_vars/vault.yml"
+    vars:
+        playbook_name: 'grafana'
+
+        use_efs: true
+        ops_data: /mnt/efs/apt/ops_data
+        ops_data_influxdb: /mnt/efs/apt/ops_data/influxdb
+        ops_data_grafana: /mnt/efs/apt/ops_data/grafana
+
+        # Postgresql
+        psql_db: grafana
+        psql_owner: grafana_admin
+        psql_pass: gr4f4n4
+
+        # Grafana
+        # grafana_admin_password set by vault.
+        grafana_dir_data: "{{ops_data_grafana}}"
+        grafana_database:
+          type: postgres
+          host: 127.0.0.1:5432
+          name: "{{psql_db}}"
+          user: "{{psql_owner}}"
+          password: "{{psql_pass}}"
+          path: "{{ops_data_grafana}}"
+
+        # InfluxDB
+        influxdb_admin_https_enabled: "true"
+        influxdb_admin_https_certificate: "{{ssl_cert_path}}"
+        influxdb_http_https_enabled: "true"
+        influxdb_http_https_certificate: "{{ssl_cert_path}}"
+        influxdb_data_dir: "{{ops_data_influxdb}}"
+
+        influxb_hostname: 'ops.aptrust.org'
+        influxdb_db: 'icinga2'
+        # NGINX Webserver
+        nginx_vhosts:
+          - listen: "80 default_server"
+            server_name: "_"
+            return: 301 https://$host$request_uri
+          - listen: "443 ssl"
+            server_name: "grafana.aptrust.org"
+            #            root: "{{ ansistrano_deploy_to }}/current/public"
+            access_log: "/var/log/nginx/grafana_aptrust_org_access.log"
+            error_log: "/var/log/nginx/grafana_aptrust_org_error.log"
+            extra_parameters: |
+                location / {
+                proxy_pass http://localhost:3000;
+                proxy_redirect off;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                }
+                ssl    on;
+                # SSL Chain if Nginx, SSL cert if Apache2
+                ssl_certificate    {{ssl_cert_path}};
+                ssl_certificate_key {{ ssl_key_path }};
+
+    roles:
+      - {role: common, tags: common}
+      - {role: postgresql, tags: postgresql}
+      - {role: ansible-influxdb, tags: influxdb}
+      - {role: ansiblebit.grafana, tags: grafana}
+      - {role: cd3ef.nginx-passenger, tags: nginx}
+
+
+    tasks:
+      - name: Create grafana DB user
+        postgresql_user: name="{{psql_owner}}"
+                         password="{{psql_pass}}"
+        tags: postgresql
+
+      - name: Create grafana DB user
+        postgresql_db: name="{{psql_db}}"
+                       encoding='UTF-8'
+                       owner="{{psql_owner}}"
+                       state=present
+        tags: postgresql
+
+      - name: Create OPS data directory
+        file:
+          path: "{{item}}"
+          owner: "{{system_default_user}}"
+          group: "{{deploy_group}}"
+          mode: 0775
+          recurse: yes
+          state: directory
+        with_items:
+            - "{{ops_data}}"
+            - "{{ops_data}}/influxdb"
+            - "{{ops_data}}/grafana"
+        tags: opsdatadir
+
+      - name: Create icinga2 database
+        influxdb_database:
+            hostname: "127.0.0.1"
+            database_name: "icinga2"
+            username: "{{influxdb_username}}"
+            password: "{{influxdb_password}}"
+            state: present
+
+      - name: Check if icinga2 is installed
+        shell: icinga2 -V > /dev/null
+        register: icinga_installed
+
+      - name: Enable icinga2 influxdbwriter
+        shell: icinga2 feature enable {{item}}
+        with_items:
+          - influxdb
+          - perfdata
+        when: icinga_installed
+
+      - name: Define influxdb config template
+        template:
+          src: roles/icinga2-ansible/icinga2-ansible-no-ui/templates/influxdb.conf.j2
+          dest: /etc/icinga2/features-available/influxdb.conf
+          owner: root
+          group: deploy
+          mode: 0644

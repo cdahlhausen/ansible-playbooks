@@ -254,7 +254,7 @@ ex_dpn_dpnpackageworker: {
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "180m"
+    messagetimeout: "360m"
 }
 
 ex_dpn_dpnvalidationworker: {
@@ -263,11 +263,11 @@ ex_dpn_dpnvalidationworker: {
     nsqtopic: "dpn_validation_topic",
     nsqchannel: "dpn_validation_channel",
     maxattempts: "3",
-    maxinflight: "20",
+    maxinflight: "6",
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "180m"
+    messagetimeout: "720m"
 }
 
 ex_dpn_dpncopyworker: {
@@ -276,11 +276,11 @@ ex_dpn_dpncopyworker: {
     nsqtopic: "dpn_copy_topic",
     nsqchannel: "dpn_copy_channel",
     maxattempts: "3",
-    maxinflight: "20",
+    maxinflight: "6",
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "180m"
+    messagetimeout: "720m"
 }
 
 ex_dpn_dpningeststoreworker: {
@@ -293,7 +293,7 @@ ex_dpn_dpningeststoreworker: {
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
-    messagetimeout: "180m"
+    messagetimeout: "720m"
 }
 
 ex_dpn_dpningestrecordworker: {

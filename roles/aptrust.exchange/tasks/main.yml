@@ -111,7 +111,7 @@
   changed_when: "'no buildable Go source files' not in go_build_result.stderr"
   tags: buildgo
 
-
+# Note: Excluding apps will exclude them to be considered under supervisor.
 - name: Get list of applications
   shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync|dpn_cleanup'"
   register: dir_out
@@ -162,6 +162,8 @@
   with_items:
         - { name: dpn_sync, hour: "*/2", minute: "*/0"}
         - { name: dpn_queue, hour: "*/1", minute: "*/10"}
+# TODO: Enable when it's time.
+# - { name: dpn_cleanup, hour: "*/4", minute: "*/20"}
   when: orgtype == 'dpn'
   tags: cronjobber
 

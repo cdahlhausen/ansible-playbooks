@@ -1,7 +1,7 @@
 # Identify type of server, DPN or APTrust
 - name: Is this an APT or DPN Server
   set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
-  tags: orgtype, lsfiles, cronjobber, reread_supervisor
+  tags: orgtype, lsfiles, cronjobber, reread_supervisor, dpn_cronjobs
 
 # Install required packages
 - name: Install required packages
@@ -146,26 +146,22 @@
     - { name: 'nsq_supervisor.conf.j2', dest: 'nsq.conf'}
   tags: listfiles
 
-# TODO: Enable again once all services are running
-#      - apt_queue
-- name: Add DPN cronjob for {{item.name}}"
+- name: Add DPN cronjobs
   cron: name="{{item.name}}"
         user="{{system_default_user}}"
         minute="{{item.minute | default('*/1')}}"
         hour="{{item.hour | default('*/1')}}"
         job=". $HOME/.profile; {{goapp_bin_path}}/{{item.name}}
-             -stats={{goapp_log_path}}/{{item.name}}_stats.json
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
              > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1"
         state=present
-        disabled=yes
+        disabled=no
   with_items:
-        - { name: dpn_sync, hour: "*/2", minute: "*/0"}
+        - { name: 'dpn_sync -hours=24', hour: "*/2", minute: "*/0"}
         - { name: dpn_queue, hour: "*/1", minute: "*/10"}
-# TODO: Enable when it's time.
-# - { name: dpn_cleanup, hour: "*/4", minute: "*/20"}
+        - { name: dpn_cleanup, hour: "*/4", minute: "*/20"}
   when: orgtype == 'dpn'
-  tags: cronjobber
+  tags: dpn_cronjobs
 
 - name: Add APTrust cronjob for {{item.name}}"
   cron: name="{{item.name}}"

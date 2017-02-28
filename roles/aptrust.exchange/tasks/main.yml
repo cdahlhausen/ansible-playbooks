@@ -1,7 +1,7 @@
 # Identify type of server, DPN or APTrust
 - name: Is this an APT or DPN Server
   set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
-  tags: orgtype, lsfiles, cronjobber, reread_supervisor, dpn_cronjobs
+  tags: orgtype, lsfiles, apt_cronjobs, reread_supervisor, dpn_cronjobs
 
 # Install required packages
 - name: Install required packages
@@ -163,22 +163,23 @@
   when: orgtype == 'dpn'
   tags: dpn_cronjobs
 
-- name: Add APTrust cronjob for {{item.name}}"
+- name: Add APTrust cronjobs
   cron: name="{{item.name}}"
         user="{{system_default_user}}"
         minute="{{item.minute | default('*/1')}}"
         hour="{{item.hour | default('*/1')}}"
         job=". $HOME/.profile; {{goapp_bin_path}}/{{item.name}}
-             -stats={{goapp_log_path}}/{{item.name}}_stats.json
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
+             {{item.params}}
              > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1"
         state=present
         disabled=no
   with_items:
-        - { name: apt_bucket_reader, hour: "*/1", minute: "*/2"}
-        - { name: apt_queue, hour: "*/1", minute: "*/30"}
+        - { name: apt_bucket_reader, hour: "*/1", minute: "*/2", params: "-stats={{goapp_log_path}}/apt_bucket_reader_stats.json"}
+        - { name: apt_queue, hour: "*/1", minute: "*/30", params: "-stats={{goapp_log_path}}/apt_queue_stats.json"}
+        - { name: apt_queue_fixity, hour: "*/1", minute: "*/30", params: "-maxfiles=2500"}
   when: orgtype == 'apt'
-  tags: cronjobber
+  tags: apt_cronjobs
 
 - set_fact:
       supervisor_apps:

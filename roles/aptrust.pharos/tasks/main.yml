@@ -159,3 +159,13 @@
         group: "{{deploy_group}}"
         mode: 0664
     tags: logperm
+
+  - name: Setup log rotation
+    template:
+        src: logrotation.yml.j2
+        dest: "/etc/logrotate.d/pharos_{{APP_ENV}}"
+        owner: "root"
+        group: "{{deploy_group}}"
+        mode: 0644
+    tags: pharos_logrotate
+

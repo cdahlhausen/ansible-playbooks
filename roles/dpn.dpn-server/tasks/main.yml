@@ -247,3 +247,13 @@
     become: true
     become_user: "{{ system_default_user }}"
     notify: reload nginx
+
+  - name: Setup log rotation
+    template:
+        src: logrotation.yml.j2
+        dest: "/etc/logrotate.d/dpn-server_{{APP_ENV}}"
+        owner: "root"
+        group: "{{deploy_group}}"
+        mode: 0644
+    tags: dpn-server_logrotate
+

@@ -1,5 +1,9 @@
 ---
 # group_vars/vagrant
+# APP Env as language agnostic variable
+APP_ENV: 'demo'
+GO_ENV: 'demo'
+RAILS_ENV: 'demo'
 
 system_default_user: vagrant
 system_default_email: "test@aptrust.org"
@@ -15,7 +19,6 @@ ssl_chain_path: "{{vault_vagrant_ssl_cert_path}}"
 ssl_key_path: "{{vault_vagrant_ssl_key_path}}"
 
 # Pharos
-RAILS_ENV: 'demo'
 pharos_local_db: true
 pharos_db_user: "{{ vault_pharos_dev_db_user}}"
 pharos_db_pwd: "{{ vault_pharos_dev_db_pwd}}"
@@ -24,9 +27,10 @@ pharos_devise_key: "{{ vault_pharos_dev_devise_key}}"
 pharos_rails_key: "{{ vault_pharos_dev_rails_key}}"
 
 pharos_url: "https://demo.aptrust.org"
+pharos_aws_ses_user: "{{vault_pharos_prod_aws_ses_user}}"
+pharos_aws_ses_pwd: "{{vault_pharos_prod_aws_ses_pwd}}"
 
 # Exchange
-GO_ENV: 'demo'
 pharos_api_user: "{{vault_pharos_demo_api_user}}"
 pharos_api_key: "{{vault_pharos_demo_api_pwd}}"
 

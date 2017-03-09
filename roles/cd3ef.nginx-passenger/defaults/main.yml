@@ -43,3 +43,4 @@ nginx_upstreams: []
 #     "srv3.example.com"
 #   }
 
+passenger_standalone: false

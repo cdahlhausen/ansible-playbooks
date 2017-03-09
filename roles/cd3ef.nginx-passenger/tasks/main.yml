@@ -20,25 +20,7 @@
     apt: name=apache2 state=absent
     when: ansible_os_family == "Debian" and apache2_present
 
-  - name: Passenger | Add GPG key to apt keyring
-    apt_key: keyserver=keyserver.ubuntu.com id=561F9B9CAC40B2F7
-    when: ansible_os_family == "Debian" and nginx_present|failed
-    tags: passenger
-    become: yes
-
-  - name: Passenger | Install needed packages
-    become: yes
-    apt: state=present pkg="{{item}}"
-    with_items:
-     - apt-transport-https
-     - ca-certificates
-    when: ansible_os_family == "Debian" and nginx_present|failed
-    tags: passenger
-
-  - name: Passenger | Add Passenger repository
-    become: yes
-    apt_repository: repo="deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main" state=present
-    when: ansible_os_family == "Debian" and nginx_present|failed
+  - include: passenger.yml
     tags: passenger
 
   - name: Generate 2048bit DHE param
@@ -49,7 +31,7 @@
     async: 120
     poll: 0
     become: yes
-    tags: dheparam
+    tags: ['dheparam','nginx']
 
   - name: Install Nginx extra and Phusion Passenger
     become: yes
@@ -57,8 +39,7 @@
     when: ansible_os_family == "Debian" and nginx_present|failed
     with_items:
      - nginx-extras
-     - passenger
-    tags: passenger
+    tags: nginx
 
   - name: Nginx | Create sites available/enabled directories
     file: path={{item}} state=directory mode=0755
@@ -68,25 +49,19 @@
     when: ansible_os_family == "Debian" and nginx_present|failed
     tags:
       - nginx
-      - passenger
     become: yes
 
   - name: Nginx | Configure include sites-enabled
     lineinfile: dest=/etc/nginx/nginx.conf regexp=".*sites-enabled.*" line="    include /etc/nginx/sites-enabled/*;" insertbefore="}" state=present
-    tags:
-      - nginx
-      - passenger
     when: ansible_os_family == "Debian" and nginx_present|failed
     become: yes
+    tags: nginx
 
   - name: Nginx | Disable default site
     file: path=/etc/nginx/sites-enabled/default state=absent
-    tags:
-      - nginx
-      - passenger
-# Note: nginx_present failed does not make sense as condition.
-#    when: ansible_os_family == "Debian" and nginx_present|failed
+    when: ansible_os_family == "Debian"
     become: yes
+    tags: nginx
 
   - name: Nginx | Copy nginx.conf template
     become: yes
@@ -95,7 +70,6 @@
     notify: nginx reload
     tags:
       - nginx
-      - passenger
 
   - name: Nginx | Set ruby to system one
     become: yes
@@ -103,16 +77,15 @@
     when: ansible_os_family == "Debian" and nginx_present|failed
     tags:
       - nginx
-      - passenger
 
   - name: Nginx | Define Passenger min instances
     become: yes
     lineinfile: dest=/etc/nginx/passenger.conf
                 insertafter="^passenger_root"
                 line="passenger_min_instances 4;"
+    when: passenger_standalone == false
     tags:
       - nginx
-      - passenger
       - mininstances
 
   - name: Nginx | Set ruby to system one

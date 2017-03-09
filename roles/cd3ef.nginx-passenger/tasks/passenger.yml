@@ -1,0 +1,39 @@
+---
+  - name: Passenger | Add GPG key to apt keyring
+    become: yes
+    apt_key: keyserver=keyserver.ubuntu.com id=561F9B9CAC40B2F7
+    when: ansible_os_family == "Debian" and nginx_present|failed
+    tags: passenger
+
+  - name: Passenger | Install needed packages
+    become: yes
+    apt: state=present pkg="{{item}}"
+    with_items:
+     - apt-transport-https
+     - ca-certificates
+    when: ansible_os_family == "Debian" and nginx_present|failed
+    tags: passenger
+
+  - name: Passenger | Add Passenger repository
+    become: yes
+    apt_repository: repo="deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main" state=present
+    when: ansible_os_family == "Debian" and nginx_present|failed
+    tags: passenger
+
+  - name: Install Phusion Passenger
+    become: yes
+    apt: state=present update_cache=yes pkg="{{item}}"
+    with_items:
+     - passenger
+    tags: passenger
+
+# TODO: Add passengers start script with params
+# --min-instances
+# --address=127.0.0.1
+# --port=4001
+# --deamonieze
+# --user=ubuntu
+# --ruby=/usr/bin/passenger_free_ruby
+#
+
+# TODO: Add

@@ -1,9 +1,9 @@
-worker_processes {{ ansible_processor_count }};
+worker_processes {{ nginx_worker_processes }};
 pid /var/run/nginx.pid;
 
 
 events {
-	worker_connections 768;
+	worker_connections {{nginx_worker_connections}};
 	# multi_accept on;
 }
 

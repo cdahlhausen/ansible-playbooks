@@ -153,7 +153,7 @@
         hour="{{item.hour | default('*/1')}}"
         job=". $HOME/.profile; {{goapp_bin_path}}/{{item.name}}
              -config={{goapp_cfg_path}}/{{GO_ENV}}.json
-             {{item.params}}
+             {{item.params | default ()}}
              > {{goapp_log_path}}/cron_{{item.name}}.log 2>&1"
         state=present
         disabled=no

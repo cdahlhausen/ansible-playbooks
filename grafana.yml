@@ -114,6 +114,7 @@
           - influxdb
           - perfdata
         when: icinga_installed
+        tags: influxdb
 
       - name: Define influxdb config template
         template:

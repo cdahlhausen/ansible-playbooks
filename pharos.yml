@@ -44,6 +44,9 @@
                 ssl_certificate_key {{ ssl_key_path }};
         nginx_client_max_body_size: 0
 
+        # Passenger
+        #        passenger_standalone: true
+
         # RBenv
         rbenv:
           env: user
@@ -79,5 +82,5 @@
         token: "{{slack_token}}"
         msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
         icon_emoji: ":dog:"
-        channel: 'ops'
-      tags: [pharos,slack]
+        channel: 'aptrust_internal'
+      tags: [pharos,slack, deploy]

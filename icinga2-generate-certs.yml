@@ -14,7 +14,7 @@
 
 - hosts: "{{ hostitem }}"
   vars:
-   hostitem: {{hostitem}}.aptrust.org
+   hostitem: "{{hostitem}}.aptrust.org"
    master_hostname: apt-util.aptrust.org
    master_ip: "{{ hostvars['apt-util'].host_eip }}"
    master_port: 5665

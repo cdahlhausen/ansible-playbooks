@@ -43,7 +43,7 @@
      tags: nodeaction
 
 - hosts: "{{ nodeitem | default('all')}}"
-  tags: ['nodeaction']
+  tags: ['nodeaction', 'nodecerts"]
   vars:
    master_hostname: apt-util.aptrust.org
    master_ip: "{{ hostvars['apt-util'].host_eip }}"

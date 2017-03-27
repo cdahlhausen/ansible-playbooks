@@ -33,6 +33,7 @@
     - acl
 
 # http://stackoverflow.com/questions/35535566/installing-pip-using-get-pip-py-snimissingwarning
+# https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
 - name: Make up for outdated Python libraries. SNIMissingWarning
   pip: name={{item}}
   with_items:

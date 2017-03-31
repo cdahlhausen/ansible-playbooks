@@ -15,10 +15,6 @@ dpn-local-demo ansible_user=vagrant hostname_name=dpn-local-demo hostname_fqdn=d
 apt-util hostname_name=apt-util hostname_fqdn=icinga.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
 apt-ops hostname_name=apt-ops hostname_fqdn=ops.aptrust.org host_eip=34.198.129.76 # Operations Instance
 
-# APTrust 1.0 world
-[test-servers]
-apt-util hostname_name=apt-util hostname_fqdn=apt-util.aptrust.org  host_eip=54.175.28.251 # Test Ingest+Restore+Utility
-
 # APTrust 2.0 world
 # All new servers have '2' suffix in their hostname except demo, since it's a new 'namespace'
 [demo-servers]
@@ -28,14 +24,16 @@ apt-demo-services hostname_name=apt-demo-services hostname_fqdn=demo-services.ap
 [pharos-servers]
 apt-demo-repo2 hostname_name=apt-demo-repo2 hostname_fqdn=demo.aptrust.org host_eip=52.55.230.218 # Pharos Demo2
 pharos ansible_user=vagrant hostname_name=pharos hostname_fqdn=pharos.aptrust.local host_eip=192.168.33.12
-apt-prod-repo2 hostname_name=apt-prod-repo2 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
+apt-prod-repo22 hostname_name=apt-prod-repo22 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
+#apt-prod-repo22 hostname_name=apt-prod-repo22 hostname_fqdn=repo.aptrust.org host_eip=52.90.134.128 # Pharos Prod
 
 [development-servers]
 
 [production-servers]
 # APTrust 2.0
-apt-prod-repo2 hostname_name=apt-prod-repo2 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
+apt-prod-repo22 hostname_name=apt-prod-repo22 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
 apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services
+# apt-prod-repo22 hostname_name=apt-prod-repo22 hostname_fqdn=repo.aptrust.org host_eip=52.90.134.128 # Pharos Prod
 
 [exchange-services]
 apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services

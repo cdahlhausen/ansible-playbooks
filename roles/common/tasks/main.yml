@@ -78,8 +78,7 @@
     mode: 0775
     state: directory
   with_items:
-    - /mnt/efs/apt
-    - /mnt/efs/dpn
+    - /mnt/efs/{{orgtype}}
   when: (ansible_bios_version != 'VirtualBox' and (use_efs == True or use_ebs == True))
   tags: aptmount
 

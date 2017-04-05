@@ -52,7 +52,23 @@
 # Identify type of server, DPN or APTrust. Default to apt.
 - name: Is this an APT or DPN Server
   set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
-  tags: orgtype, nfsmount
+  tags: [always, mountdir]
+
+- name: set orgmountdir fact
+  set_fact: orgmountdir={{mount_dir}}/{{orgtype}}
+  tags: [always, mountdir]
+
+- name: set orgmountdirlogs fact
+  set_fact: orgmountdirlogs={{mount_dir}}/{{orgtype}}/logs/{{ansible_hostname}}
+  tags: [always, mountdir]
+
+- name: "check mount point {{ orgmountdir }}"
+  command: mountpoint {{ orgmountdir }}
+  register: mount_stat
+  failed_when: False
+  changed_when: False
+  tags: [always, mountdir]
+
 
 # Message of the day explaining server is under control of Ansible.
 - name: MOTD
@@ -69,7 +85,7 @@
   become: yes
   file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
 
-- name: Create /mnt/apt if not mounted already.
+- name: Create /mnt/efs/apt or /mnt/efs/dpn if not mounted already
   become: yes
   file:
     path: "{{item}}"
@@ -79,8 +95,10 @@
     state: directory
   with_items:
     - /mnt/efs/{{orgtype}}
-  when: (ansible_bios_version != 'VirtualBox' and (use_efs == True or use_ebs == True))
-  tags: aptmount
+    - /mnt/efs/{{orgtype}}/logs/{{ansible_hostname}}
+    - "{{orgmountdirlogs}}"
+  when: (ansible_bios_version != 'VirtualBox' and (use_efs == True or use_ebs == True) and mount_stat.rc == 0)
+  tags: [aptmount, mountdir]
 
 - name: Identify my availabiltiy zone
   shell: "curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone"
@@ -90,11 +108,9 @@
 
 # TODO Setup EBS mounting
 
-
 # Mount EFS volume.
 - name: Mount EFS volume
   mount:
-    # src: "{{my_aws_az.stdout}}{{efs_mount_uri}}"
     src: "{{efs_mount_uri}}"
     name: "/mnt/efs/{{orgtype}}"
     fstype: nfs
@@ -139,6 +155,8 @@
     - adiamond
     - cd3ef
 
+# TODO: Revisit this. We may not need it since deploy and git operations are
+#       done with Ansible, hence an ansible user.
 - name: add deploy user private key
   become: yes
   become_user: "{{ system_default_user }}"

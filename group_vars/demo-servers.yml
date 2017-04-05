@@ -6,6 +6,9 @@ APP_ENV: 'demo'
 GO_ENV: 'demo'
 RAILS_ENV: 'demo'
 
+# SSH
+sshd_allow_users: ["{{system_default_user}}",cd3ef,andrew.diamond,adiamond,kec6en]
+
 # Fedora
 fedora_db_user: "{{vault_fedora_user}}"
 fedora_db_pwd: "{{vault_fedora_dev_pwd}}"

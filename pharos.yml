@@ -82,5 +82,5 @@
         token: "{{slack_token}}"
         msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
         icon_emoji: ":dog:"
-        channel: 'aptrust_internal'
+        channel: 'ops'
       tags: [pharos,slack, deploy]

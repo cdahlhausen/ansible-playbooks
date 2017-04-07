@@ -1,0 +1,40 @@
+---
+# Identify type of server, DPN or APTrust. Default to apt.
+- name: Is this an APT or DPN Server
+  set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
+  tags: [always, mountdir]
+
+- name: Check if central log directory exists
+  command: "mountpoint {{mount_dir}}/{{orgtype}}"
+  register: mount_stat
+  changed_when: False
+
+- name: Create appname subdirectory
+  file:
+    path: "{{central_log_dir}}/{{appname}}"
+    owner: "{{system_default_user}}"
+    group: "{{deploy_group}}"
+    mode: 0755
+    state: directory
+
+# Only move existing files if not yet symlinked.
+- name: Check if app log directory has already been symlinked
+  stat: path="{{app_log_dir}}"
+  register: app_log_dir_link
+
+- name: Move existing logfiles to central log directory
+  command: "mv {{item}} {{central_log_dir}}"
+  when:  app_log_dir_link.stat and app_log_dir_link.stat.islnk == false
+  with_fileglob:
+    - "{{app_log_dir}}/*"
+
+- name: Symlink app log dir to central log dir
+  file:
+    src: "{{central_log_dir}}/{{appname}}"
+    dest: "{{app_log_dir}}"
+    owner: "{{system_default_user}}"
+    group: "{{deploy_group}}"
+    state: link
+
+
+

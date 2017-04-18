@@ -1,0 +1,35 @@
+---
+-   hosts: apt-prod-andrew
+    vars_files:
+        - "group_vars/vault.yml"
+
+    environment: "{{go_env}}"
+    vars:
+        playbook_name: andrew
+
+        RAILS_ENV: 'production'
+        # Golang
+        golang_workspace_user: "{{system_default_user}}"
+
+        # Supervisor
+        supervisor_user: "{{system_default_user}}"
+        supervisor_user_group: "{{system_default_group}}"
+        supervisor_pid_path: "/tmp"
+
+
+    roles:
+      - {role: common, tags: common}
+      - {role: futurice.supervisor, tags: supervisor}
+      - {role: sansible.golang, tags: golang}
+        #      - {role: retr0h.nsq, tags: nsq}
+        #      - {role: aptrust.exchange, tags: [exchange, deploy]}
+
+    tasks:
+
+    - name: Slack to all
+      slack:
+        token: "{{slack_token}}"
+        msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
+        icon_emoji: ":dog:"
+        channel: 'ops'
+      tags: [exchange,slack,deploy]

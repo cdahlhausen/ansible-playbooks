@@ -41,7 +41,6 @@
     - ndg-httpsclient
     - pyasn1
 
-
 - name: Install AWS CLI tools and Boto
   become: yes
   pip: name={{item}}
@@ -68,56 +67,6 @@
   failed_when: False
   changed_when: False
   tags: [always, mountdir]
-
-
-# Message of the day explaining server is under control of Ansible.
-- name: MOTD
-  become: yes
-  template: src=motd.j2 dest=/etc/motd owner=root mode=0644
-  tags: common
-  when: "'apt' in ansible_hostname"
-
-- name: Create Deploy group
-  become: yes
-  group: name=deploy state=present gid=1234
-
-- name: Adjust /srv permissions.
-  become: yes
-  file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
-
-- name: Create /mnt/efs/apt or /mnt/efs/dpn if not mounted already
-  become: yes
-  file:
-    path: "{{item}}"
-    owner: "{{system_default_user}}"
-    group: "{{deploy_group}}"
-    mode: 0775
-    state: directory
-  with_items:
-    - /mnt/efs/{{orgtype}}
-    - /mnt/efs/{{orgtype}}/logs/{{ansible_hostname}}
-    - "{{orgmountdirlogs}}"
-  when: (ansible_bios_version != 'VirtualBox' and (use_efs == True or use_ebs == True) and mount_stat.rc == 0)
-  tags: [aptmount, mountdir]
-
-- name: Identify my availabiltiy zone
-  shell: "curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone"
-  register: my_aws_az
-  when: (ansible_bios_version != 'VirtualBox')
-  tags: awsaz
-
-# TODO Setup EBS mounting
-
-# Mount EFS volume.
-- name: Mount EFS volume
-  mount:
-    src: "{{efs_mount_uri}}"
-    name: "/mnt/efs/{{orgtype}}"
-    fstype: nfs
-    opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
-    state: mounted
-  when: (ansible_bios_version != 'VirtualBox' and use_efs == True)
-  tags: nfsmount
 
 # Adding common users to the system.
 - name: add common users
@@ -185,6 +134,56 @@
   with_items:
     - scott.turnbull
   tags: remove_user
+# Message of the day explaining server is under control of Ansible.
+- name: MOTD
+  become: yes
+  template: src=motd.j2 dest=/etc/motd owner=root mode=0644
+  tags: common
+  when: "'apt' in ansible_hostname"
+
+- name: Create Deploy group
+  become: yes
+  group: name=deploy state=present gid=1234
+
+- name: Adjust /srv permissions.
+  become: yes
+  file: path=/srv owner="{{system_default_user}}" group="{{deploy_group}}" mode=0775
+
+- name: Create /mnt/efs/apt or /mnt/efs/dpn if not mounted already
+  become: yes
+  file:
+    path: "{{item}}"
+    owner: "{{system_default_user}}"
+    group: "{{deploy_group}}"
+    mode: 0775
+    state: directory
+  with_items:
+    - /mnt/efs/{{orgtype}}
+    - /mnt/efs/{{orgtype}}/logs/{{ansible_hostname}}
+    - "{{orgmountdirlogs}}"
+  when: (ansible_bios_version != 'VirtualBox' and (use_efs == True or use_ebs == True) and mount_stat.rc == 0)
+  tags: [aptmount, mountdir]
+
+- name: Identify my availabiltiy zone
+  shell: "curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone"
+  register: my_aws_az
+  when: (ansible_bios_version != 'VirtualBox')
+  tags: awsaz
+
+# TODO Setup EBS mounting
+
+# Mount EFS volume.
+- name: Mount EFS volume
+  mount:
+    src: "{{efs_mount_uri}}"
+    name: "/mnt/efs/{{orgtype}}"
+    fstype: nfs
+    opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
+    state: mounted
+  when: (ansible_bios_version != 'VirtualBox' and use_efs == True)
+  tags: nfsmount
+
+
 
 ## Making sure github.com is a known_host
 - name: Ensure github.com is a known host

@@ -8,6 +8,17 @@
         playbook_name: andrew
 
         RAILS_ENV: 'production'
+        # RBenv
+        rbenv:
+          env: user
+          version: v1.0.0
+          ruby_version: 2.3.1
+        rbenv_users:
+            - "{{system_default_user}}"
+#            - adiamond
+#            - cd3ef
+        rbenv_group: 'deploy'
+
         # Golang
         golang_workspace_user: "{{system_default_user}}"
 
@@ -20,6 +31,7 @@
     roles:
       - {role: common, tags: common}
       - {role: futurice.supervisor, tags: supervisor}
+      - {role: zzet.rbenv, tags: rbenv}
       - {role: sansible.golang, tags: golang}
         #      - {role: retr0h.nsq, tags: nsq}
         #      - {role: aptrust.exchange, tags: [exchange, deploy]}

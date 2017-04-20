@@ -38,6 +38,12 @@
 
     tasks:
 
+    - name: Install extra packages
+      apt: pkg="{{item}}" state=present
+      with_items:
+        - libmagic-dev
+      tags: packages
+
     - name: Slack to all
       slack:
         token: "{{slack_token}}"

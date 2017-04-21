@@ -46,6 +46,20 @@ efs_mount_uri: "fs-97ff5bde.efs.us-east-1.amazonaws.com:/"
 pharos_api_user: "{{vault_pharos_demo_api_user}}"
 pharos_api_key: "{{vault_pharos_demo_api_pwd}}"
 
+apt_cronjobs:
+  apt_bucket_reader:
+    hour: "*"
+    minute: "*/16"
+    params: "-stats={{goapp_log_path}}/apt_bucked_reader_stats.json"
+  apt_queue:
+    hour: "*/1"
+    minute: "*/30"
+    params: "-stats={{goapp_log_path}}/apt_queue_stats.json"
+  apt_queue_fixity:
+    hour: "*/1"
+    minute: "*/30"
+    params: "-maxfiles=2500"
+
 ex_tardirectory: "/mnt/efs/apt/data"
 ex_restoredirectory: "/mnt/efs/apt/restore"
 ex_logdirectory: "/mnt/efs/apt/logs"

@@ -10,17 +10,19 @@ goapp_log_path: "/mnt/efs/{{orgtype}}/logs"
 # have either on a different server
 ex_services: all # values: all, ingest, restore
 
-goapp_services:
-    ingest:
-    - apt_fetch
-    - apt_record
-    - apt_store
-    - apt_volume_service
-    - dpn_sync
-#    - dpn_copy
-    - nsq_service
-    restore: []
-
+apt_cronjobs:
+  apt_bucket_reader:
+    hour: "*/1"
+    minute: "*/2"
+    params: "-stats={{goapp_log_path}}/apt_bucked_reader_stats.json"
+  apt_queue:
+    hour: "*/1"
+    minute: "*/30"
+    params: "-stats={{goapp_log_path}}/apt_queue_stats.json"
+  apt_queue_fixity:
+    hour: "*/1"
+    minute: "*/30"
+    params: "-maxfiles=2500"
 
 ex_tardirectory: "~/tmp/data"
 ex_restoredirectory: "~/tmp/apt/restore"

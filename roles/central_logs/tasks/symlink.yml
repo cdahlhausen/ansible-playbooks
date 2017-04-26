@@ -42,4 +42,9 @@
     group: "{{deploy_group}}"
     force: yes
     state: link
+  register: symlinked
   when: (mount_stat.rc == 0) and (app_log_dir_link.stat.islnk == false)
+
+- name: Restart service if defined
+  service: name="{{item.servicename}}" state=reloaded
+  when: item.servicename is defined

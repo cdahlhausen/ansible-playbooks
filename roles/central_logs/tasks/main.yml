@@ -5,6 +5,6 @@
   changed_when: False
 
 - include: symlink.yml
-  with_items: "{{appname}}"
+  with_items: "{{centrallogs}}"
   when: mount_stat.rc == 0
 

@@ -2,7 +2,7 @@
 
 # Application that produces the logs. A subdirectory in the central log location
 # will be created.
-appname: ''
+centrallogs: ''
 
 # Directory to symlink in central log directory. e.g. /var/log/nginx
 app_log_dir: ''

@@ -6,15 +6,14 @@
         # Defined in all.yml and
         #        mount_dir: /mnt/efs/apt
 
-        appname:
-          - {name: nginx, logdir: /var/log/nginxcopy }
-          - { name: unattended-upgrades, logdir: /var/log/unattended-upgradescopy }
-
-            # - {name: pharos, logdir: /var/www/repo.aptrust.org/pharos/current/log }
+        centrallogs:
+          - { name: nginx, logdir: /var/log/nginx, servicename: nginx}
+            # - { name: unattended-upgrades, logdir: /var/log/unattended-upgradescopy }
+          - {name: pharos, logdir: "/var/www/{{ansible_fqdn}}/pharos/shared/log", servicename: nginx}
 
     roles:
       #      - common
-      - central_logs
+      - { role: central_logs, tags: centrallogs}
 
 
 

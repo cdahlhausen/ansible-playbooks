@@ -1,10 +1,19 @@
 ---
+# Identify type of server, DPN or APTrust. Default to apt.
+- name: Is this an APT or DPN Server
+  set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
+  tags: [always, mountdir]
+
 - name: Check if EFS mount exists
   command: "mountpoint {{mount_dir}}/{{orgtype}}"
   register: mount_stat
   changed_when: False
 
+- name: If logs already symlinked, ignore the rest..
+  stat: path="{{item.logdir}}"
+  register: logssym
+  with_items: "{{centrallogs}}"
+
 - include: symlink.yml
   with_items: "{{centrallogs}}"
-  when: mount_stat.rc == 0
-
+  when: mount_stat.rc == 0 and (logssym.stat.islnk is defined and logssym.stat.islnk)

@@ -113,7 +113,7 @@
 
 # Note: Excluding apps will exclude them to be considered under supervisor.
 - name: Get list of applications
-  shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync|dpn_cleanup|apt_audit_list|apt_restore_from_glacier'"
+  shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync|dpn_cleanup|apt_audit_list|apt_restore_from_glacier|apt_download'"
   register: dir_out
   tags: lsfiles
 

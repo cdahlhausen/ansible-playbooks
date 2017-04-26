@@ -22,6 +22,7 @@
 
 - name: ls "{{item.name}}"
   shell: ls -A {{item.logdir}}
+  no_log: true
   register: path_files
 
 - name: Move existing logfiles to central log directory

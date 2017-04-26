@@ -20,8 +20,8 @@
   changed_when: false
   when:  app_log_dir_link.stat and app_log_dir_link.stat.islnk == false
 
-- name: ls testapp
-  shell: ls {{item.logdir}}
+- name: ls "{{item.name}}"
+  shell: ls -A {{item.logdir}}
   register: path_files
 
 - name: Move existing logfiles to central log directory

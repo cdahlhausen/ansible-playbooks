@@ -1,9 +1,0 @@
----
-
-- name: Update file and folder permissions
-  file:
-    path: "{{ansistrano_deploy_to}}"
-    state: directory
-    recurse: yes
-    owner: "{{system_default_user}}"
-    group: "{{deploy_group}}"

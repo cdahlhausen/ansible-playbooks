@@ -1,7 +1,7 @@
 # Identify type of server, DPN or APTrust
 - name: Is this an APT or DPN Server
   set_fact: orgtype="{% if 'dpn' in ansible_hostname%}dpn{%else%}apt{%endif%}"
-  tags: orgtype, lsfiles, apt_cronjobs, reread_supervisor, dpn_cronjobs
+  tags: [always]
 
 # Install required packages
 - name: Install required packages
@@ -88,6 +88,10 @@
   register: gitclone
   tags: gitclone
 
+- debug: var=gitclone
+  tags: gitclone
+
+
 # Checkout Exchange repo
 - name: Checkout exchange repo
   become_user: "{{system_default_user}}"
@@ -95,8 +99,8 @@
   shell: "go get -u -f -d github.com/APTrust/exchange/..."
   environment: "{{go_env}}"
   register: checkout
-  when: gitclone.changed
-  tags: buildgo, gitclone2
+  when: gitclone|changed
+  tags: buildgo, gitclone
 
 # go install exchange binaries.
 - name: Build and install go binaries
@@ -120,6 +124,9 @@
 - name: Set Exchange services fact to configure
   set_fact:
       exchangeservices: "{{dir_out.stdout_lines}}"
+  tags: lsfiles
+
+- debug: var=ex_{{orgtype}}_services
   tags: lsfiles
 
 - name: Set nsq services fact to configure supervisor

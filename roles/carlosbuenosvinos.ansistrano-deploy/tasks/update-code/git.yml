@@ -1,7 +1,11 @@
 ---
 - name: ANSISTRANO | GIT | Ensure GIT deployment key is up to date
   copy:
-    src: "{{ ansistrano_git_identity_key_path }}"
+    #    Note: Changed back to content since ssh key is stored in variable.
+    #    Since Ansible 2.1 however you can copy vault encrypted files too, so
+    #    storing ssh keys in separate encrypted files might make sense going forward.
+    #    src: "{{ ansistrano_git_identity_key_path }}"
+    content: "{{ ansistrano_git_identity_key_path }}"
     dest: "{{ ansistrano_deploy_to }}/git_identity_key"
     mode: 0400
   when: ansistrano_git_identity_key_path|trim != ""

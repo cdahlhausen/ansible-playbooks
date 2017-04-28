@@ -11,11 +11,12 @@
         ansistrano_deploy_via: "git"
         ansistrano_git_repo: "git@github.com:APTrust/pharos.git"
         ansistrano_git_branch: "develop"
-        ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
-# TODO: Test shared paths and see if any more tasks have to be set for this to work.
+        # Note: key_path rewritten to support ssh key as variable not file.
+        ansistrano_git_identity_key_path: "{{aptdeploy_sshkey_private}}"
         ansistrano_shared_paths: ["log"]
         ansistrano_keep_releases: 3
-        ansistrano_before_symlink_shared_tasks_file: "roles/aptrust.pharos/tasks/before-symlink.yml"
+        ansistrano_ensure_shared_paths_exist: no
+        # ansistrano_ensure_basedirs_shared_paths_exist: no
 
         # Pharos Role
         pharos_app_root: "{{ ansistrano_deploy_to }}/current"

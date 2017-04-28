@@ -22,6 +22,8 @@
 - include: symlink.yml
   when: ansistrano_current_via == "symlink"
 
+- include: update-permissions.yml
+
 - include: rsync-deploy.yml
   when: ansistrano_current_via == "rsync"
 

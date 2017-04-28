@@ -121,7 +121,7 @@
         creates: "{{pharos_app_root}}/log/.schema_loaded"
     become: true
     become_user: "{{ system_default_user }}"
-    when: "'production' not in '{{RAILS_ENV}}'"
+    when: "('production' or 'demo') not in '{{RAILS_ENV}}'"
     tags: dbmigrate
 
   - name: Migrate DB Schema

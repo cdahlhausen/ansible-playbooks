@@ -15,5 +15,5 @@
 
 - name: ANSISTRANO | Copy release version into REVISION file
   copy:
-    content: "{{ ansistrano_release_version }}"
+    content: "{{ ansistrano_release_version }}\n{{ansistrano_git_result.after}}"
     dest: "{{ ansistrano_release_path.stdout }}/REVISION"

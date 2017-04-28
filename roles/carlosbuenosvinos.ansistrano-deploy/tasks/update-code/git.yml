@@ -6,6 +6,7 @@
     mode: 0400
   when: ansistrano_git_identity_key_path|trim != ""
 
+
 - name: ANSISTRANO | GIT | Update remote repository
   git:
     repo: "{{ ansistrano_git_repo }}"
@@ -33,6 +34,10 @@
 
 - name: ANSISTRANO | GIT | Register ansistrano_git_result variable
   set_fact: ansistrano_git_result={{ ansistrano_git_result_update_ssh if ansistrano_git_result_update|skipped else ansistrano_git_result_update }}
+
+- name: Set git hash fact
+  set_fact: app_git_hash="{{ansistrano_git_result.after}}"
+  when: ansistrano_git_result|changed
 
 - name: ANSISTRANO | GIT | Shred GIT deployment key
   command: shred -f "{{ ansistrano_deploy_to }}/git_identity_key"

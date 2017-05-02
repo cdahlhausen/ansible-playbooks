@@ -85,7 +85,8 @@
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: [deploy, pharos]}
       - {role: aptrust.pharos, tags: [pharos, deploy]}
-      - {role: central_logs, tags: [logs, deploy]}
+        # Disabled until central_logs role is refactored.
+        #      - {role: central_logs, tags: [logs, deploy]}
     tasks:
 
     - name: Slack to all

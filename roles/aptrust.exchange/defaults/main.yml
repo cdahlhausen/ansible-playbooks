@@ -10,6 +10,23 @@ goapp_log_path: "/mnt/efs/{{orgtype}}/logs"
 # have either on a different server
 ex_services: all # values: all, ingest, restore
 
+ex_apt_services:
+  - apt_fetch
+  - apt_file_delete
+  - apt_fixity_check
+  - apt_record
+  - apt_restore
+  - apt_store
+  - apt_volume_service
+
+ex_dpn_services:
+  - dpn_copy
+  - dpn_ingest_record
+  - dpn_ingest_store
+  - dpn_package
+  - dpn_replication_store
+  - dpn_validate
+
 apt_cronjobs:
   apt_bucket_reader:
     hour: "*/1"

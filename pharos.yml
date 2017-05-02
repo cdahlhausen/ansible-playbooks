@@ -15,6 +15,8 @@
         ansistrano_git_identity_key_path: "{{aptdeploy_sshkey_private}}"
         ansistrano_shared_paths: ["log"]
         ansistrano_keep_releases: 3
+        # Check disabled to allow for symlink to central log directory for
+        # log file persistence
         ansistrano_ensure_shared_paths_exist: no
         # ansistrano_ensure_basedirs_shared_paths_exist: no
 
@@ -59,9 +61,16 @@
 #            - cd3ef
         rbenv_group: 'deploy'
 
+        # Central logs on efs mount
+        # Note: Role doesn't allow for multiple logdirs at the moment.
+        # Requires refactoring.
+        centrallogs:
+            # - { name: nginx, logdir: /var/log/nginx, servicename: nginx}
+            # - { name: unattended-upgrades, logdir: /var/log/unattended-upgradescopy }
+          - {name: pharos, logdir: "/var/www/{{ansible_fqdn}}/pharos/shared/log", servicename: nginx}
 
-# THESE ARE SUPPLIED PER GROUP/HOST-VARS
-## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user
+    # THESE ARE SUPPLIED PER GROUP/HOST-VARS
+    ## Rewrite to use aws_ses_user everywhere. currently mapped to postfix_sasl_user
     # AWS CREDENTIALS
     #AWS_ACCESS_KEY_ID: "{{ var_aws_access_key_id }}"
     #AWS_SECRET_ACCESS_KEY: "{{ var_aws_secret_access_key }}"
@@ -76,6 +85,7 @@
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: [deploy, pharos]}
       - {role: aptrust.pharos, tags: [pharos, deploy]}
+      - {role: central_logs, tags: [logs, deploy]}
     tasks:
 
     - name: Slack to all

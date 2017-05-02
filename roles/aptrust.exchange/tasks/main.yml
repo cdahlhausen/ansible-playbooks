@@ -91,7 +91,6 @@
 - debug: var=gitclone
   tags: gitclone
 
-
 # Checkout Exchange repo
 - name: Checkout exchange repo
   become_user: "{{system_default_user}}"
@@ -115,18 +114,16 @@
   changed_when: "'no buildable Go source files' not in go_build_result.stderr"
   tags: buildgo
 
-# Note: Excluding apps will exclude them to be considered under supervisor.
-- name: Get list of applications
-  shell: "cd {{goapp_bin_path}} && ls -1 {{orgtype}}* | egrep -v 'apt_bucket_reader|{{orgtype}}_queue|apt_json_extractor|dpn_sync|dpn_cleanup|apt_audit_list|apt_restore_from_glacier|apt_download'"
-  register: dir_out
-  tags: lsfiles
-
-- name: Set Exchange services fact to configure
+- name: Set apt exchange services fact to configure supervisor
   set_fact:
-      exchangeservices: "{{dir_out.stdout_lines}}"
+      exchangeservices: "{{ex_apt_services}}"
+  when: orgtype == 'apt'
   tags: lsfiles
 
-- debug: var=ex_{{orgtype}}_services
+- name: Set dpn exchange services fact to configure supervisor
+  set_fact:
+      exchangeservices: "{{ex_dpn_services}}"
+  when: orgtype == 'dpn'
   tags: lsfiles
 
 - name: Set nsq services fact to configure supervisor
@@ -198,7 +195,8 @@
         - 'exchange:'
   when: orgtype == 'dpn'
 
-# When state = present, the module will call supervisorctl reread then supervisorctl add if the program/group does not exist
+# When state = present, the module will call supervisorctl reread then
+# supervisorctl add if the program/group does not exist
 - name: Reread/Add supervisor app config files
   supervisorctl: name="{{item}}" state=present
   with_items: "{{supervisor_apps}}"
@@ -215,7 +213,8 @@
     - nsqadmin
     - nsqlookupd
 
-# When state = restarted, the module will call supervisorctl update then call supervisorctl restart.
+# When state = restarted, the module will call supervisorctl update then
+# call supervisorctl restart.
 - name: Update and restart supervisor processes
   supervisorctl: name="{{item}}" state=restarted
   when: supervisor_config_files.changed or go_build_result.changed or checkout.changed

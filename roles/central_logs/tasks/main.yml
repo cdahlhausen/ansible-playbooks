@@ -13,7 +13,16 @@
   stat: path="{{item.logdir}}"
   register: logssym
   with_items: "{{centrallogs}}"
+  tags: symdeb
+
 
 - include: symlink.yml
   with_items: "{{centrallogs}}"
-  when: mount_stat.rc == 0 and (logssym.stat.islnk is defined and logssym.stat.islnk)
+  #  when: mount_stat.rc == 0 and (logssym.stat.islnk is defined and logssym.stat.islnk == false)
+  when: mount_stat.rc == 0
+
+
+  # NOTE: THIS DOES NOT WORK WIHT A DICT OF MULTIPLE LOGDIRS. THE CONDITIONAL DOESNT
+  # EVAL EVERY ITEM IN THE RESULTS LIST. NEED TO ITERATE THROUGH THE LIST SOMEHOW OR RECREATE
+  # A LIST OF ONLY NON SYMLINKED ITEMS.
+

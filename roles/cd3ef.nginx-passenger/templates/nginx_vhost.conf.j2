@@ -35,7 +35,12 @@ server {
     {% endif %}
 
 {% if vhost.location is defined %}
-    location {{ vhost.location }}
-    {% endif %}
+    {% for loc in vhost.location %}
+    location {{ loc.name }}{
+        {{ loc.content }}
+    }
+    {% endfor %}
+{% endif %}
+
 }
 {% endfor %}

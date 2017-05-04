@@ -1,0 +1,48 @@
+---
+
+- name: clone mediawiki
+  git:
+    repo: 'https://gerrit.wikimedia.org/r/p/mediawiki/core.git'
+    dest: '{{ mediawiki_path }}'
+    version: "{{mediawiki_version|default('HEAD')}}"
+    depth: 1
+
+- include: composer.yml
+
+- name: install imagemagick
+  apt:
+    name: imagemagick
+    state: present
+
+- name: install mediawiki dependencies
+  shell: composer install --no-dev
+  args:
+    chdir: '{{ mediawiki_path }}'
+
+- include: mysql.yml
+  when: mediawiki_db.connection == "mysql"
+
+- name: install mediawiki skins
+  git:
+    repo: "https://gerrit.wikimedia.org/r/mediawiki/skins/{{item}}"
+    dest: "{{ mediawiki_path }}/skins/{{item}}"
+  with_items: '{{mediawiki_skins}}'
+
+- name: install mediawiki
+  command: php {{ mediawiki_path }}/maintenance/install.php
+    --dbname {{mediawiki_db.name}}
+    --dbuser {{mediawiki_db.user}}
+    --dbpass {{mediawiki_db.password}}
+    --dbtype {{mediawiki_db.connection}}
+    --lang {{mediawiki_language}}
+    --pass {{admin_user.pass}}
+    --scriptpath '{{mediawiki_dir}}'
+    {{instance_name}} {{admin_user.name}}
+  args:
+    creates: '{{ mediawiki_path }}/LocalSettings.php'
+
+- name: enable clean URL's
+  lineinfile:
+    dest: '{{ mediawiki_path }}/LocalSettings.php'
+    line: '$wgArticlePath = "/$1";'
+    regexp: '\$wgArticlePath'

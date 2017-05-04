@@ -25,6 +25,8 @@
         pharos_environment: "{{ruby_env}}"
 
         # NGINX Webserver
+        install_passenger: true
+
         nginx_vhosts:
           - listen: "80 default_server"
             server_name: "_"

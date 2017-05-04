@@ -68,6 +68,10 @@
   changed_when: False
   tags: [always, mountdir]
 
+- name: Create Deploy group
+  become: yes
+  group: name=deploy state=present gid=1234
+
 # Adding common users to the system.
 - name: add common users
   become: yes
@@ -141,9 +145,6 @@
   tags: common
   when: "'apt' in ansible_hostname"
 
-- name: Create Deploy group
-  become: yes
-  group: name=deploy state=present gid=1234
 
 - name: Adjust /srv permissions.
   become: yes

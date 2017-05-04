@@ -228,9 +228,6 @@
        dest=/srv/ops_scripts
        accept_hostkey=yes
 
-- name: Add diskcheck cron job
-  tags: common, cron
-  cron: name="Check disk space" minute="*/10" hour="*" job="/srv/ops_scripts/diskcheck.py" state=absent
 
 # https://github.com/ansible/ansible-modules-core/issues/4064
 - name: Ansible bug workaround

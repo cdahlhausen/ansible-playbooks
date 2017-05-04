@@ -44,3 +44,6 @@ nginx_upstreams: []
 #   }
 
 passenger_standalone: false
+install_passenger: false
+install_php: false
+

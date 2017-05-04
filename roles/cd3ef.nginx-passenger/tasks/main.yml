@@ -20,8 +20,6 @@
     apt: name=apache2 state=absent
     when: ansible_os_family == "Debian" and apache2_present
 
-  - include: passenger.yml
-    tags: passenger
 
   - name: Generate 2048bit DHE param
     shell: nohup openssl dhparam -out dhparam.pem 2048 &
@@ -33,13 +31,21 @@
     become: yes
     tags: ['dheparam','nginx']
 
-  - name: Install Nginx extra and Phusion Passenger
+    - name: Install Nginx-extras
     become: yes
     apt: state=present update_cache=yes pkg="{{item}}"
     when: ansible_os_family == "Debian" and nginx_present|failed
     with_items:
      - nginx-extras
     tags: nginx
+
+  - include: passenger.yml
+    when: install_passenger
+    tags: passenger
+
+  - include: php.yml
+    when: install_php
+    tags: php
 
   - name: Nginx | Create sites available/enabled directories
     file: path={{item}} state=directory mode=0755
@@ -71,39 +77,6 @@
     tags:
       - nginx
       - nginxconf
-
-  - name: Nginx | Set ruby to system one
-    become: yes
-    lineinfile: dest=/etc/nginx/passenger.conf regexp="^(\s*)#\s*passenger_ruby" line="passenger_ruby /usr/local/bin/ruby;" backrefs=yes
-    when: ansible_os_family == "Debian" and nginx_present|failed
-    tags:
-      - nginx
-
-  - name: Nginx | Define Passenger min instances
-    become: yes
-    lineinfile: dest=/etc/nginx/passenger.conf
-                insertafter="^passenger_root"
-                line="passenger_min_instances 4;"
-    when: passenger_standalone == false
-    tags:
-      - nginx
-      - mininstances
-
-  - name: Nginx | Set ruby to system one
-    become: yes
-    lineinfile: dest=/etc/nginx/passenger.conf regexp="^(\s*)#\s*passenger_root" line="passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;" backrefs=yes
-    when: ansible_os_family == "Debian" and nginx_present|failed
-    tags:
-      - nginx
-      - passenger
-    notify: nginx reload
-
-  - name: Verify Passenger install
-    become: true
-    shell: "/usr/bin/passenger-config validate-install"
-    register: passenger_verification
-    changed_when: "passenger_verification.rc == 1"
-    tags: verifypassenger
 
 # Note: Logrotation not releasing the file descriptor hence it continues to write to the rotated .1 files
 # More info here: https://bugs.launchpad.net/nginx/+bug/1450770

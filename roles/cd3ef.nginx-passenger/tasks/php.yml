@@ -1,0 +1,35 @@
+- name: Install php5-fpm
+  apt: name={{item}} state=installed
+  with_items:
+  - php5-fpm
+  - php-apc
+  notify:
+  - nginx reload
+  - php5-fpm restart
+
+- name: Set PHP tunables
+  lineinfile: dest=/etc/php5/fpm/php.ini
+              regexp="^;?{{item.key}}"
+              line="{{item.key}} = {{item.value}}"
+              backup=yes
+  with_dict: "{{tunables|default({})}}"
+
+- name: Install php5 packages
+  apt: name={{item}} state=installed
+  with_items: "{{php5_packages|default([])}}"
+  notify:
+  - php5-fpm restart
+
+- name: enable nginx and php5-fpm
+  service: name={{item}} enabled=yes state=started
+  with_items:
+  - php5-fpm
+
+# On Ubuntus this is usually a TCP port. We'd rather use a unix socket...
+- name: set php5-fpm socket location
+  lineinfile:
+    dest: /etc/php5/fpm/pool.d/www.conf
+    regexp: '^listen ?='
+    line: 'listen = /var/run/php5-fpm.sock'
+  notify:
+  - php5-fpm restart

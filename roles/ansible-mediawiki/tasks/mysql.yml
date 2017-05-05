@@ -52,14 +52,19 @@
 - name: ensure mysql python packages are present
   apt:
     name: python-mysqldb
+    state: present
 
 - name: create database
   mysql_db:
     name: '{{mediawiki_db.name}}'
     login_unix_socket: '/var/run/mysqld/mysqld.sock'
+  when: mediawiki_local_db == true
 
-- name: create database user
+- name: Create database user
   mysql_user:
+    host: "{{mediawiki_db_host}}"
     name: '{{mediawiki_db.user}}'
     password: '{{mediawiki_db.password}}'
     priv: '{{mediawiki_db.name}}.*:ALL'
+  when: mediawiki_local_db == true
+

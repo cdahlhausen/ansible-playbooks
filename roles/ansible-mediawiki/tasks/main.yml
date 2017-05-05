@@ -47,3 +47,13 @@
     dest: '{{ mediawiki_path }}/LocalSettings.php'
     line: '$wgArticlePath = "/$1";'
     regexp: '\$wgArticlePath'
+
+- name: Install Mediawiki extensions
+  git:
+    repo: "https://gerrit.wikimedia.org/r/p/mediawiki/extensions/{{ item.package }}.git"
+    dest: "{{ mediawiki_path }}/extensions/{{ item.package }}"
+    version: "{{ item.version|default(mediawiki_version) }}"
+    depth: 1
+    force: yes
+  with_flattened:
+    - "{{ mediawiki_extensions }}"

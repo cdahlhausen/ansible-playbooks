@@ -47,3 +47,19 @@ passenger_standalone: false
 install_passenger: false
 install_php: false
 
+php5_packages:
+  - php5-common
+  - php5-mysql
+  #- php5-suhosin-extension
+  - php5-gd
+  - php5-cgi
+  - php-pear
+  - php5-mcrypt
+  - php5-curl
+  - php5-intl
+  - php5-memcache
+  - php5-pgsql
+  - php5-sqlite
+  - php5-xdebug
+  - php5-xmlrpc
+  - php-apc

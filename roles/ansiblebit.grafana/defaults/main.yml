@@ -65,6 +65,7 @@ grafana_conf_data: |
   [auth.google]
 
   [auth.proxy]
+  enabled = true
 
   [auth.basic]
 

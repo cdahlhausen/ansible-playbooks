@@ -30,6 +30,7 @@
 
 - name: install mediawiki
   command: php {{ mediawiki_path }}/maintenance/install.php
+    --dbserver {{ mediawiki_db_host }}
     --dbname {{mediawiki_db.name}}
     --dbuser {{mediawiki_db.user}}
     --dbpass {{mediawiki_db.password}}

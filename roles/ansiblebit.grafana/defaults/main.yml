@@ -56,6 +56,7 @@ grafana_conf_data: |
   [snapshots]
 
   [users]
+  auto_assign_org = true
 
   [auth.anonymous]
 

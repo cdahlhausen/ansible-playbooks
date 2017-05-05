@@ -14,8 +14,19 @@
               backup=yes
   with_dict: "{{tunables|default({})}}"
 
+- name: Add suhosin apt key
+  apt_key:
+    url: "https://sektioneins.de/files/repository.asc"
+    state: present
+
+- name: Add suhosin repo
+  apt_repository:
+    repo: deb http://repo.suhosin.org/ ubuntu-trusty main'
+    state: present
+    update_cache: yes
+
 - name: Install php5 packages
-  apt: name={{item}} state=installed
+  apt: name={{item}} state=latest
   with_items: "{{php5_packages|default([])}}"
   notify:
   - php5-fpm restart

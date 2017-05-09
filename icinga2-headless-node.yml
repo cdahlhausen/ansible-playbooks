@@ -43,32 +43,32 @@
      tags: nodeaction
 
 - hosts: "{{ nodeitem | default('all')}}"
-  tags: ['nodeaction', 'nodecerts"]
+  tags: ['nodeaction', 'nodecerts']
   vars:
    master_hostname: apt-util.aptrust.org
-   master_ip: "{{ hostvars['apt-util'].host_eip }}"
+   master_ip:  hostvars['apt-util'].host_eip
    master_port: 5665
   tasks:
     - name: create pki folder
       file: path=/etc/icinga2/pki state=directory mode=0700 owner=nagios group=nagios
-      tags: ['nodeaction']
+      tags: nodeaction
 
     - name: create cert on new node
-      shell: icinga2 pki new-cert --cn {{ nodeitem }}.aptrust.org --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt
-      tags: ['nodeaction']
+      shell: icinga2 pki new-cert --cn "{{ nodeitem }}.aptrust.org" --key "/etc/icinga2/pki/{{ nodeitem }}.key" --cert "/etc/icinga2/pki/{{ nodeitem }}.crt"
+      tags: nodeaction
 
     - name: save the masters cert as trustedcert
-      shell: icinga2 pki save-cert --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --host {{ master_hostname }}
+      shell: icinga2 pki save-cert --key "/etc/icinga2/pki/{{ nodeitem }}.key" --cert "/etc/icinga2/pki/{{ nodeitem }}.crt" --trustedcert /etc/icinga2/pki/trusted-master.crt --host "{{ master_hostname }}"
       become: yes
-      tags: ['nodeaction']
+      tags: nodeaction
 
     - name: request the certificate from the icinga server
-      shell: icinga2 pki request --host {{ master_hostname }} --port 5665 --ticket {{ hostvars[ masteritem ]['ticket']['stdout'] }} --key /etc/icinga2/pki/{{ nodeitem }}.key --cert /etc/icinga2/pki/{{ nodeitem }}.crt --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key
-      tags: ['nodeaction']
+      shell: icinga2 pki request --host "{{ master_hostname }}" --port 5665 --ticket "{{ hostvars[masteritem]['ticket']['stdout'] }}" --key "/etc/icinga2/pki/{{ nodeitem }}.key" --cert "/etc/icinga2/pki/{{ nodeitem }}.crt" --trustedcert "/etc/icinga2/pki/trusted-master.crt" --ca "/etc/icinga2/pki/ca.key"
+      tags: nodeaction
 
     - name: node setup
       shell: icinga2 node setup --ticket {{ hostvars[masteritem]['ticket']['stdout'] }} --endpoint {{ master_hostname }} --zone {{ nodeitem }}.aptrust.org --master_host {{ master_hostname }} --trustedcert /etc/icinga2/pki/trusted-master.crt --cn {{ nodeitem }}.aptrust.org --accept-config --accept-commands
-      tags: ['nodeaction']
+      tags: nodeaction
 
     - name: Update master zone
       replace: >

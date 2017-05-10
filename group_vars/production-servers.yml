@@ -188,9 +188,9 @@ ex_receivingbuckets: [
 
 ex_dpn: {
     localnode: "aptrust",
-    logdirectory: "/mnt/efs/dpn/logs",
-    stagingdirectory: "/mnt/efs/dpn/staging",
-    remotenodehomedirectory: "/mnt/efs/dpn",
+    logdirectory: "/mnt/ebs/dpn/logs",
+    stagingdirectory: "/mnt/ebs/dpn/staging",
+    remotenodehomedirectory: "/mnt/ebs/dpn",
     loglevel: "4",
     logtostderr: "false",
     replicatetonumnodes: "2",

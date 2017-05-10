@@ -40,10 +40,10 @@
 #       Applying permissions recursively to avoid Supervisor bug that creates
 #       logfiles only with root:root rw access.
 #       https://github.com/Supervisor/supervisor/issues/114
-- name: Create EFS volume directories
+- name: Create EBS volume directories
   become: yes
   file:
-    path: "/mnt/efs/{{item.0}}/{{item.1}}"
+    path: "/mnt/ebs/{{item.0}}/{{item.1}}"
     owner: "{{system_default_user}}"
     group: "{{deploy_group}}"
     mode: 0775
@@ -52,13 +52,13 @@
   with_nested:
     - ['apt', 'dpn']
     - ['data','logs','restore','replication']
-  tags: exchange_efs
+  tags: exchange_ebs
 
 # Create symlink outbound directories for each DPN node user on the system.
-- name: Create and symlink outbound directories to EFS staging dir
+- name: Create and symlink outbound directories to EBS staging dir
   become: yes
   file:
-    src: "/mnt/efs/dpn/staging"
+    src: "/mnt/ebs/dpn/staging"
     dest: "/home/{{item}}/outbound"
     owner: "{{item}}"
     group: "{{deploy_group}}"

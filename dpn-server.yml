@@ -14,15 +14,13 @@
         ansistrano_deploy_to: "/var/www/{{ansible_fqdn}}/{{playbook_name}}"
         ansistrano_deploy_via: "git"
         ansistrano_git_repo: "git@github.com:dpn-admin/dpn-server.git"
-        # ansistrano_git_branch: "e748b2ba8068a902b215dd7524923416756b9d0b"
-        # ansistrano_git_branch: "develop"
         # This is tagged version 2.0.2
         ansistrano_git_branch: "2559169292b4e365f7399aeb6db43fe36947986d"
-        ansistrano_git_private_key: "{{aptdeploy_sshkey_private}}"
-# TODO: Test shared paths and see if any more tasks have to be set for this to work.
+         # Note: key_path rewritten to support ssh key as variable not file.
+        ansistrano_git_identity_key_path: "{{aptdeploy_sshkey_private}}"
         ansistrano_shared_paths: ["log"]
         ansistrano_keep_releases: 3
-        ansistrano_before_symlink_shared_tasks_file: "roles/dpn.dpn-server/tasks/before-symlink.yml"
+        # ansistrano_before_symlink_shared_tasks_file: "roles/dpn.dpn-server/tasks/before-symlink.yml"
 
         # DPN-Server Role
         dpnserver_app_root: "{{ ansistrano_deploy_to }}/current"
@@ -72,3 +70,11 @@
       - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: dpn.dpn-server, tags: [dpn-server, deploy]}
+
+    - name: Slack to all
+      slack:
+        token: "{{slack_token}}"
+        msg: "{{playbook_name}} deployment on {{ inventory_hostname }} completed"
+        icon_emoji: ":dog:"
+        channel: 'ops'
+      tags: [pharos,slack, deploy]

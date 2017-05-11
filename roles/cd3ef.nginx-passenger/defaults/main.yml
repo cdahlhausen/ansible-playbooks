@@ -50,7 +50,7 @@ install_php: false
 php5_packages:
   - php5-common
   - php5-mysql
-  #- php5-suhosin-extension
+  - php5-suhosin-extension
   - php5-gd
   - php5-cgi
   - php-pear

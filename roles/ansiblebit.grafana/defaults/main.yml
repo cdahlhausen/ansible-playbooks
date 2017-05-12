@@ -24,7 +24,7 @@ grafana_database:
   path: grafana.db
 
 grafana_conf_data: |
-  app_mode = development
+  app_mode = {{app_env}}
 
   [paths]
   data = {{ grafana_dir_data }}
@@ -56,6 +56,7 @@ grafana_conf_data: |
   [snapshots]
 
   [users]
+  auto_assign_org = true
 
   [auth.anonymous]
 
@@ -64,6 +65,7 @@ grafana_conf_data: |
   [auth.google]
 
   [auth.proxy]
+  enabled = true
 
   [auth.basic]
 

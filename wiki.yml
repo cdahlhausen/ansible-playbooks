@@ -1,0 +1,70 @@
+---
+  - hosts: wiki
+    user: "{{ system_default_user }}"
+    become: yes
+    vars_files:
+      - "group_vars/vault.yml"
+    vars:
+      playbook_name: allservers
+      fail2ban_config_ignoreip: "{{ hostvars|fetchlistfromdict(groups.all)|map(attribute='host_eip')|join (' ')}}"
+      fail2ban_config_destemail: ops@aptrust.org
+      fail2ban_config_maxretry: 1
+
+      # Mediawiki
+      server_name: 'wiki.aptrust.local'
+      mediawiki_path: '/var/www/{{ansible_fqdn}}/mediawiki'
+      mediawiki_local_db: false
+      instance_name: aptrust
+
+      # NGINX Webserver
+      install_php: true
+      nginx_vhosts:
+          - listen: "80 default_server"
+            server_name: "_"
+            return: 301 https://$host$request_uri
+          - listen: "443 ssl"
+            server_name: "{{ansible_fqdn}}"
+            root: "{{ mediawiki_path }}/local"
+            access_log: "/var/log/nginx/{{ansible_fqdn}}_access.log"
+            error_log: "/var/log/nginx/{{ansible_fqdn}}_error.log"
+            extra_parameters: |
+                ssl    on;
+                # SSL Chain if Nginx, SSL cert if Apache2
+                ssl_certificate    {{ssl_cert_path}};
+                ssl_certificate_key {{ ssl_key_path }};
+            nginx_client_max_body_size: 0
+            location:
+              - name: "/"
+                content: "try_files $uri $uri @rewrite;"
+              - name: "@rewrite"
+                content: "rewrite ^/(.*)$ /index.php;"
+              - name:  "^~ /maintenance/"
+                content: "return 403;"
+              - name: "~ \\.php$"
+                content: |
+                  include fastcgi_params;
+                  fastcgi_pass unix:/var/run/php5-fpm.sock;
+                  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                  try_files $uri @rewrite;
+              - name: "~* \\.(js|css|png|jpg|jpeg|gif|ico)$"
+                content: |
+                  try_files $uri /index.php;
+                  expires max;
+                  log_not_found off;
+              - name: "= /_.gif"
+                content: |
+                  expires max;
+                  empty_gif;
+              - name: "^~ /cache/"
+                content: "deny all;"
+              - name: "/dumps"
+                content: |
+                  root {{ mediawiki_path }}/local;
+                  autoindex on;
+              - name: "~ /\\."
+                content:  "deny all;"
+
+    roles:
+      - {role: common, tags: common}
+      - {role: cd3ef.nginx-passenger, tags: nginx}
+      - {role: ansible-mediawiki, tags: mediawiki}

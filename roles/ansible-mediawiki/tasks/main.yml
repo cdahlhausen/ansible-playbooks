@@ -30,6 +30,7 @@
 
 - name: install mediawiki
   command: php {{ mediawiki_path }}/maintenance/install.php
+    --dbserver {{ mediawiki_db_host }}
     --dbname {{mediawiki_db.name}}
     --dbuser {{mediawiki_db.user}}
     --dbpass {{mediawiki_db.password}}
@@ -46,3 +47,13 @@
     dest: '{{ mediawiki_path }}/LocalSettings.php'
     line: '$wgArticlePath = "/$1";'
     regexp: '\$wgArticlePath'
+
+- name: Install Mediawiki extensions
+  git:
+    repo: "https://gerrit.wikimedia.org/r/p/mediawiki/extensions/{{ item.package }}.git"
+    dest: "{{ mediawiki_path }}/extensions/{{ item.package }}"
+    version: "{{ item.version|default(mediawiki_version) }}"
+    depth: 1
+    force: yes
+  with_flattened:
+    - "{{ mediawiki_extensions }}"

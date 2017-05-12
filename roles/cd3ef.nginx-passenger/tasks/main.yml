@@ -31,7 +31,7 @@
     become: yes
     tags: ['dheparam','nginx']
 
-    - name: Install Nginx-extras
+  - name: Install Nginx-extras
     become: yes
     apt: state=present update_cache=yes pkg="{{item}}"
     when: ansible_os_family == "Debian" and nginx_present|failed

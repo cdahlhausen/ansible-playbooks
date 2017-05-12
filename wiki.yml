@@ -41,9 +41,11 @@
             nginx_client_max_body_size: 0
             location:
               - name: "/"
-                content: "try_files $uri $uri @rewrite;"
+                content: |
+                  "index index.php"
+                  "try_files $uri $uri @rewrite;"
               - name: "@rewrite"
-                content: "rewrite ^/(.*)$ /index.php;"
+                content: "rewrite ^/([^?]*)(?:\\?(.*))? /index.php?title=$1&$2 last;"
               - name:  "^~ /maintenance/"
                 content: "return 403;"
               - name: "~ \\.php$"
@@ -51,7 +53,6 @@
                   include fastcgi_params;
                   fastcgi_pass unix:/var/run/php5-fpm.sock;
                   fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                  try_files $uri @rewrite;
               - name: "~* \\.(js|css|png|jpg|jpeg|gif|ico)$"
                 content: |
                   try_files $uri /index.php;

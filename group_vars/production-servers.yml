@@ -261,11 +261,11 @@ ex_dpn_dpnpackageworker: {
 
 ex_dpn_dpnvalidationworker: {
     networkconnections: "8",
-    workers: "4",
+    workers: "1",
     nsqtopic: "dpn_validation_topic",
     nsqchannel: "dpn_validation_channel",
     maxattempts: "3",
-    maxinflight: "6",
+    maxinflight: "2",
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",

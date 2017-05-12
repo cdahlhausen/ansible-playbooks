@@ -1,6 +1,9 @@
 ---
 nginx_default_release: ""
 
+nginx_user: "{% if ansible_os_family == 'RedHat' or ansible_os_family == 'Suse' %}nginx{% elif ansible_os_family == 'Debian' %}www-data{% elif ansible_os_family == 'FreeBSD' %}www{% endif %}"
+nginx_group: "{{nginx_user}}"
+
 nginx_worker_processes: "{{ansible_processor_cores | default('1')}}"
 nginx_worker_connections: "1024"
 

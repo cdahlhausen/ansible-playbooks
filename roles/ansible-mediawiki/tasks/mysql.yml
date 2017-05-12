@@ -1,7 +1,7 @@
 ---
 
 # TODO: Add AWS Rds setup here
-- debug: msg="{{mediawiki_db.user}}"
+- debug: msg="{{mediawiki_db.user}} {{mediawiki_db.password}}"
   tags: wikidebug
 
 - name: Create DB on RDS
@@ -43,6 +43,7 @@
     aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
     aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
   register: rds_facts
+  when: mediawiki_local_db == false
   tags: createrds
 
 - name: Set RDS db_host fact

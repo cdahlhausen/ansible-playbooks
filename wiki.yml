@@ -25,9 +25,12 @@
           - listen: "80 default_server"
             server_name: "_"
             return: 301 https://$host$request_uri
+            location:
+              - name: "/favicon.ico"
+                content: "access_log off; log_not_found off;"
           - listen: "443 ssl"
             server_name: "{{ansible_fqdn}}"
-            root: "{{ mediawiki_path }}/local"
+            root: "{{ mediawiki_path }}"
             access_log: "/var/log/nginx/{{ansible_fqdn}}_access.log"
             error_log: "/var/log/nginx/{{ansible_fqdn}}_error.log"
             extra_parameters: |
@@ -62,7 +65,7 @@
                 content: "deny all;"
               - name: "/dumps"
                 content: |
-                  root {{ mediawiki_path }}/local;
+                  root {{ mediawiki_path }};
                   autoindex on;
               - name: "~ /\\."
                 content:  "deny all;"

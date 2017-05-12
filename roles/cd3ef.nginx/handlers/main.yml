@@ -9,3 +9,5 @@
 - name: nginx reload
   service: name=nginx state=reloaded
 
+- name: php5-fpm restart
+  service: name=php5-fpm state=restarted

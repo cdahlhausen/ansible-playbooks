@@ -9,10 +9,6 @@ server {
     server_name {{ vhost.server_name }};
     {% endif %}
 
-    location ~ \.(php|html)$ {
-            deny  all;
-    }
-
 {% if vhost.root is defined %}
     root {{ vhost.root }};
     {% endif %}
@@ -39,7 +35,12 @@ server {
     {% endif %}
 
 {% if vhost.location is defined %}
-    location {{ vhost.location }}
-    {% endif %}
+    {% for loc in vhost.location %}
+    location {{ loc.name }} {
+        {{ loc.content }}
+    }
+    {% endfor %}
+{% endif %}
+
 }
 {% endfor %}

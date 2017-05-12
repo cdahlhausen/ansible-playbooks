@@ -30,14 +30,16 @@
 
         # InfluxDB
         influxdb_admin_https_enabled: "true"
-        influxdb_admin_https_certificate: "{{ssl_cert_path}}"
+        # influxdb_admin_https_certificate: "{{ssl_cert_path}}"
         influxdb_http_https_enabled: "true"
-        influxdb_http_https_certificate: "{{ssl_cert_path}}"
+        # influxdb_http_https_certificate: "{{ssl_cert_path}}"
         influxdb_data_dir: "{{ops_data_influxdb}}"
 
-        influxb_hostname: 'ops.aptrust.org'
+        influxdb_hostname: 'ops.aptrust.org'
         influxdb_db: 'icinga2'
         # NGINX Webserver
+        install_passenger: false
+
         nginx_vhosts:
           - listen: "80 default_server"
             server_name: "_"
@@ -66,7 +68,7 @@
       - {role: postgresql, tags: postgresql}
       - {role: ansible-influxdb, tags: influxdb}
       - {role: ansiblebit.grafana, tags: grafana}
-      - {role: cd3ef.nginx-passenger, tags: nginx}
+      - {role: cd3ef.nginx, tags: nginx}
 
 
     tasks:
@@ -84,29 +86,54 @@
 
       - name: Create OPS data directory
         file:
-          path: "{{item}}"
-          owner: "{{system_default_user}}"
+          path: "{{item.dir}}"
+          owner: "{{item.owner | default(system_default_user)}}"
           group: "{{deploy_group}}"
           mode: 0775
           recurse: yes
           state: directory
         with_items:
-            - "{{ops_data}}"
-            - "{{ops_data}}/influxdb"
-            - "{{ops_data}}/grafana"
+            - { dir: "{{ops_data}}"}
+            - { dir: "{{ops_data}}/influxdb", owner: influxdb }
+            - { dir: "{{ops_data}}/grafana", owner: grafana }
         tags: opsdatadir
 
+      - name: Copy SSL cert+key
+        become: yes
+        copy:
+          content="{{ssl_cert}}\n{{ssl_key}}"
+          dest="/etc/ssl/influxdb.pem"
+          force=yes
+          owner=root
+          group=deploy
+          mode=0755
+
       - name: Create icinga2 database
-        influxdb_database:
-            hostname: "127.0.0.1"
-            database_name: "icinga2"
-            username: "{{influxdb_username}}"
-            password: "{{influxdb_password}}"
-            state: present
+        command: influx --ssl --host={{influxdb_hostname}} -execute 'CREATE DATABASE {{influxdb_db}}'
+          #        influxdb_database:
+          # hostname: "ops.aptrust.org"
+          # database_name: "icinga2"
+          # port: "{{influxdb_port}}"
+          # username: "{{influxdb_username}}"
+          # password: "{{influxdb_password}}"
+          # state: present
+        tags: influxdbdb
+
+
+
+        #     shell:  "curl  --ssl "https://ops.aptrust.org:8086/db?u=root&p=root" -d "{\"name\": \"{{influxdb_db}}\"}"
+        # uri:
+        #  url: https://ops.aptrust.org:8086/query"
+        #  method: POST
+        #  body: q=CREATE DATABASE "{{influxdb_db}}"
+        #  body_format: json
+          #          XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"
+
 
       - name: Check if icinga2 is installed
         shell: icinga2 -V > /dev/null
         register: icinga_installed
+        tags: influxdb
 
       - name: Enable icinga2 influxdbwriter
         shell: icinga2 feature enable {{item}}
@@ -123,3 +150,30 @@
           owner: root
           group: deploy
           mode: 0644
+        tags: influxdb
+
+      - name: Setup github login.
+        blockinfile:
+          dest: /etc/grafana/grafana.ini
+          insertafter: "auth.github"
+          backup: yes
+          content: |
+            enabled = true
+            allow_sign_up = true
+            client_id = ec80c51083680e044bea
+            client_secret = cc73841f1833df2eedf4964cf05cddd3b3eb9635
+            scopes = user:email
+            auth_url = https://github.com/login/oauth/authorize
+            token_url = https://github.com/login/oauth/access_token
+            api_url = https://api.github.com/user
+            allow_sign_up = true
+            team_ids = 896179
+            allowed_organizations = Academic Preservation Trust
+        tags: githublogin
+
+      - name: Allow auth per reverse proxy
+        blockinfile:
+          dest: /etc/grafana/grafana.ini
+          insertafter: "auth.proxy"
+          content: |
+            enabled = true

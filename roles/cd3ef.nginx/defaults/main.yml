@@ -1,7 +1,7 @@
 ---
 nginx_default_release: ""
 
-nginx_worker_processes: "1"
+nginx_worker_processes: "{{ansible_processor_cores | default('1')}}"
 nginx_worker_connections: "1024"
 
 nginx_error_log: "/var/log/nginx/error.log warn"
@@ -43,3 +43,23 @@ nginx_upstreams: []
 #     "srv3.example.com"
 #   }
 
+passenger_standalone: false
+install_passenger: false
+install_php: false
+
+php5_packages:
+  - php5-common
+  - php5-mysql
+  #  - php5-suhosin
+  - php5-gd
+  - php5-cgi
+  - php-pear
+  - php5-mcrypt
+  - php5-curl
+  - php5-intl
+  - php5-memcache
+  - php5-pgsql
+  - php5-sqlite
+  - php5-xdebug
+  - php5-xmlrpc
+  - php-apc

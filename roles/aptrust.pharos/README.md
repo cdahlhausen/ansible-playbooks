@@ -54,7 +54,7 @@ Dependencies
 Role dependencies:
 - common
 - zzet.rbenv
-- cd3ef.nginx-passenger
+- cd3ef.nginx
 - carlosbuenosvinos.ansistrano-deploy
 
 Example Playbook
@@ -122,7 +122,7 @@ Example Playbook
       - {role: common, tags: common}
       - {role: oracle-java8, tags: oracle-java8 }
       - {role: zzet.rbenv, tags: rbenv}
-      - {role: cd3ef.nginx-passenger, tags: [nginx, passenger, nginx-passenger]}
+      - {role: cd3ef.nginx, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: aptrust.pharos, tags: pharos}
 

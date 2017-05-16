@@ -50,7 +50,7 @@ passenger_standalone: false
 install_passenger: false
 install_php: false
 
-php5_packages:
+php_trusty_packages:
   - php5-common
   - php5-mysql
   #  - php5-suhosin
@@ -66,3 +66,23 @@ php5_packages:
   - php5-xdebug
   - php5-xmlrpc
   - php-apc
+
+php_xenial_packages:
+  - php
+  - php-fpm
+  - php-pear
+  - php-mcrypt
+  - php-intl
+  - php-apcu
+  - php7.0-common
+  - php7.0-cli
+  - php7.0-dev
+  - php7.0-fpm
+  - libpcre3-dev
+  - php-gd
+  - php-curl
+  - php-imap
+  - php-json
+  - php-opcache
+  - php-mbstring
+  - php7.0-mbstring

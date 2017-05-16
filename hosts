@@ -34,7 +34,7 @@ apt-prod-repo2 hostname_name=apt-prod-repo22 hostname_fqdn=repo.aptrust.org host
 # APTrust 2.0
 apt-prod-repo2 hostname_name=apt-prod-repo22 hostname_fqdn=repo.aptrust.org host_eip=52.202.25.174 # Pharos Prod
 apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services
-# apt-prod-repo22 hostname_name=apt-prod-repo22 hostname_fqdn=repo.aptrust.org host_eip=52.90.134.128 # Pharos Prod
+apt-prod-web hostname_name=apt-prod-web hostname_fqdn=wiki.aptrust.org host_eip=34.200.146.5 # Web and Wiki Instance
 
 [exchange-services]
 apt-prod-services hostname_name=apt-prod-services hostname_fqdn=prod-services.aptrust.org host_eip=34.197.110.161 # Prod Go Services

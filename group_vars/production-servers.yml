@@ -345,3 +345,17 @@ ex_nsq_broadcast_address: "{{hostname_fqdn}}"
 ex_nsq_nsqlookupd_tcp_addresses: "127.0.0.1:4160"
 ex_nsq_msg_timeout: "4880m0s"
 ex_nsq_max_msg_timeout: "720m0s"
+
+# Mediawiki / wiki
+wiki_server_name: 'wiki.aptrust.org'
+mediawiki_path: '/var/www/{{ansible_fqdn}}/mediawiki'
+mediawiki_local_db: false
+mediawiki_db:
+  user: "{{vault_mediawiki_db_user}}"
+  password: "{{vault_mediawiki_db_pwd}}"
+  rds_instance_type: 'db.t2.small'
+  rds_multi_az: 'no'
+  rds_region: 'us-east-1'
+  rds_sec_group: 'sg-407b0e3e'
+  rds_subnet: 'production'
+

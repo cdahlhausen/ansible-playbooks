@@ -19,7 +19,6 @@
     - iotop
     - bmon
     - vim-tiny
-    - emacs23-nox
     - unzip
     - tar
     - python-pip
@@ -31,6 +30,22 @@
     - nfs-common
 # https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
     - acl
+
+- name: install emacs packages Ubuntu 14.04LTS
+  become: yes
+  apt: pkg={{ item }} state=latest update_cache=true
+  with_items:
+    - emacs23-nox
+  when: ansible_distribution_release == 'trusty'
+  tags: packages
+
+- name: install emacs packages Ubuntu 16.04LTS
+  become: yes
+  apt: pkg={{ item }} state=latest update_cache=true
+  with_items:
+    - emacs24-nox
+  when: ansible_distribution_release == 'xenial'
+  tags: packages
 
 # http://stackoverflow.com/questions/35535566/installing-pip-using-get-pip-py-snimissingwarning
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2

@@ -11,3 +11,6 @@
 
 - name: php5-fpm restart
   service: name=php5-fpm state=restarted
+
+- name: php-fpm restart
+  service: name=php7.0-fpm state=restarted

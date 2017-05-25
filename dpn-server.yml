@@ -71,6 +71,7 @@
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: dpn.dpn-server, tags: [dpn-server, deploy]}
 
+    tasks:
     - name: Slack to all
       slack:
         token: "{{slack_token}}"

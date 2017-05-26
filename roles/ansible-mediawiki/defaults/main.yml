@@ -34,19 +34,20 @@ mediawiki_db:
 
 mediawiki_extensions:
   - { package: 'CategoryTree' }               # provides a dynamic view of the wiki's catagory structure as a tree
-  - { package: 'CirrusSearch' }               # implements searching for MediaWiki using ElasticSearch
+  #  - { package: 'CirrusSearch' }               # implements searching for MediaWiki using ElasticSearch
   - { package: 'Cite' }                       # allows footnotes for citing sources and helps for correctly citing content
   - { package: 'CiteThisPage' }               # adds a special page that provides different citation format
   - { package: 'ConfirmEdit' }                # adds CAPTCHAs for page saves and other user actions
-  - { package: 'DynamicPageList' }            # create lists of other articles based on their category.
-  - { package: 'Echo' }                       # implements Echo, Wiki's next-generation notification subsystem
-  - { package: 'Elastica' }                   # provides base ElasticSearch functionality
-  - { package: 'Flow' }                       # provides a new discussion and collaboration system for talk pages
-  - { package: 'Gadgets' }                    # allows users to enable JS-based, user-provided gadgets from preference page
+  #  Needs more config.
+  #  - { package: 'DynamicPageList' }            # create lists of other articles based on their category.
+  #  - { package: 'Echo' }                       # implements Echo, Wiki's next-generation notification subsystem
+  #  - { package: 'Elastica' }                   # provides base ElasticSearch functionality
+  #  - { package: 'Flow' }                       # provides a new discussion and collaboration system for talk pages
+  #  - { package: 'Gadgets' }                    # allows users to enable JS-based, user-provided gadgets from preference page
   - { package: 'Interwiki' }                  # adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table
   - { package: 'ImageMap' }                   # allows clickable image maps
   - { package: 'InputBox' }                   # allows users to add predefined HTML forms
-  - { package: 'LdapAuthentication' }         # provides LDAP authentication and some authorization functionality for MediaWiki
+  #  - { package: 'LdapAuthentication' }         # provides LDAP authentication and some authorization functionality for MediaWiki
   - { package: 'LocalisationUpdate' }         # allows to update the locations for MediaWiki message without upgrade the MediaWiki
   - { package: 'MobileFrontend' }             # provides a mobile-friendly view
   - { package: 'MultimediaViewer' }           # provides a better experience to users when they click on thumbnails in a page
@@ -57,14 +58,21 @@ mediawiki_extensions:
   - { package: 'Popups' }                     # displays popups with summaries when users hover over article links
   - { package: 'PdfHandler' }                 # allows to handle PDF files
   - { package: 'SpamBlacklist' }              # prevents edits that contain URLs whose domains match regular expression patterns
-  - { package: 'SemanticCompoundQueries' }    # allows for the display of more than one SMW inline query in one result display set
-  - { package: 'SemanticForms' }              # allows to create forms for creating and editing pages that use infobox-style templates
+  # Note: To be installed by composer
+  #  - { package: 'SemanticCompoundQueries' }    # allows for the display of more than one SMW inline query in one result display set
+  #  - { package: 'SemanticForms' }              # allows to create forms for creating and editing pages that use infobox-style templates
   - { package: 'SyntaxHighlight_GeSHi' }      # provides rich formating of source code using the <syntaxhighlight> tag
   - { package: 'TemplateData' }               # allows to store, retrieve and visualise information about templates
   - { package: 'TitleBlacklist' }             # allows wiki admin to block the creation, movement and upload of pages
-  - { package: 'TimedMediaHandler' }          # integrated support for server side transcoding, WebM, Ogg Theora, Vorbis, Speex and timed text
-  - { package: 'UniversalLanguageSelector' }  # tool that allows users to select a language and configure its support in an easy way
+  # Note: Needs more config settings.
+  #   - { package: 'TimedMediaHandler' }          # integrated support for server side transcoding, WebM, Ogg Theora, Vorbis, Speex and timed text
+  #  - { package: 'UniversalLanguageSelector' }  # tool that allows users to select a language and configure its support in an easy way
   - { package: 'VisualEditor' }               # integrates VisualEditor into MediaWiki for editing pages as rich content
-  - { package: 'Validator' }                  # provides generic parameter handling support to other extensions
-  - { package: 'Widgets' }                    # allows adding free-type widgets to the wiki by editing pages
+  #  Note: installed by semantic-mediawiki per composer
+  #  - { package: 'Validator' }                  # provides generic parameter handling support to other extensions
+  #  - { package: 'Widgets' }                    # allows adding free-type widgets to the wiki by editing pages
   - { package: 'WikiEditor' }                 # provides an improved interface for editing wikitext
+  #  - { package: 'CreatePageUw' }                 #Adds Special:CreatePage - one-field form to create a new page.
+  #  - { package: 'LastModified' }                 #Provides a Last modified date for wiki articles
+  # - { package: 'BreadCrumbs2' }                 #Provides a Last modified date for wiki articles
+  - { package: 'PageForms' }

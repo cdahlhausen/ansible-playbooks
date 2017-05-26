@@ -1,0 +1,37 @@
+---
+# Setting up VisualEditor
+
+- name: Add apt key
+  apt_key:
+    keyserver: keys.gnupg.net
+    id: 90E9F83F22250DD7
+  tags: parsoid
+
+- name: Add repository
+  apt_repository: repo="deb https://releases.wikimedia.org/debian trusty-mediawiki main" state=present filename='parsoid.list' update_cache='yes'
+  tags: parsoid
+
+- name: install npm
+  apt: name=npm state=latest
+  tags: parsoid
+
+- name: install parsoid
+  git:
+    repo: https://github.com/wikimedia/parsoid
+    dest: "{{mediawiki_path}}/parsoid"
+  tags: parsoid
+
+- name: npm parsoid
+  shell: npm install
+  args:
+    chdir: "{{mediawiki_path}}/parsoid"
+  tags: parsoid
+
+- name: Config parsoid
+  shell: cp config.example.yaml config.yaml
+  args:
+    chdir: "{{mediawiki_path}}/parsoid"
+  tags: parsoid
+
+
+

@@ -1,7 +1,8 @@
 ---
-  - hosts: wiki
+  - hosts: apt-prod-web
     user: "{{ system_default_user }}"
     become: yes
+
     vars_files:
       - "group_vars/vault.yml"
     vars:
@@ -11,7 +12,7 @@
       fail2ban_config_maxretry: 1
 
       # Mediawiki
-      server_name: 'wiki.aptrust.local'
+      server_name: "{{hostname_fqdn}}"
       mediawiki_path: '/var/www/{{ansible_fqdn}}/mediawiki'
       mediawiki_local_db: true
       instance_name: aptrust

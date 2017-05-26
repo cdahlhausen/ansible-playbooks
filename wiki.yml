@@ -84,5 +84,7 @@
     roles:
       - {role: common, tags: common}
       - {role: cd3ef.nginx, tags: nginx}
-      - {role: wtanaka.mysql, tags: mysql,mediawiki}
+      - {role: wtanaka.mysql, tags: ['mysql','mediawiki'], when: mediawiki_local_db == true}
+
+      - {role: tersmitten.composer, tags: composer, when: ansible_distribution_release == 'xenial'}
       - {role: ansible-mediawiki, tags: mediawiki}

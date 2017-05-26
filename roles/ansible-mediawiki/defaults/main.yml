@@ -7,6 +7,7 @@ mediawiki_path: '/srv/{{instance_name}}'
 mediawiki_language: 'en'
 server_name: '{% if subdomain %}{{subdomain}}.{% endif %}{{hostname}}'
 base_uri: 'http://{{server_name}}/{{mediawiki_dir}}'
+mediawiki_logo_file: 'aptrust-wiki-logo.png'
 
 mediawiki_version: HEAD
 mediawiki_skins:

@@ -43,8 +43,8 @@
             location:
               - name: "/"
                 content: |
-                  "index index.php"
-                  "try_files $uri $uri @rewrite;"
+                  index index.php;
+                  try_files $uri $uri @rewrite;
               - name: "@rewrite"
                 content: "rewrite ^/([^?]*)(?:\\?(.*))? /index.php?title=$1&$2 last;"
               - name:  "^~ /maintenance/"

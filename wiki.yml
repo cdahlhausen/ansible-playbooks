@@ -14,8 +14,8 @@
       # Mediawiki
       server_name: "{{hostname_fqdn}}"
       mediawiki_path: '/var/www/{{ansible_fqdn}}/mediawiki'
-      mediawiki_local_db: true
       instance_name: aptrust
+      mediawiki_local_db: false
 
       # Local MySQL Db
       mysql_root_db_pass: foobar       # The root DB password

@@ -265,7 +265,7 @@ ex_dpn_dpnvalidationworker: {
     nsqtopic: "dpn_validation_topic",
     nsqchannel: "dpn_validation_channel",
     maxattempts: "3",
-    maxinflight: "2",
+    maxinflight: "1",
     heartbeatinterval: "10s",
     readtimeout: "60s",
     writetimeout: "10s",
@@ -360,4 +360,3 @@ mediawiki_db:
   rds_region: 'us-east-1'
   rds_sec_group: 'sg-407b0e3e'
   rds_subnet: 'prod-private'
-

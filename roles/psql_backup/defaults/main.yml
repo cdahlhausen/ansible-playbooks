@@ -1,0 +1,44 @@
+---
+
+# Optional system user to run backups as.  If the user the script is running as doesn't match this
+# the script terminates.  Leave blank to skip check.
+pg_backup_user: "{{system_default_user}}"
+
+# Optional hostname to adhere to pg_hba policies.  Will default to "localhost" if none specified.
+pg_hostname: {{pg_hostname}}
+
+# Optional username to connect to database as.  Will default to "postgres" if none specified.
+pg_username=
+
+# This dir will be created if it doesn't exist.  This must be writable by the user the script is
+# running as.
+pg_backup_dir=/home/backups/database/postgresql/
+
+# List of strings to match against in database name, separated by space or comma, for which we only
+# wish to keep a backup of the schema, not the data. Any database names which contain any of these
+# values will be considered candidates. (e.g. "system_log" will match "dev_system_log_2010-01")
+pg_schema_only_list=""
+
+# Will produce a custom-format backup if set to "yes"
+pg_enable_custom_backups=yes
+
+# Will produce a gzipped plain-format backup if set to "yes"
+pg_enable_plain_backups=yes
+
+# Will produce gzipped sql file containing the cluster globals, like users and passwords, if set to "yes"
+pg_enable_globals_backups=yes
+
+
+#### SETTINGS FOR ROTATED BACKUPS ####
+
+# Which day to take the weekly backup from (1-7 = Monday-Sunday)
+pg_day_of_week_to_keep=5
+
+# Number of days to keep daily backups
+pg_days_to_keep=7
+
+# How many weeks to keep weekly backups
+pg_weeks_to_keep=5
+
+######################################
+

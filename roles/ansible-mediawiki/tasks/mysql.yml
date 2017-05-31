@@ -1,9 +1,5 @@
 ---
 
-# TODO: Add AWS Rds setup here
-- debug: msg="{{mediawiki_db.user}} {{mediawiki_db.password}}"
-  tags: wikidebug
-
 - name: Create DB on RDS
   rds:
       command: create
@@ -19,7 +15,7 @@
 # TODO: dependent on environment. set default to demo
 # Note: security group name doesn't work, only id. Security groups have to be configured manually via AWS web console.
       vpc_security_groups: "{{ mediawiki_db.rds_sec_group | default('sg-18a4ac62')}}"
-      subnet: "{{ mediawiki_db._rds_subnet | default('demo') }}"
+      subnet: "{{ mediawiki_db.rds_subnet | default('demo') }}"
 # Note: Timeout is set high since inital RDS creation may take a while.
       wait_timeout: 600
       wait: yes

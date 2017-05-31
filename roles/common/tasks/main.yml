@@ -30,6 +30,12 @@
     - nfs-common
 # https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
     - acl
+    - ntp
+
+
+- name: Ensure ntp deamon is running
+  service: name=ntp state=started
+  tags: ntp
 
 - name: install emacs packages Ubuntu 14.04LTS
   become: yes

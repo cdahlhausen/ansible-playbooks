@@ -6,6 +6,7 @@
     dest: '{{ mediawiki_path }}'
     version: "{{mediawiki_version|default('HEAD')}}"
     depth: 1
+    force: yes
 
 - include: composer.yml
   when: ansible_distribution_release == 'trusty'
@@ -21,7 +22,6 @@
     chdir: '{{ mediawiki_path }}'
 
 - include: mysql.yml
-  when: mediawiki_db.connection == "mysql"
 
 - name: install mediawiki skins
   git:
@@ -49,6 +49,31 @@
     line: '$wgArticlePath = "/$1";'
     regexp: '\$wgArticlePath'
 
+- name: Upload wiki logo
+  copy:
+    src: '{{mediawiki_logo_file}}'
+    dest: '{{ mediawiki_path }}/images/{{mediawiki_logo_file}}'
+    owner: "{{system_default_user}}"
+    group: "{{system_default_group}}"
+    mode: 0644
+
+- name: Set wiki logo
+  lineinfile:
+    dest: '{{ mediawiki_path }}/LocalSettings.php'
+    regexp: '\$wgLogo = (.*)'
+    line: "$wgLogo = '/images/{{mediawiki_logo_file}}';"
+    state: present
+
+# Update config
+# $wgEmergencyContact = "apache@localhost";
+# $wgPasswordSender = "apache@localhost";
+# Enable writable images dir first!
+# $wgEnableUploads = false;
+## ADD Set Default Timezone
+#$wgLocaltimezone = "America/New_York";
+#date_default_timezone_set( $wgLocaltimezone );
+#
+
 - name: Install Mediawiki extensions
   git:
     repo: "https://gerrit.wikimedia.org/r/p/mediawiki/extensions/{{ item.package }}.git"
@@ -58,3 +83,20 @@
     force: yes
   with_flattened:
     - "{{ mediawiki_extensions }}"
+
+- name: Enable Mediawiki extensions
+  lineinfile: dest="{{mediawiki_path}}/LocalSettings.php"
+              regexp="^wfLoadExtension\( \'{{item.package}}'\ \)\;"
+              line="wfLoadExtension( '{{item.package}}' );"
+              state=present
+  with_flattened:
+  - "{{ mediawiki_extensions }}"
+
+- include: visualeditor.yml
+  tags: parsoid
+
+- include: semantic-mediawiki.yml
+  tags: semwiki
+
+- include: wikieditor.yml
+  tags: wikieditor

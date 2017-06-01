@@ -1,2 +1,63 @@
 ---
 
+# Create /etc/psql_backup folder
+# Copy config file in etc folder
+# Copy sh scripts into folder. chmod +x
+# Later: Add cronjob
+
+- name: Create psql_backup folder
+  file:
+    path: /etc/psql_backup
+    owner: "{{system_default_user}}"
+    group: "{{system_default_group}}"
+    mode: 0755
+    state: directory
+
+- name: Copy psql_backup scripts
+  copy:
+    src: "{{item}}"
+    dest: "/etc/psql_backup"
+    owner: "{{system_default_user}}"
+    group: "{{system_default_group}}"
+    mode: 0754
+  with_items:
+    - pg_backup.sh
+    - pg_backup_rotated.sh
+
+# This is for avoiding server version mismatches. Versions above 9.5 are
+# downwards compatible.
+- name: Install postgresql-client-9.6
+  become: true
+  shell: sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+
+- name: Add apt-key
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    state: present
+
+- name: install postgresql-client-9.6
+  apt: name=postgresql-client-9.6 update_cache=yes
+
+- name: Copy psql_backup.config
+  template:
+    src: "pg_backup.config.j2"
+    dest: "/etc/psql_backup/pg_backup.config"
+    owner: "{{system_default_user}}"
+    group: "{{system_default_group}}"
+    mode: 0744
+
+- name: Set .pgpass
+  no_log: true
+  template:
+    src: ".pgpass"
+    dest: "/home/{{pg_backup_user}}/.pgpass"
+    owner: "{{system_default_user}}"
+    group: "{{system_default_group}}"
+    mode: 0600
+
+- name: Set up cron job for regular backups
+  cron:
+    name: "Run postgres backup"
+    minute: "0"
+    hour: "5,2"
+    job: "./etc/psql_backup/pg_backup_rotated.sh"

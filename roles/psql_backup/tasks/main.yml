@@ -58,6 +58,6 @@
 - name: Set up cron job for regular backups
   cron:
     name: "Run postgres backup"
-    minute: "0"
-    hour: "5,2"
+    minute: "22"
+    hour: "1"
     job: "./etc/psql_backup/pg_backup_rotated.sh"

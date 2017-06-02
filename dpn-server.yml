@@ -62,7 +62,12 @@
           ruby_version: 2.3.1
         rbenv_users: "{{system_default_user}}"
 
-#
+        #PSQL_BACKUP
+        pg_hostname: "{{dpnserver_db_hostname}}"
+        pg_username: "{{dpnserver_db_user}}"
+        pg_pass: "{{dpnserver_db_pwd}}"
+        pg_backup_dir: "/mnt/efs/dpn/psql_backup/"
+
     roles:
       - {role: common, tags: common}
       - {role: dpn-common, tags: dpn-common}
@@ -70,6 +75,7 @@
       - {role: cd3ef.nginx, tags: [nginx, passenger, nginx-passenger]}
       - {role: carlosbuenosvinos.ansistrano-deploy, tags: deploy}
       - {role: dpn.dpn-server, tags: [dpn-server, deploy]}
+      - {role: psql_backup, tags: [psqlbackup]}
 
     tasks:
     - name: Slack to all

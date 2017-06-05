@@ -79,9 +79,9 @@
   git: repo="git@github.com:APTrust/exchange.git"
       dest="{{ goapp_src_path }}"
       accept_hostkey=yes
-      clone=yes
-      update=yes
-      force=yes
+      clone=no
+      update=no
+      force=no
       version=master
   become_user: "{{system_default_user}}"
   become: true

@@ -88,9 +88,6 @@
   register: gitclone
   tags: gitclone
 
-- debug: var=gitclone
-  tags: gitclone
-
 # Checkout Exchange repo
 - name: Checkout exchange repo
   become_user: "{{system_default_user}}"

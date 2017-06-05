@@ -18,7 +18,10 @@ pg_backup_dir: "/home/{{pg_backup_user}}/postgresq_backup"
 # List of strings to match against in database name, separated by space or comma, for which we only
 # wish to keep a backup of the schema, not the data. Any database names which contain any of these
 # values will be considered candidates. (e.g. "system_log" will match "dev_system_log_2010-01")
-pg_schema_only_list: ""
+# Note: rdsadmin db schema is not accessible but if the script doesn't run a full backup
+# of the database the script will have a positive exit code, hence not send out
+# cron emails.
+pg_schema_only_list: "rdsadmin"
 
 # Will produce a custom-format backup if set to "yes"
 pg_enable_custom_backups: 'yes'

@@ -1,0 +1,507 @@
+---
+# DPN Production Server Variables
+
+# APP Env as language agnostic variable
+APP_ENV: 'production'
+GO_ENV: 'production'
+RAILS_ENV: 'production'
+
+dpnserver_devise_secret_key: "86931bd97f34e6545252d463e8141a008cb86d52051aa78e38726543749d681224022b449c062e4e16ab26bebb66306f9d14ca93332b452383ba0b41a1d36e7b"
+dpnserver_secret_key: "c88bcb133e8703ca1bbac54eef08b67f9fb577fc437c64a94e22ef9fb264e99b595e4eba3f45a1580beb9f78d0aa2a0adbe850667fe9b8877cc508bbb8e287c2"
+dpnserver_cipher_key: "oc557my9i2TwMermnA4S6hArb915VWXR"
+dpnserver_cipher_iv: "Y11zZ1b7K2P8WMSECogPl6Jx0hXb5IzS"
+
+dpnserver_name: "APTrust"
+dpnserver_namespace: "aptrust"
+dpnserver_api_root: "https://dpn.aptrust.org/"
+
+dpnserver_staging_dir: "/mnt/ebs/dpn"
+dpnserver_repo_dir: "dummy-value"
+dpnserver_queue_adapter: ":disabled"
+dpn_transfer_private_key: "/home/{{system_default_user}}/.ssh/apt_dpn"
+dpn_transfer_public_key: "/home/{{system_default_user}}/.ssh/apt_dpn.pub"
+
+
+# SSH
+dpn_apt_public_sshkey: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDQj8uFxhd9oTsqoZ/DTUAQxkS3gDA6HdStvLpUooRhFfrKSUGoEd6VTyfKJi++aMzXobIiQ/HoHfVIy7Rh7/wtVyvcAsYYF2ofEHpCa6K+JFhlMqWH7QDYKNbE7uiD31bJV7zsTWv1O1ohCS16OTqj6RYFhuuyx1JokpXBZwtTUa/apqS+DOB8tUFD1IKXy5vHxGj6BFmDdA4Ho0LemBC6NFCn/qi8lcU2+WpSLgDghW7WOJEXdsZDCPmBZ5f/5j46xGO/bvBtXnd/NqP9B++g8JJrryNkZLlsD7LbZ3ROsMPD3T1Ox3wQwtC+vSJgQwBpDaWxX/4DKZCwU8yEfbzTiRqlKABaYaUu/8z40+lvAnU3D+yl98TgdCSO7Icb3ka6TGeLFNNslYBckcwcDy00gqienghM5RvYRocR3GwG1jwzXUxtbXF9lH1lEGFBBFs5EeSqRJUZLcnRTzj5FpCfoNwMsQA9xxYZ20tE/Cmx1C2qGWyvgpuyEclYUVklVBevsKXttQjwuBBcrIBv/Jb2b8G0QCwdt2Qhz2kn7tiM96Pk8+FhVhHJhO6RuaEcC9COyZdTJw5noUS7rZIyx6MiszzefXvExxG4yTp3p4dcc0bX6bo2rkpXP+CaCE2kSEHGUpBB9FZBs8knBwrB8DA7ThOfQT1ACfByMFQMqW0sjw==
+
+dpn_apt_private_sshkey: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIJKQIBAAKCAgEA0I/LhcYXfaE7KqGfw01AEMZEt4AwOh3Urby6VKKEYRX6yklB
+      qBHelU8nyiYvvmjM16GyIkPx6B31SMu0Ye/8LVcr3ALGGBdqHxB6QmuiviRYZTKl
+      h+0A2CjWxO7og99WyVe87E1r9TtaIQktejk6o+kWBYbrssdSaJKVwWcLU1Gv2qak
+      vgzgfLVBQ9SCl8ubx8Ro+gRZg3QOB6NC3pgQujRQp/6ovJXFNvlqUi4A4IVu1jiR
+      F3bGQwj5gWeX/+Y+OsRjv27wbV53fzaj/QfvoPCSa68jZGS5bA+y22d0TrDDw909
+      Tsd8EMLQvr0iYEMAaQ2lsV/+AymQsFPMhH2804kapSgAWmGlLv/M+NPpbwJ1Nw/s
+      pffE4HQkjuyHG95GukxnixTTbJWAXJHMHA8tNIKonp4ITOUb2EaHEdxsBtY8M11M
+      bW1xfZR9ZRBhQQRbORHkqkSVGS3J0U84+RaQn6DcDLEAPccWGdtLRPwpsdQtqhls
+      r4KbshHJWFFZJVQXr7Cl7bUI8LgQXKyAb/yW9m/BtEAsHbdkIc9pJ+7YjPej5PPh
+      YVYRyYTukbmhHAvQjsmXUycOZ6FEu62SMsejIrM83n17xMcRuMk6d6eHXHNG1+m6
+      Nq5KVz/gmghNpEhBxlKQQfRWQbPJJwcKwfAwO04Tn0E9QAnwcjBUDKltLI8CAwEA
+      AQKCAgAKoDjjUOtjeDJ2gpOMNMRd1mwr2TkbzOdIDsSDiWArPh5v7fmNYZOwkb7a
+      OsXV8qr1FYTo4ANUKyqTEeXX041KlhVi+TU0hwTeHk3MUoWRIHLsfP8YBMg1Oydu
+      Eyn/hgJ68aBrfapRbTuzUS9i+cV2EmsPzwb1LdiSAV3l46UdEp1eC317PVa2o9l2
+      Zj5dE3+VVvluO4h//Qq18uh2RNMdWYr+dCgOq6bHnT+Afl2HEuVJvsoNovyI780e
+      fbOt0wI6pkTavQE84UI/Vf5W5u+biIY9PEgWVldoHQikywmO9MyUjxIPkHROuk4+
+      WY6FzwQXVh2qAtUDPjvj7/EMkwdqvAdvNRnlVPR2xvWsRLG3xStjwhqWIBK9MFoG
+      ZrdtngJLLUIZo9rfC5003z9/5TIVrLoL/ERKimLTLlcU5gm+e2pLeR3/6nhDvNzD
+      ZDKc7/70N8XAVA/AikwHDujji9AFwaO4ezctK3jy8fAidoJ7r+tPr9rS5UyxVwZq
+      S8m2zUS/e0dSnjANNn0NGp1ppKpswSETXD5P1lLGbFctJdbTe8RiQ7UpEc7Qu9PN
+      XtC+MkV8WNeINZz3GdWFL8di3H2OAhkukOe0vu3RP27p8DhZrAcRjL2GVgrOpjaY
+      zAoBiNYjYkhJuyYD0sCYLGqo/pBub9jj24NH8nwP4ShpqcVbeQKCAQEA+Dvjmza5
+      j2Marrig7FRFzuB9AsW+KUgNioXsLHI7PdgLO5VyJHfswW//HF5k28SKEPpAwkdP
+      +NbB3XTnjkl5Nz/72Q0s9Fq8/RgbDzmNPsQ13hHZLKk7zdcUfYWG0k5J89yQf5Wx
+      M2huVpbuW/73uZj2eX+dNHBv2knDBUHgK/FcXlKHwx94VYRMr4qiJrc6k8VkDBhM
+      tEzB/l5KocIgNjklk11mdEeUhAewxMNgKkqlXDcF1hsZOZZz+/GSyODNcNXZEZqm
+      ttmM5vQ8W9P/DkKbpMIg9ewr/SQaVsl/hXKD0kDknOa//qZxqAXL/YQmP7vfmBw/
+      doRucpBOI6OvEwKCAQEA1xYriwQrrngTSZul2Xn7+Zs/zVYdzuGf1/gg0KfAPRNH
+      hPQ5JMKgrrTcY4k6os+4QlIUFAIYZToA7iY8AbkEED5QjlTLIebRX0/NV7b8ypTt
+      EN1QEp/+CEVv2P0XSFsOKzyBQhRrZ+QSzRMSQ3o3401aNxRYctk/8DbgMBsO8+VA
+      iRU6IKEQOeRXKcW2Xlc6yCQk3FDW3e+tx99ulsTmdiM2XH8DeK9BJQyCJTxrh7DM
+      pqheGIIWTFa4wjiJAPNdB5UMd+VIy90TBhESMMR4bhVde2YZlj0l5Gnsvt8u5LkC
+      OEQEN8pcxUfmIdmIwM3ku5dUmVMIQsPGAV1naWrwFQKCAQEAmT4PkqBECXq63CXq
+      YjrcJYx8YBvG+yEaCuwGEqIqZFFdDdmCb3UBWaFUMiUrymgYe8ah982iVxHs+FPV
+      JwfApxT+2s3BdNAXX39kJQ/4XEkwn/kQwvtuifI/GgY2Ztoh2UPOiJTWoc/UXewr
+      Feve7lq5vePEHr1Sr8VdeX9jbn0/8pKscQ6acOCNnsjMtW3j4Zm326ecoqnIEMoQ
+      9K8sx4yb38+HEj2mN6OvwqiCU1lln/nvxm9QMTbqPxyw6wWsjf3WVYHNbY/75g/c
+      uyuyhxEjmKCnTGoR9eI1yGH4MV+ydTfOafYhjIkgHQQHHGhaXHoU3IiDvRygOmVP
+      d7zytQKCAQA2h2lcoh8M6WZCaBKA8zsdie1/+lAuTec/UqnHHHBRS5z7KQt/tVQV
+      Vsb0+SqDclQNhE+QzwMuTqlDty/JZAWStKmpm/evzZvRJSMzFLI8DcuYVfNh9Wvq
+      3ue/RFLtxh/ueDVw8kpUmW7mzOn5b3fRyZ+QjTjrTQa3uMHXkFSXIszctCP7d7ns
+      Y2Zxsa1Nd6HwcbFipaADvir5nDymPp8K3lx+0LiplQzX/rbUB+BfE0SfD9pjLj/G
+      9Ml8e+bH9erk7DWwA9IT1SVoiVVqRbUee44qpbTg8Pm1UeFydpSl6f2VFDFZj5U7
+      csH2XPcdolVV9cS95l4Wxxlg6TQ5dqINAoIBAQDxpEV5CT2ut8+hpt7dhi1soOiK
+      AcdWyX4gwK9+nfys+FgpspnM3NyixSBt7rs5VEymVvS25tkFJssJswF4SdUpMBg9
+      DO59UcistPBXZI0Oc6gIxyXy5uRS1vqiQk6qC7JmUJK+xfQj9sPe4gpRzu+iV8mN
+      xeYiDAtETUSCtIosKJlpQbGVKr2yvpeW02Y+oVKY3ESz6b8NNt/SR41PO9GfZHUP
+      NOCjs7SKzX81THEN2nanM6u3KbdDdP3E9LVKPi79GZNlHalVf9kzOZwK0cnV+gHq
+      mlwOTOdHD5AMUV5/MDaNnbIcNBcJisiS9jMcpic8PQIbOqsXxsDqutX9TGlb
+      -----END RSA PRIVATE KEY-----
+
+# SSH
+dpn_chron_sshkey: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzaOk0UYNm3f1IRgYEvFtase24ilEJPfeR6VZWXtlzCG+qFaGjWXxE+42AEvYMtqub7sRq/9/ECUiguDjTJ5UUIUsRQ4vSc3LI2kE/zMkGa6CtzAoVVLUKyFGm/bnucoIl1y7o6VuzFAAcSBlbtQoxGsgdQRxhsVd6soorZCNtE7N+xtFi+EuKLr2ZKoYOfOd8E+Dm3cRQxt9RrBCZ/CsSOZ+5c4h/xFJmMGiuPhWZlT6MIVk+Sg9izmu0zniQVUjADzxPYWPSzO3of3dx4RCZg4kbN6ijZrfWWGlmiYCI+BadkPcnAcJzhFLy5BCBZ6AusFoc8mOPpXfICvDzMiscw== chronopolis@dpn-registry.ucsd.edu
+
+dpn_hathi_sshkey: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMjT+R7D3R1anWcr6tWC0Bm8IcmP0/kpyLjnmH3qW1KSnjQJ8WPSlLHPniHBF2DQlEoI5J9xW4c/UWryZvD+yildCmp3Bca0/P5dSZDALolQKvoz6bsX0mUn+4iwKuOEjKtznvvPZ2T3Nbsv1diC69aE9pDawKmv0Z3C9N2fYvhL9dN5S5aCtBSFszhCixfhDBRDqE0J1Gd+68rJ+4KYYr377D2/HjcRxnLY925RvaLBkcsLS4GObf4SvZ6HIs+cXk6JJ/8NAQMlKUmxNTx8ParVO4ECDExVf0A9cVvTyQuuCEpyMofU7+TyOjMCE0wLBH2OUjB19qUMe6p4sy41SH
+
+dpn_sdr_sshkey: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzrhtvaLZ+59pgd9+H1smaNrSFWklGY/xhJWLMPgoPad9uOf7jUuCXiEy2Dy8v2dlIYWQICY+HH8cmdI4PjKKTbKfxXkovqjtNORc/BSzvVMPrD0qCMfPKyh4gM/uAlp21JA5l/QGmq6PBu99Mn3CKndAWOWL3Ex5FeOFz436f/1FMr8m9s80BBt07qdTWxeAa3GoM1YiaqltQWIypBASjMZZvYIXHIsQdBdP6kgusnKTN+o3+EV4uVt2TDX3/dDqmqmkVJeIQH9CB0h3UklEN/oxV8vmRg4Pv0cZbgjWFk885+sfTT4k+MHgixpipgHjZnauNvU/PVPUp+2b1AoYFw== lyberadmin@dpn-demo.stanford.edu
+
+dpn_tdr_sshkey: |
+  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDokvf8bsO/a8crY5AOtDy/C/tbkS7Wz/si9RwLz+jDkKoBuUOkwSpGCpk1q9yZ3cECUL2yVh2HdtWFZ7Qc5jf+u4BaLGzyhOVmpQ6gqv3MqMBg2y5B7BuqovdL1jkfwTmkMX/eG1iTzSQCpMr7cNpnwqAAa/oVEgBiaZOlLHD03jWJ8eVb2V/NEAmD1PM/HAhWXenBL3mEfhfnx/WwcsGu+vwiK7fl+phR5Y5sOFKuMKHfO4PsTHWWQEQkPydwfFybgEzQwQZDAyYRqhwAkdILoqYH/EdKyR3FqDoV71GDT55aMnEPXQ5tMIGFVh8qShg9nQXB9I7wCNf4LSrn8J+D s7728@rest.lib.utexas.edu
+
+# DPN-Server
+# https://dpn.aptrust.org/api-v1/
+# This is the admin API key. You'll find info about other DPN nodes and API keys at https://docs.google.com/document/d/1klXDZkGLGrYfgfHPL3EqtVTgHtocjjSWIvKmR-uMw-A/edit#
+dpn_admin_api_key: f12c2ecf5edbc087172a040cdda713e641e4a0ea
+
+# https://dpn.aptrust.org/admin/
+dpn_admin_user: dpn_admin@aptrust.org
+dpn_admin_pwd: WotsCrickin
+
+# dpn-server repo application env variables.
+# Credentials for Fluctus
+fluctus_api_user: "system@aptrust.org"
+fluctus_api_key: "0fe304e06834ca44f1c8b27340810084f4e9605c"
+
+# Credentials for DPN REST servers.
+# DPN_APT_TOKEN is for our own local server.
+dpnserver_nodes:
+    apt:
+        name: "APTrust"
+        hostname: 'dpn-prod2.aptrust.org'
+#        token: "f12c2ecf5edbc087172a040cdda713e641e4a0ea"
+        token: "ac13123085e14f909679ad18295bdc899b4f1e866348"
+        credential: "somethingelse"
+        api_root: "http://localhost"
+        ssh_key: "{{dpn_apt_public_sshkey}}"
+        storage_type: "default"
+        storage_region: "default"
+    chron:
+        name: "Chronopolis"
+        hostname: 'dpn-registry.ucsd.edu'
+        token: "9549fd71ba152cc2a02b23f561640306f651e01e"
+        credential: "somethingelse"
+        api_root: "http://localhost"
+        ssh_key: "{{dpn_chron_sshkey}}"
+        storage_type: "default"
+        storage_region: "default"
+    hathi:
+        name: "Hathi Trust"
+        hostname: 'dpn.hathitrust.org'
+        token: "9fe61985-003e-4c4c-98ff-dd42a290afe3"
+        credential: "somethingelse"
+        api_root: "http://localhost"
+        ssh_key: "{{dpn_hathi_sshkey}}"
+        storage_type: "default"
+        storage_region: "default"
+    sdr:
+        name: "Stanford Digital Repository"
+        hostname: 'no-prod.node.yet'
+        token: "Smokin-Joe-Frazier"
+        credential: "somethingelse"
+        api_root: "http://localhost"
+        ssh_key: "{{dpn_sdr_sshkey}}"
+        storage_type: "default"
+        storage_region: "default"
+    tdr:
+        name: "Texas Digital Repository"
+        hostname: 'rest.lib.utexas.edu'
+        token: "2eda2b215b753f4792e6afac45db2488ae08654e"
+        credential: "somethingelse"
+        api_root: "http://localhost"
+        ssh_key: "{{dpn_tdr_sshkey}}"
+        storage_type: "default"
+        storage_region: "default"
+
+# dpn_rest_token: "f12c2ecf5edbc087172a040cdda713e641e4a0ea"
+dpn_rest_token: "ac13123085e14f909679ad18295bdc899b4f1e866348"
+
+dpnserver_apt_token: "ac13123085e14f909679ad18295bdc899b4f1e866348"
+
+dpnserver_apt_credential: "RZzboaKuluo1A481RQ3nEVQDxwoeDZcuvUYpzfDWLhUl1v"
+dpn_chron_token: "9549fd71ba152cc2a02b23f561640306f651e01e"
+dpnserver_chron_credential: ""
+dpn_hathi_token: "9fe61985-003e-4c4c-98ff-dd42a290afe3"
+dpnserver_hathi_credential: ""
+# Stanford Digital Repository
+dpn_sdr_token: "Smokin-Joe-Frazier"
+dpnserver_sdr_credential: ""
+dpn_tdr_token: "2eda2b215b753f4792e6afac45db2488ae08654e"
+dpnserver_tdr_credential: ""
+
+
+# DB Settings
+dpnserver_local_db: False
+
+# Connection info for the postgres RDS instance
+dpnserver_db_adapter: "postgresql"
+dpnserver_db_port: 5432
+#TODO: Need to create new DB first.
+dpnserver_db_name: "dpnserver_{{RAILS_ENV}}"
+# db_host is set by querying AWS and set fact in dpn-server role
+dpnserver_db_hostname: "{{dpnserver_db_host}}"
+dpnserver_db_user: "dpnserver_admin"
+dpnserver_db_pwd: "w*h4kUNvyaO"
+dpnserver_vpc_sec_group: 'sg-2f3fce53'
+dpnserver_rds_subnet: "prod-private"
+
+# Outgoing email
+aws_ses_user: "AKIAIAMIE6RZQQMF543Q"
+aws_ses_pwd: "Ai/L3vvOCafNALAt9wXrEmf0c5gmORfGGku+0ZL7Uqhr"
+
+# AWS EFS
+use_efs: true
+dpnserver_efs_mounttarget: 'fs-977ca7de.efs.us-east-1.amazonaws.com:/'
+efs_mount_uri: 'fs-977ca7de.efs.us-east-1.amazonaws.com:/'
+
+# Exchange Go Services
+pharos_url: "https://repo.aptrust.org"
+pharos_api_user: "{{vault_pharos_prod_api_user}}"
+pharos_api_key: "{{vault_pharos_prod_api_pwd}}"
+
+ex_tardirectory: "/mnt/ebs/apt/data"
+ex_restoredirectory: "/mnt/ebs/apt/restore"
+ex_logdirectory: "/mnt/ebs/apt/logs"
+ex_replicationdirectory: "/mnt/ebs/apt/replication"
+ex_maxfilesize: "5497558138880"
+ex_skipalreadyprocessed: "true"
+ex_deleteonsuccess: "true"
+ex_logtostderr: "false"
+ex_usevolumeservice: "false"
+ex_volumeserviceport: 8898
+ex_loglevel: 4
+ex_bucketreadercachehours: 24
+ex_bagvalidationconfigfile: "config/aptrust_bag_validation_config.json"
+ex_bagitversion: "0.97"
+ex_bagitencoding: "UTF-8"
+
+ex_pharosurl: "{{pharos_url}}"
+ex_pharosapiversion: "v2"
+
+ex_nsqdhttpaddress: "http://prod-services.aptrust.org:4151"
+ex_nsqlookupd: "prod-services.aptrust.org:4161"
+
+ex_aptrusts3region: "us-east-1"
+ex_aptrustglacierregion: "us-west-2"
+
+ex_preservationbucket: "aptrust.preservation.storage"
+ex_replicationbucket: "aptrust.preservation.oregon"
+
+ex_customrestorebucket: ""
+ex_restoretotestbuckets: "false"
+ex_maxdayssincefixitycheck: 90
+
+ex_fetchworker: {
+    networkconnections: "6",
+    workers: "6",
+    nsqtopic: "apt_fetch_topic",
+    nsqchannel: "apt_fetch_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "720m"
+  }
+
+ex_storeworker: {
+    networkconnections: "12",
+    workers: "6",
+    nsqtopic: "apt_store_topic",
+    nsqchannel: "apt_store_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "720m"
+  }
+
+ex_recordworker: {
+    networkconnections: "6",
+    workers: "3",
+    nsqtopic: "apt_record_topic",
+    nsqchannel: "apt_record_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "360m"
+  }
+
+ex_replicationworker: {
+    networkconnections: "12",
+    workers: "8",
+    nsqtopic: "apt_replication_topic",
+    nsqchannel: "apt_replication_channel",
+    maxattempts: "5",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "180m"
+  }
+
+ex_restoreworker: {
+    networkconnections: "8",
+    workers: "4",
+    nsqtopic: "apt_restore_topic",
+    nsqchannel: "apt_restore_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "720m"
+  }
+
+ex_filedeleteworker: {
+    networkconnections: "12",
+    workers: "4",
+    nsqtopic: "apt_file_delete_topic",
+    nsqchannel: "apt_file_delete_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "30m"
+  }
+
+ex_fixityworker: {
+    networkconnections: "4",
+    workers: "4",
+    nsqtopic: "apt_fixity_topic",
+    nsqchannel: "apt_fixity_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "180m"
+  }
+
+ex_receivingbuckets: [
+    'aptrust.receiving.columbia.edu',
+    'aptrust.receiving.georgetown.edu',
+    'aptrust.receiving.indiana.edu',
+    'aptrust.receiving.jhu.edu',
+    'aptrust.receiving.miami.edu',
+    'aptrust.receiving.ncsu.edu',
+    'aptrust.receiving.psu.edu',
+    'aptrust.receiving.syr.edu',
+    'aptrust.receiving.uchicago.edu',
+    'aptrust.receiving.uc.edu',
+    'aptrust.receiving.uchicago.edu',
+    'aptrust.receiving.uconn.edu',
+    'aptrust.receiving.umd.edu',
+    'aptrust.receiving.umich.edu',
+    'aptrust.receiving.unc.edu',
+    'aptrust.receiving.nd.edu',
+    'aptrust.receiving.virginia.edu',
+    'aptrust.receiving.vt.edu'
+    ]
+
+ex_dpn: {
+    localnode: "aptrust",
+    logdirectory: "/mnt/ebs/dpn/logs",
+    stagingdirectory: "/mnt/ebs/dpn/staging",
+    remotenodehomedirectory: "/mnt/ebs/dpn",
+    loglevel: "4",
+    logtostderr: "false",
+    replicatetonumnodes: "2",
+    dpnapiversion: "api-v2",
+    dpnpreservationbucket: "aptrust.dpn.preservation",
+    acceptinvalidsslcerts: "false",
+    usesshwithrsync: "true",
+    dpnglacierregion: "us-east-1",
+# TODO: Is this relative or absolute to the go bin or go src directory?
+#     We may want to move configs in the bin directory anyways. and only
+#     update them if the repo has updated.
+    bagvalidationconfigfile: "config/dpn_bag_validation_config.json",
+}
+
+ex_dpn_restclient: {
+    comment: "Settings for our local DPN REST API server. load LocalAuthtoken from environment!",
+    localserviceurl: "https://dpn-prod2.aptrust.org/",
+    localapiroot: "api-v2",
+    localauthtoken: "{{dpn_rest_token}}"
+}
+
+ex_dpn_defaultmetadata: {
+comment: "Config settings for common DPN bagit metadata",
+    bagitversion: "0.97",
+    bagitencoding: "UTF-8",
+    ingestnodename: "APTrust",
+    ingestnodeaddress: "160 McCormick Rd., Charlottesville, VA 22904",
+    ingestnodecontactname: "APTrust Administrator",
+    ingestnodecontactemail: "help@aptrust.org"
+}
+
+#     comment: "remote node admin tokens are ignored in this config.",
+ex_dpn_remotenodeadmintokensfortesting: {
+  chron: "{{dpn_chron_token}}",
+  hathi: "{{dpn_hathi_token}}",
+  sdr:   "{{dpn_sdr_token}}",
+  tdr:   "{{dpn_tdr_token}}"
+}
+
+#     comment: set these in the environment, not here. export dpn_<node>_token.,
+ex_dpn_remotenodetokens: {
+  chron: "{{dpn_chron_token}}",
+  hathi: "{{dpn_hathi_token}}",
+  sdr:   "{{dpn_sdr_token}}",
+  tdr:   "{{dpn_tdr_token}}"
+}
+
+#     comment: "remote node urls in demo come from node records in the local rest service.",
+ex_dpn_remotenodeurls: {
+    chron: "",
+    hathi: "",
+    sdr:   "",
+    tdr:   ""
+}
+
+ex_dpn_dpnpackageworker: {
+    networkconnections: "8",
+    workers: "4",
+    nsqtopic: "dpn_package_topic",
+    nsqchannel: "dpn_package_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "180m"
+}
+
+ex_dpn_dpnvalidationworker: {
+    networkconnections: "8",
+    workers: "2",
+    nsqtopic: "dpn_validation_topic",
+    nsqchannel: "dpn_validation_channel",
+    maxattempts: "3",
+    maxinflight: "2",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "480m"
+}
+
+ex_dpn_dpncopyworker: {
+    networkconnections: "8",
+    workers: "4",
+    nsqtopic: "dpn_copy_topic",
+    nsqchannel: "dpn_copy_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "600m"
+}
+
+ex_dpn_dpningeststoreworker: {
+    networkconnections: "4",
+    workers: "4",
+    nsqtopic: "dpn_ingest_store_topic",
+    nsqchannel: "dpn_ingest_store_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "180m"
+}
+
+ex_dpn_dpningestrecordworker: {
+    networkconnections: "4",
+    workers: "4",
+    nsqtopic: "dpn_record_topic",
+    nsqchannel: "dpn_record_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "180m"
+}
+
+ex_dpn_dpnreplicationstoreworker: {
+    networkconnections: "4",
+    workers: "4",
+    nsqtopic: "dpn_replication_store_topic",
+    nsqchannel: "dpn_replication_store_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "180m"
+}
+
+ex_dpn_dpnrestoreworker: {
+    networkconnections: "4",
+    workers: "4",
+    nsqtopic: "dpn_restore_topic",
+    nsqchannel: "dpn_restore_channel",
+    maxattempts: "3",
+    maxinflight: "20",
+    heartbeatinterval: "10s",
+    readtimeout: "60s",
+    writetimeout: "10s",
+    messagetimeout: "180m"
+}
+#
+# NSQ services config
+ex_nsq_mem_queue_size: "0"
+ex_nsq_data_path: "{{ex_tardirectory}}"
+ex_nsq_tcp_address: "0.0.0.0:4150"
+ex_nsq_broadcast_address: "{{hostname_fqdn}}"
+ex_nsq_nsqlookupd_tcp_addresses: "127.0.0.1:4160"
+ex_nsq_msg_timeout: "4880m0s"
+ex_nsq_max_msg_timeout: "720m0s"
